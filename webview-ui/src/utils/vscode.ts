@@ -1,3 +1,3 @@
-import type { WebviewApi } from "vscode-webview";
+// import type { WebviewApi } from "vscode-webview";
 
-export const vscode: WebviewApi<unknown> = acquireVsCodeApi();
+// export const vscode: WebviewApi<unknown> = acquireVsCodeApi();

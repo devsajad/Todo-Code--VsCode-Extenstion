@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { vscode } from "./utils/vscode";
+import { vscode } from "../utils/vscode";
 
 interface Todo {
   type: "fix-bug" | "refactor" | "feature";
