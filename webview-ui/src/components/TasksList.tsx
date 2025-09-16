@@ -1,8 +1,8 @@
 import React from "react";
-import type { task } from "../types/types";
+import type { TaskType } from "../types/types";
 
 type propsType = {
-  tasks: task[];
+  tasks: TaskType[];
 };
 
 const TasksList = ({ tasks }: propsType) => {

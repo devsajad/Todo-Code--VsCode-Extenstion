@@ -1,11 +1,11 @@
 import React from "react";
 import TasksList from "./TasksList";
-import type { task } from "../types/types";
+import type { TaskType } from "../types/types";
 
 type propsType = {
   title: string;
   color: "yellow" | "red" | "green";
-  tasks: task[];
+  tasks: TaskType[];
 };
 
 const TasksContainer = ({ title, color, tasks }: propsType) => {
