@@ -1,39 +1,27 @@
-import React, { useState } from "react";
-// import { vscode } from "../utils/vscode";
-import AddTaskDropDown from "./components/AddTaskDropDown";
-import TasksContainer from "./components/TasksContainer";
+import React, { useState, useEffect } from "react";
+import { vscode } from "./utils/vscode";
 import type { TaskType } from "./types/types";
+import TasksContainer from "./components/TasksContainer";
+import { ModalManager } from "./components/ui/modal/ModalContainer";
 
 function App() {
-  const exampleTodos: TaskType[] = [
-    { type: "fix-bug", text: "Fix login bug", file: "auth.ts", line: 12 },
-    { type: "feature", text: "Add dark mode", file: "theme.tsx", line: 5 },
-    {
-      type: "refactor",
-      text: "Refactor header component",
-      file: "Header.tsx",
-      line: 1,
-    },
-    {
-      type: "fix-bug",
-      text: "Fix typo in footer",
-      file: "Footer.tsx",
-      line: 22,
-    },
-    {
-      type: "refactor",
-      text: "Improve performance",
-      file: "App.tsx",
-      line: 30,
-    },
-    {
-      type: "feature",
-      text: "Add notifications",
-      file: "Notifications.tsx",
-      line: 3,
-    },
-  ];
-  const [todos] = useState<TaskType[]>(exampleTodos);
+  const [todos, setTodos] = useState<TaskType[]>([]);
+
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      const message = event.data;
+      if (message.command === "update-todos") {
+        setTodos(message.data);
+      }
+    };
+
+    window.addEventListener("message", handleMessage);
+
+    vscode.postMessage({
+      command: "get-todos",
+    });
+    return () => window.removeEventListener("message", handleMessage);
+  }, []);
 
   const bugs = todos.filter((todo) => todo.type === "fix-bug");
   const features = todos.filter((todo) => todo.type === "feature");
@@ -41,9 +29,12 @@ function App() {
 
   return (
     <div className="max-w-7xl mx-auto px-6 ">
-      <header className="text-2xl font-bold uppercase py-6 flex justify-start gap-4 items-center">
-        <p>Project Todos</p>
-        <AddTaskDropDown />
+      <header className="py-6 flex items-center gap-6">
+        <h1 className="font-bold uppercase text-xl">Project Todos</h1>
+        <ModalManager>
+          <ModalManager.DropDown />
+          <ModalManager.Modal />
+        </ModalManager>
       </header>
 
       <main className="grid grid-cols-1 md:grid-cols-3 gap-6">
