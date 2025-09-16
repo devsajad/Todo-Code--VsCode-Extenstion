@@ -13,11 +13,12 @@ const TasksList = ({ tasks }: propsType) => {
           className="bg-gray-secondry p-2 flex items-center gap-3"
           key={index}
         >
-          <div className="rounded-full w-5 h-5 border-2 border-white"></div>
+          <div className="rounded-full w-3 h-3 border-1 border-white"></div>
           <div>
             <p className="text-md">{task.text}</p>
             <p className="text-gray-subtext text-xs">
-              File <span>{task.file}</span>, line <span>{task.line}</span>
+              File <span>{task.file.split(/[\\/]/).pop()}</span>, line{" "}
+              <span>{task.line}</span>
             </p>
           </div>
         </li>
