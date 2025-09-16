@@ -1,1 +1,20 @@
 @import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
+
+@theme {
+  --font-sans: "Rubik", sans-serif;
+  --color-gray-bg: #121212;
+  --color-gray-secondry: #363636;
+  --color-gray-subtext: #afafaf;
+  --color-purple-primary: #8687e7;
+  --color-red-error: #f5234b;
+  --color-green-success: #1ec337;
+  --color-yellow-warning: #f5c200;
+  --color-white-text: #fff;
+}
+
+@layer base {
+  body {
+    @apply text-white-text bg-neutral-900;
+  }
+}
