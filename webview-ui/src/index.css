@@ -1,5 +1,5 @@
-@import "tailwindcss";
 @import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
+@import "tailwindcss";
 
 @theme {
   --font-sans: "Rubik", sans-serif;
@@ -11,10 +11,15 @@
   --color-green-success: #1ec337;
   --color-yellow-warning: #f5c200;
   --color-white-text: #fff;
+  --color-button-background: #8687e7;
+  --color-button-foreground: #fff;
 }
 
 @layer base {
   body {
     @apply text-white-text bg-neutral-900;
+  }
+  button {
+    @apply cursor-pointer;
   }
 }

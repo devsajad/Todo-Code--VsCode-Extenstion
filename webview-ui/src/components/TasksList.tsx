@@ -7,7 +7,7 @@ type propsType = {
 
 const TasksList = ({ tasks }: propsType) => {
   return (
-    <ul className="space-y-3">
+    <ul className="space-y-2">
       {tasks.map((task, index) => (
         <li
           className="bg-gray-secondry p-2 flex items-center gap-3"

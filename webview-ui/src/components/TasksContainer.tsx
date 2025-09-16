@@ -16,7 +16,7 @@ const TasksContainer = ({ title, color, tasks }: propsType) => {
   };
 
   return (
-    <header className="font-bold space-y-1 mb-3">
+    <header className="font-bold space-y-3">
       <p className="py-1.5">{title}</p>
       <div className={`h-0.5 ${titleColor[color]}`}></div>
       <TasksList tasks={tasks} />
