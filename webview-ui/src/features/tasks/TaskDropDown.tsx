@@ -3,6 +3,7 @@ import { VscAdd } from "react-icons/vsc";
 import { DropDown } from "../../components/ui/DropDown/DropDown";
 import Modal from "../../components/ui/Modal/Modal";
 import AddTaskForm from "./AddTaskForm";
+import AddCategoryForm from "./AddCategoryForm";
 
 const TaskDropDown = () => {
   return (
@@ -23,7 +24,15 @@ const TaskDropDown = () => {
           </Modal.Content>
         </Modal>
 
-        <DropDown.Item> Add Category</DropDown.Item>
+        <Modal>
+          <Modal.Trigger>
+            <DropDown.Item>Add Category</DropDown.Item>
+          </Modal.Trigger>
+
+          <Modal.Content>
+            <AddCategoryForm />
+          </Modal.Content>
+        </Modal>
       </DropDown.Content>
     </DropDown>
   );

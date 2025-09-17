@@ -1,3 +1,4 @@
+import { CATEGORIES_ICONS, CATEGORIES_COLORS } from "./../constants/constants";
 export type TaskType = {
   id: string;
   source: "comment" | "manual";
@@ -12,7 +13,7 @@ export type TaskType = {
 
 export type CategoryType = {
   id: string;
-  color: "red" | "green" | "yellow";
-  icon: "VscBug" | "VscSync" | "VscGitPullRequest";
+  color: (typeof CATEGORIES_COLORS)[number];
+  icon: (typeof CATEGORIES_ICONS)[number];
   name: string;
 };

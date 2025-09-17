@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import { Header } from "./components/Header";
 import Main from "./components/Main";
+import CategoriesContainer from "./features/tasks/CategoriesContainer";
 import { setCategories } from "./features/tasks/store/CategoriesSlice";
 import { setTasks } from "./features/tasks/store/TasksSlice";
-import TasksContainer from "./features/tasks/TasksContainer";
+import TaskDropDown from "./features/tasks/TaskDropDown";
 import { useAppDispatch, useAppSelector } from "./store/hook";
 import { vscode } from "./utils/vscode";
-import TaskDropDown from "./features/tasks/TaskDropDown";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -37,7 +37,8 @@ function App() {
       </Header>
       <Main>
         {categories.map((category) => (
-          <TasksContainer
+          <CategoriesContainer
+            key={category.id}
             id={category.id}
             color={category.color}
             name={category.name}

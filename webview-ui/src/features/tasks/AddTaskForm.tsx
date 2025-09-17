@@ -7,7 +7,7 @@ const AddTaskForm = () => {
   const { handleCloseModal } = useModal();
   const [titleInput, setTitleInput] = useState<string>("");
 
-  function handleAddTask(e: React.MouseEvent) {
+  function handleAddTask(e: React.FormEvent) {
     e.stopPropagation();
     e.preventDefault();
 
@@ -32,11 +32,8 @@ const AddTaskForm = () => {
   }
 
   return (
-    <form
-      className="bg-gray-secondry p-6 max-w-md grow"
-      onClick={(e) => handleAddTask(e)}
-    >
-      <div className="flex flex-col mb-3 space-y-2">
+    <form onSubmit={(e) => handleAddTask(e)}>
+      <div className="flex flex-col mb-6 space-y-2">
         <label htmlFor="title" className="font-medium uppercase text-base">
           Title
         </label>
@@ -51,7 +48,7 @@ const AddTaskForm = () => {
         />
       </div>
 
-      <div className="flex flex-col mb-6 space-y-2">
+      <div className="flex flex-col mb-12 space-y-2">
         <label htmlFor="title" className="font-medium uppercase text-base">
           Description
         </label>

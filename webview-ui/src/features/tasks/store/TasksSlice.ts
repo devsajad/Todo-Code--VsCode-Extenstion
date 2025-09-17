@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { TaskType } from "../../../types/types";
+import type { TaskType } from "../../types/types";
 
 const initialState: TaskType[] = [];
 

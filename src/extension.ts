@@ -4,19 +4,19 @@ import * as fs from "fs";
 const DEFAULT_CATEGORIES = [
   {
     id: "feature",
-    color: "green",
+    color: "#22c55e",
     icon: "VscGitPullRequest",
     name: "App Features",
   },
   {
     id: "fix-bug",
-    color: "red",
+    color: "#ef4444",
     icon: "VscBug",
     name: "Fix Bugs",
   },
   {
     id: "refactor",
-    color: "yellow",
+    color: "#eab308",
     icon: "VscSync",
     name: "Refactors",
   },
@@ -50,36 +50,84 @@ export function activate(context: vscode.ExtensionContext) {
         context.extensionUri
       );
 
-      // Handle messages from the webview (our React app)
       panel.webview.onDidReceiveMessage(
         async (message) => {
-          if (message.command === "get-data") {
-            // Load categories from storage
-            const categories = context.workspaceState.get(
-              "todoCategories",
-              DEFAULT_CATEGORIES
-            );
-            // Load manual tasks from storage
-            const manualTasks = context.workspaceState.get("manualTasks", []);
-            // Scan the workspace for comment-based tasks
-            const commentTasks = await scanWorkspaceForTodos(context);
+          switch (message.command) {
+            // --- DATA FETCHING ---
+            case "get-data":
+              const categories = context.workspaceState.get(
+                "todoCategories",
+                DEFAULT_CATEGORIES
+              );
+              const manualTasks = context.workspaceState.get("manualTasks", []);
+              const commentTasks = await scanWorkspaceForTodos(context);
 
-            // Send the complete state to the frontend
-            panel.webview.postMessage({
-              command: "update-data",
-              data: {
-                tasks: [...manualTasks, ...commentTasks],
-                categories: categories,
-              },
-            });
-          }
+              panel.webview.postMessage({
+                command: "update-data",
+                data: {
+                  tasks: [...manualTasks, ...commentTasks],
+                  categories: categories,
+                },
+              });
+              return;
 
-          // Handle adding a new manual task
-          if (message.command === "add-manual-task") {
-            const savedTasks = context.workspaceState.get("manualTasks", []);
-            const updatedTasks = [...savedTasks, message.data];
-            // Save the updated list back to storage
-            await context.workspaceState.update("manualTasks", updatedTasks);
+            // --- CATEGORY CRUD ---
+            case "add-category": {
+              const savedCategories = context.workspaceState.get(
+                "todoCategories",
+                DEFAULT_CATEGORIES
+              );
+              const newCategory = message.data;
+              const updatedCategories = [...savedCategories, newCategory];
+              await context.workspaceState.update(
+                "todoCategories",
+                updatedCategories
+              );
+              return;
+            }
+
+            case "remove-category": {
+              const savedCategories = context.workspaceState.get(
+                "todoCategories",
+                DEFAULT_CATEGORIES
+              );
+              const categoryIdToRemove = message.data.id;
+              const updatedCategories = savedCategories.filter(
+                (cat) => cat.id !== categoryIdToRemove
+              );
+              await context.workspaceState.update(
+                "todoCategories",
+                updatedCategories
+              );
+              return;
+            }
+
+            case "update-category": {
+              const savedCategories = context.workspaceState.get(
+                "todoCategories",
+                DEFAULT_CATEGORIES
+              );
+              const updatedCategory = message.data;
+              const updatedCategories = savedCategories.map((cat) =>
+                cat.id === updatedCategory.id ? updatedCategory : cat
+              );
+              await context.workspaceState.update(
+                "todoCategories",
+                updatedCategories
+              );
+              return;
+            }
+
+            // --- TASK CRUD (for manual tasks) ---
+            case "add-manual-task": {
+              const savedTasks = context.workspaceState.get("manualTasks", []);
+              const newTask = message.data;
+              const updatedTasks = [...savedTasks, newTask];
+              await context.workspaceState.update("manualTasks", updatedTasks);
+              return;
+            }
+
+            // Add your remove and update task handlers here as well...
           }
         },
         undefined,
