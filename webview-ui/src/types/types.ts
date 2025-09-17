@@ -1,4 +1,6 @@
 export type TaskType = {
+  id: string;
+  source: "comment" | "manual";
   categoryId: string;
   text: string;
   file?: string;
@@ -10,7 +12,7 @@ export type TaskType = {
 
 export type CategoryType = {
   id: string;
-  color: string;
-  icon: string;
+  color: "red" | "green" | "yellow";
+  icon: "VscBug" | "VscSync" | "VscGitPullRequest";
   name: string;
 };

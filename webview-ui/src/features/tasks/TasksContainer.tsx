@@ -1,7 +1,8 @@
 import React from "react";
 import { VscBug, VscGitPullRequest, VscSync } from "react-icons/vsc";
-import type { TaskType } from "../../types/types";
-import TasksList from "../tasks/TasksList";
+import { useAppSelector } from "../../store/hook";
+import TasksList from "./TasksList";
+import type { CategoryType } from "../../types/types";
 
 const iconMap = {
   VscBug: VscBug,
@@ -9,15 +10,11 @@ const iconMap = {
   VscGitPullRequest: VscGitPullRequest,
 };
 
-type propsType = {
-  title: string;
-  color: "yellow" | "red" | "green";
-  tasks: TaskType[];
-  icon: keyof typeof iconMap;
-};
-
-const TasksContainer = ({ title, color, tasks, icon }: propsType) => {
+const TasksContainer = ({ name, color, icon, id }: CategoryType) => {
   const IconComponent = icon ? iconMap[icon] : null;
+
+  const tasks = useAppSelector((state) => state.tasks);
+  const filteredTask = tasks.filter((task) => task.categoryId === id);
 
   const titleColor = {
     yellow: "bg-yellow-warning",
@@ -28,11 +25,11 @@ const TasksContainer = ({ title, color, tasks, icon }: propsType) => {
   return (
     <header className="space-y-3">
       <div className="flex items-center justify-between">
-        <p className="text-base">{title}</p>
+        <p className="text-base">{name}</p>
         {IconComponent && <IconComponent className="text-base" />}
       </div>
       <div className={`h-0.5 ${titleColor[color]}`}></div>
-      <TasksList tasks={tasks} />
+      <TasksList tasks={filteredTask} />
     </header>
   );
 };

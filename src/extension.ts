@@ -116,9 +116,10 @@ async function scanWorkspaceForTodos(context: vscode.ExtensionContext) {
       for (let i = 0; i < document.lineCount; i++) {
         const line = document.lineAt(i);
         const match = line.text.match(todoRegex);
+
         if (match) {
-          console.log(match);
           allTodos.push({
+            id: `${file.fsPath}-${i + 1}`,
             categoryId: match[1].toLowerCase(),
             text: match[3].trim(),
             description: null,
@@ -126,6 +127,7 @@ async function scanWorkspaceForTodos(context: vscode.ExtensionContext) {
             line: i + 1,
             priority: null,
             date: null,
+            source: "comment",
           });
         }
       }
