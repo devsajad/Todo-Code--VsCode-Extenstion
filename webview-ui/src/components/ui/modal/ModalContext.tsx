@@ -1,19 +1,17 @@
 import { createContext, useContext } from "react";
 
-interface ModalContextType {
-  activeModal: "task" | "category" | null;
-  openModal: (modalId: "task" | "category") => void;
-  closeModal: () => void;
-  toggleDropDown: () => void;
-  isShowDropDown: boolean;
-}
+type ModalContextType = {
+  isShowModal: boolean;
+  handleOpenModal: () => void;
+  handleCloseModal: () => void;
+};
 
 export const ModalContext = createContext<ModalContextType | null>(null);
 
-export const useModalContext = () => {
+export function useModal() {
   const context = useContext(ModalContext);
   if (!context) {
-    throw new Error("Component must be rendered within a ModalManager");
+    throw new Error("Using modal context outside of the provider");
   }
   return context;
-};
+}

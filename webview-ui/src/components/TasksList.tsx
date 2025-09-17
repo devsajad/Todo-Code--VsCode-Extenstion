@@ -17,8 +17,8 @@ const TasksList = ({ tasks }: propsType) => {
           <div>
             <p className="text-md">{task.text}</p>
             <p className="text-gray-subtext text-xs">
-              File <span>{task.file.split(/[\\/]/).pop()}</span>, line{" "}
-              <span>{task.line}</span>
+              File <span>{task?.file?.split(/[\\/]/).pop()}</span>, line{" "}
+              <span>{task?.line}</span>
             </p>
           </div>
         </li>

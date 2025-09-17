@@ -1,24 +1,29 @@
-import React, { useState, useEffect } from "react";
-import { vscode } from "./utils/vscode";
-import type { TaskType } from "./types/types";
+import React, { useEffect, useState } from "react";
+import { VscAdd } from "react-icons/vsc";
 import TasksContainer from "./components/TasksContainer";
-import { ModalManager } from "./components/ui/modal/ModalContainer";
+import { DropDown } from "./components/ui/DropDown/DropDown";
+import type { TaskType } from "./types/types";
+import { vscode } from "./utils/vscode";
+import Modal from "./components/ui/Modal/Modal";
+import AddTaskForm from "./components/ui/DropDown/AddTaskForm";
 
 function App() {
   const [todos, setTodos] = useState<TaskType[]>([]);
+  const [categories, setCategories] = useState();
 
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
       const message = event.data;
-      if (message.command === "update-todos") {
-        setTodos(message.data);
+      console.log(message);
+      if (message.command === "update-data") {
+        setTodos(message.data.tasks);
+        setCategories(message.data.categories);
       }
     };
-
     window.addEventListener("message", handleMessage);
 
     vscode.postMessage({
-      command: "get-todos",
+      command: "get-data",
     });
     return () => window.removeEventListener("message", handleMessage);
   }, []);
@@ -31,16 +36,48 @@ function App() {
     <div className="max-w-7xl mx-auto px-6 ">
       <header className="py-6 flex items-center gap-6">
         <h1 className="font-bold uppercase text-xl">Project Todos</h1>
-        <ModalManager>
-          <ModalManager.DropDown />
-          <ModalManager.Modal />
-        </ModalManager>
+        <DropDown>
+          <DropDown.Trigger>
+            Add
+            <VscAdd />
+          </DropDown.Trigger>
+
+          <DropDown.Content>
+            <Modal>
+              <Modal.Trigger>
+                <DropDown.Item>Add Task</DropDown.Item>
+              </Modal.Trigger>
+
+              <Modal.Content>
+                <AddTaskForm />
+              </Modal.Content>
+            </Modal>
+
+            <DropDown.Item> Add Category</DropDown.Item>
+            
+          </DropDown.Content>
+        </DropDown>
       </header>
 
       <main className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <TasksContainer color="red" tasks={bugs} title="Fix Bugs" />
-        <TasksContainer color="yellow" tasks={refactors} title="Refactors" />
-        <TasksContainer color="green" tasks={features} title="features" />
+        <TasksContainer
+          color="red"
+          tasks={bugs}
+          title="Fix Bugs"
+          icon="VscBug"
+        />
+        <TasksContainer
+          color="yellow"
+          tasks={refactors}
+          title="Refactors"
+          icon="VscSync"
+        />
+        <TasksContainer
+          color="green"
+          tasks={features}
+          title="features"
+          icon="VscGitPullRequest"
+        />
       </main>
     </div>
   );
