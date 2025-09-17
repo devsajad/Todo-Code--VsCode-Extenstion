@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { VscSend } from "react-icons/vsc";
-import { vscode } from "../../../utils/vscode";
-import { useModal } from "../Modal/ModalContext";
+import { vscode } from "../../utils/vscode";
+import { useModal } from "../../components/ui/Modal/ModalContext";
 
 const AddTaskForm = () => {
   const { handleCloseModal } = useModal();

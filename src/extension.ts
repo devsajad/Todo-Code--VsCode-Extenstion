@@ -1,7 +1,26 @@
-// src/extension.ts
 import * as vscode from "vscode";
 import * as path from "path";
-import * as fs from "fs"; // Import the Node.js file system module
+import * as fs from "fs";
+const DEFAULT_CATEGORIES = [
+  {
+    id: "feature",
+    color: "green",
+    icon: "VscGitPullRequest",
+    name: "App Features",
+  },
+  {
+    id: "fix-bug",
+    color: "red",
+    icon: "VscBug",
+    name: "Fix Bugs",
+  },
+  {
+    id: "refactor",
+    color: "yellow",
+    icon: "VscSync",
+    name: "Refactors",
+  },
+];
 
 export function activate(context: vscode.ExtensionContext) {
   // Determine if we are in development mode by checking the extension's mode
@@ -34,9 +53,25 @@ export function activate(context: vscode.ExtensionContext) {
       // Handle messages from the webview (our React app)
       panel.webview.onDidReceiveMessage(
         async (message) => {
-          if (message.command === "get-todos") {
-            const todos = await scanWorkspaceForTodos();
-            panel.webview.postMessage({ command: "update-todos", data: todos });
+          if (message.command === "get-data") {
+            // Load categories from storage
+            const categories = context.workspaceState.get(
+              "todoCategories",
+              DEFAULT_CATEGORIES
+            );
+            // Load manual tasks from storage
+            const manualTasks = context.workspaceState.get("manualTasks", []);
+            // Scan the workspace for comment-based tasks
+            const commentTasks = await scanWorkspaceForTodos(context);
+
+            // Send the complete state to the frontend
+            panel.webview.postMessage({
+              command: "update-data",
+              data: {
+                tasks: [...manualTasks, ...commentTasks],
+                categories: categories,
+              },
+            });
           }
 
           // Handle adding a new manual task
@@ -56,6 +91,54 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(disposable);
 }
 
+async function scanWorkspaceForTodos(context: vscode.ExtensionContext) {
+  const categories = context.workspaceState.get(
+    "todoCategories",
+    DEFAULT_CATEGORIES
+  );
+  const categoriesIds = categories.map((category) => category.id);
+
+  const todoPattern = `(?:\/\/|\\*)\\s*##(${categoriesIds.join(
+    "|"
+  )})(:|\\s)(.*)`;
+
+  const todoRegex = new RegExp(todoPattern, "i"); // 'i' for case-insensitive
+
+  const files = await vscode.workspace.findFiles(
+    "**/*.{js,ts,jsx,tsx}",
+    "**/node_modules/**"
+  );
+  const allTodos = [];
+
+  for (const file of files) {
+    try {
+      const document = await vscode.workspace.openTextDocument(file);
+      for (let i = 0; i < document.lineCount; i++) {
+        const line = document.lineAt(i);
+        const match = line.text.match(todoRegex);
+        if (match) {
+          console.log(match);
+          allTodos.push({
+            categoryId: match[1].toLowerCase(),
+            text: match[3].trim(),
+            description: null,
+            file: file.fsPath,
+            line: i + 1,
+            priority: null,
+            date: null,
+          });
+        }
+      }
+    } catch (e) {
+      console.error(`Could not read file: ${file.fsPath}`, e);
+    }
+  }
+
+  console.log(`Finished scanning. Found ${allTodos.length} todos.`);
+  return allTodos;
+}
+
+// SERVER FUNCTIONS
 // This function now acts as a router to load the correct HTML
 function getWebviewContent(
   isDevelopment: boolean,
@@ -131,42 +214,6 @@ function getNonce() {
     text += possible.charAt(Math.floor(Math.random() * possible.length));
   }
   return text;
-}
-
-async function scanWorkspaceForTodos() {
-  const files = await vscode.workspace.findFiles(
-    "**/*.{js,ts,jsx,tsx}",
-    "**/node_modules/**"
-  );
-  console.log(`Scanning... Found ${files.length} files.`);
-  const allTodos = [];
-
-  for (const file of files) {
-    try {
-      const document = await vscode.workspace.openTextDocument(file);
-      for (let i = 0; i < document.lineCount; i++) {
-        const line = document.lineAt(i);
-        const match = line.text.match(
-          /(?:\/\/|\*)\s*##(fix-bug|refactor|feature)(.*)/
-        );
-
-        if (match) {
-          console.log(`Found a match in ${file.fsPath} on line ${i + 1}`);
-          allTodos.push({
-            type: match[1],
-            text: match[2].trim(),
-            file: file.fsPath,
-            line: i + 1,
-          });
-        }
-      }
-    } catch (e) {
-      console.error(`Could not read file: ${file.fsPath}`, e);
-    }
-  }
-
-  console.log(`Finished scanning. Found ${allTodos.length} todos.`);
-  return allTodos;
 }
 
 export function deactivate() {}

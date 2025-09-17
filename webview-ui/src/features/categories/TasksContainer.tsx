@@ -1,7 +1,7 @@
 import React from "react";
 import { VscBug, VscGitPullRequest, VscSync } from "react-icons/vsc";
-import type { TaskType } from "../types/types";
-import TasksList from "./TasksList";
+import type { TaskType } from "../../types/types";
+import TasksList from "../tasks/TasksList";
 
 const iconMap = {
   VscBug: VscBug,

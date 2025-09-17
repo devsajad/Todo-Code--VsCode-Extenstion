@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { VscAdd } from "react-icons/vsc";
-import TasksContainer from "./components/TasksContainer";
+import TasksContainer from "./features/categories/TasksContainer";
 import { DropDown } from "./components/ui/DropDown/DropDown";
-import type { TaskType } from "./types/types";
+import type { CategoryType, TaskType } from "./types/types";
 import { vscode } from "./utils/vscode";
 import Modal from "./components/ui/Modal/Modal";
-import AddTaskForm from "./components/ui/DropDown/AddTaskForm";
+import AddTaskForm from "./features/tasks/AddTaskForm";
 
 function App() {
   const [todos, setTodos] = useState<TaskType[]>([]);
-  const [categories, setCategories] = useState();
+  const [categories, setCategories] = useState<CategoryType[]>([]);
 
+  console.log(categories, todos);
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
       const message = event.data;
@@ -28,9 +29,9 @@ function App() {
     return () => window.removeEventListener("message", handleMessage);
   }, []);
 
-  const bugs = todos.filter((todo) => todo.type === "fix-bug");
-  const features = todos.filter((todo) => todo.type === "feature");
-  const refactors = todos.filter((todo) => todo.type === "refactor");
+  const bugs = todos.filter((todo) => todo.categoryId === "fix-bug");
+  const features = todos.filter((todo) => todo.categoryId === "feature");
+  const refactors = todos.filter((todo) => todo.categoryId === "refactor");
 
   return (
     <div className="max-w-7xl mx-auto px-6 ">
@@ -54,12 +55,17 @@ function App() {
             </Modal>
 
             <DropDown.Item> Add Category</DropDown.Item>
-            
           </DropDown.Content>
         </DropDown>
       </header>
 
       <main className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <TasksContainer
+          color="green"
+          tasks={features}
+          title="App Features"
+          icon="VscGitPullRequest"
+        />
         <TasksContainer
           color="red"
           tasks={bugs}
@@ -71,12 +77,6 @@ function App() {
           tasks={refactors}
           title="Refactors"
           icon="VscSync"
-        />
-        <TasksContainer
-          color="green"
-          tasks={features}
-          title="features"
-          icon="VscGitPullRequest"
         />
       </main>
     </div>
