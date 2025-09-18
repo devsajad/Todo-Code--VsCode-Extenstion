@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import * as path from "path";
 import * as fs from "fs";
+import { TodoViewProvider } from "./TodoViewProvider";
 
 export type TaskType = {
   id: string;
@@ -39,26 +40,32 @@ const DEFAULT_CATEGORIES = [
 ];
 
 export function activate(context: vscode.ExtensionContext) {
-  // Determine if we are in development mode by checking the extension's mode
-  const isDevelopment =
-    context.extensionMode === vscode.ExtensionMode.Development;
+  // 1. Register the Sidebar View Provider
+  const sidebarProvider = new TodoViewProvider(context);
+  context.subscriptions.push(
+    vscode.window.registerWebviewViewProvider(
+      TodoViewProvider.viewType,
+      sidebarProvider
+    )
+  );
 
   let disposable = vscode.commands.registerCommand(
-    "code-todos.start",
-    async () => {
+    "code-todos.showPanel",
+    () => {
+      // This is all your existing logic for creating the main panel
       const panel = vscode.window.createWebviewPanel(
-        "codeTodos",
+        "codeTodosPanel", // A unique ID for this panel type
         "Code Todos",
         vscode.ViewColumn.One,
         {
           enableScripts: true,
-          // Restrict the webview to only loading content from our extension's directories
-          localResourceRoots: [
-            vscode.Uri.joinPath(context.extensionUri, "webview-ui/dist"),
-          ],
+          localResourceRoots: [context.extensionUri],
         }
       );
 
+      // Determine if we are in development mode by checking the extension's mode
+      const isDevelopment =
+        context.extensionMode === vscode.ExtensionMode.Development;
       // Set the webview's content based on the mode
       panel.webview.html = getWebviewContent(
         isDevelopment,

@@ -17,7 +17,26 @@
         "command": "code-todos.start",
         "title": "Start Todos Coders"
       }
-    ]
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "code-todos-container",
+          "title": "Code Todos",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "code-todos-container": [
+        {
+          "icon": "media/icon.svg",
+          "id": "code-todos-view",
+          "name": "Code Todos",
+          "type": "webview"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
