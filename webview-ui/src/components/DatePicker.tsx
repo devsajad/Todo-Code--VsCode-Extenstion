@@ -25,7 +25,7 @@ const DateRangePicker = ({
         )}`
       : selectedRange?.from
       ? `${format(selectedRange.from, "PPP")} - ...`
-      : "Select a date range";
+      : "Select start to end date range";
 
   return (
     <div className="relative" ref={ref}>

@@ -12,7 +12,7 @@ const DropDownTrigger = ({ children }: ModalTriggerPropsType) => {
     <div>
       <button
         onClick={() => handleToggleDropDown()}
-        className="text-sm rounded-sm font-base font-bold uppercase w-full bg-purple-primary text-primary-text flex items-center justify-center gap-1 px-2 py-1 cursor-pointer"
+        className="text-sm rounded-sm font-medium font-medium uppercase w-full bg-purple-primary text-primary-text flex items-center justify-center gap-1 px-2 py-1 cursor-pointer"
       >
         {children}
       </button>

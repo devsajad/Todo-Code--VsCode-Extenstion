@@ -32,7 +32,7 @@ const AddCategoryForm = () => {
 
   return (
     <form onSubmit={(e) => handleSubmit(e)}>
-      <h2 className="text-purple-primary font-bold text-center max-w-55 py-2 mx-auto text-lg mb-6">
+      <h2 className="font-bold text-purple-primary text-center max-w-55 py-2 mx-auto text-lg mb-6">
         Create New Category
       </h2>
       <div className="flex flex-col mb-4 space-y-1">

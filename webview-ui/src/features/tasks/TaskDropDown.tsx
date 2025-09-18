@@ -1,16 +1,16 @@
 import React from "react";
+import { IoMdAdd } from "react-icons/io";
 import { DropDown } from "../../components/ui/DropDown/DropDown";
 import Modal from "../../components/ui/Modal/Modal";
 import AddCategoryForm from "./AddCategoryForm";
 import AddTaskForm from "./AddTaskForm";
-import { HiDocumentAdd } from "react-icons/hi";
 
 const TaskDropDown = () => {
   return (
     <DropDown>
       <DropDown.Trigger>
         Add
-        <HiDocumentAdd className="text-base" />
+        <IoMdAdd />
       </DropDown.Trigger>
 
       <DropDown.Content>

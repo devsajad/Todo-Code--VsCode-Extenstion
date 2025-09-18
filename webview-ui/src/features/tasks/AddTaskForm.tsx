@@ -71,7 +71,7 @@ const AddTaskForm = () => {
       </div>
 
       <div className="flex flex-col mb-6 space-y-1">
-        <label className="font-medium  text-base">Date Range</label>
+        <label className="font-medium  text-base">Start/End Date</label>
         <DateRangePicker
           selectedRange={dateRange}
           onRangeSelect={setDateRange}
@@ -100,10 +100,7 @@ const AddTaskForm = () => {
         />
       </div>
 
-      <button
-        type="submit"
-        className="btn-primary"
-      >
+      <button type="submit" className="btn-primary">
         <span className="font-medium">Add Task</span>
       </button>
     </form>
