@@ -2,25 +2,34 @@ import React from "react";
 import { useAppSelector } from "../../store/hook.js";
 import { ICON_MAP } from "../constants/constants.js";
 import type { CategoryType } from "../types/types.js";
+import MoreCategoryButton from "./MoreCategoryButton.js";
 import TasksList from "./TasksList.js";
 
-const CategoriesContainer = ({ name, color, icon, id }: CategoryType) => {
-  const IconComponent = icon ? ICON_MAP[icon] : null;
+const CategoriesContainer = ({ category }: { category: CategoryType }) => {
+  const IconComponent = category.icon ? ICON_MAP[category.icon] : null;
 
   const tasks = useAppSelector((state) => state.tasks);
-  const filteredTask = tasks.filter((task) => task.categoryId === id);
+  const filteredTask = tasks.filter((task) => task.categoryId === category.id);
 
-  if (filteredTask.length === 0) return null;
+  // if (filteredTask.length === 0) return null;
 
   return (
-    <header className="space-y-3">
-      <div className="flex items-center justify-between">
-        <p className="text-base">{name}</p>
-        {IconComponent && <IconComponent className="text-base" />}
-      </div>
-      <div style={{ background: color }} className={`h-[4px] rounded-full`}></div>
+    <div className="space-y-3">
+      <header className="space-y-2">
+        <div className="flex items-center gap-2">
+          {IconComponent && <IconComponent className="text-base" />}
+          <p className="text-base">{category.name}</p>
+          <MoreCategoryButton category={category} />
+        </div>
+
+        <div
+          style={{ background: category.color }}
+          className={`h-[4px] rounded-full`}
+        ></div>
+      </header>
+
       <TasksList tasks={filteredTask} />
-    </header>
+    </div>
   );
 };
 

@@ -36,14 +36,8 @@ function App() {
         <TaskDropDown />
       </Header>
       <Main>
-        {categories.map((category) => (
-          <CategoriesContainer
-            key={category.id}
-            id={category.id}
-            color={category.color}
-            name={category.name}
-            icon={category.icon}
-          />
+        {categories.map((category, index) => (
+          <CategoriesContainer key={index} category={category} />
         ))}
       </Main>
     </>

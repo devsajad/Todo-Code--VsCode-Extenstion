@@ -1,16 +1,16 @@
+import DateRangePicker from "@/components/DatePicker";
 import React, { useState } from "react";
-import { VscSend } from "react-icons/vsc";
+import type { DateRange } from "react-day-picker";
 import { useModal } from "../../components/ui/Modal/ModalContext";
 import { useAppDispatch, useAppSelector } from "../../store/hook";
 import CategoryPicker from "./CategoryPicker";
 import PriorityPicker from "./PriorityPicker";
-import DateRangePicker from "@/components/DatePicker";
-import type { DateRange } from "react-day-picker";
 import { addManualTaskThunk } from "./store/TasksSlice";
 
 const AddTaskForm = () => {
   const { handleCloseModal } = useModal();
   const [titleInput, setTitleInput] = useState<string>("");
+  const [descriptionInput, setDescriptionInput] = useState<string>("");
   const categories = useAppSelector((state) => state.categories);
   const [selectedPriority, setSelectedPriority] = useState<number>(5);
   const [selectedCategoryId, setSelectedCategoryId] = useState(
@@ -30,6 +30,7 @@ const AddTaskForm = () => {
         priority: selectedPriority,
         startDate: dateRange?.from,
         endDate: dateRange?.to,
+        description: descriptionInput,
       })
     );
 
@@ -62,6 +63,8 @@ const AddTaskForm = () => {
           Description
         </label>
         <input
+          value={descriptionInput}
+          onChange={(e) => setDescriptionInput(e.target.value)}
           className="border-1 border-white-text/30 px-2 py-2 rounded-md"
           type="text"
           name="description"

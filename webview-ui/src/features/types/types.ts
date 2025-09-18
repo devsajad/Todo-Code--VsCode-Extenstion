@@ -11,7 +11,7 @@ export type TaskType = {
   date?: Date;
   startDate?: Date;
   endDate?: Date;
-  completed: boolean;
+  completed : boolean;
 };
 
 export type CategoryType = {

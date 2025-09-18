@@ -5,26 +5,43 @@ import { useDropDown } from "../../components/ui/DropDown/DropDownContext";
 import { useModal } from "../../components/ui/Modal/ModalContext";
 import { useAppDispatch } from "../../store/hook";
 import { CATEGORIES_COLORS, CATEGORIES_ICONS } from "../constants/constants";
-import { addCategoryThunk } from "./store/CategoriesSlice";
+import { addCategoryThunk, updateCategoryThunk } from "./store/CategoriesSlice";
+import type { CategoryType } from "../types/types";
 
-const AddCategoryForm = () => {
+const AddEditCategoryForm = ({ category }: { category?: CategoryType }) => {
   const { handleCloseModal } = useModal();
   const { handleCloseDropDown } = useDropDown();
-  const [nameInput, setNameInput] = useState<string>("");
-  const [selectedColor, setSelectedColor] = useState(CATEGORIES_COLORS[0]);
-  const [selectedIcon, setSelectedIcon] = useState(CATEGORIES_ICONS[0]);
+  const [nameInput, setNameInput] = useState<string>(
+    () => category?.name || ""
+  );
+  const [selectedColor, setSelectedColor] = useState(
+    () => category?.color || CATEGORIES_COLORS[0]
+  );
+  const [selectedIcon, setSelectedIcon] = useState(
+    () => category?.icon || CATEGORIES_ICONS[0]
+  );
   const dispatch = useAppDispatch();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    dispatch(
-      addCategoryThunk({
-        name: nameInput,
-        color: selectedColor,
-        icon: selectedIcon,
-      })
-    );
+    if (category)
+      dispatch(
+        updateCategoryThunk({
+          name: nameInput,
+          color: selectedColor,
+          icon: selectedIcon,
+          id: category.id,
+        })
+      );
+    else
+      dispatch(
+        addCategoryThunk({
+          name: nameInput,
+          color: selectedColor,
+          icon: selectedIcon,
+        })
+      );
 
     handleCloseModal();
     handleCloseDropDown();
@@ -32,8 +49,8 @@ const AddCategoryForm = () => {
 
   return (
     <form onSubmit={(e) => handleSubmit(e)}>
-      <h2 className="font-bold text-purple-primary text-center max-w-55 py-2 mx-auto text-lg mb-6">
-        Create New Category
+      <h2 className="font-bold uppercase text-purple-primary text-center max-w-55 py-2 mx-auto text-lg mb-6">
+        {category ? "Edit Category" : "Create New Category"}
       </h2>
       <div className="flex flex-col mb-4 space-y-1">
         <label htmlFor="title" className="font-medium  text-base">
@@ -42,7 +59,7 @@ const AddCategoryForm = () => {
         <input
           value={nameInput}
           onChange={(e) => setNameInput(e.target.value)}
-          className="border-1 border-white-text/30 px-2 py-1"
+          className="border-1 border-white-text/30 px-2 py-2"
           type="text"
           name="title"
           id="title"
@@ -83,4 +100,4 @@ const AddCategoryForm = () => {
   );
 };
 
-export default AddCategoryForm;
+export default AddEditCategoryForm;

@@ -3,16 +3,17 @@ import { useDropDown } from "./DropDownContext";
 
 type ModalTriggerPropsType = {
   children: ReactNode;
+  classNames?: string;
 };
 
-const DropDownTrigger = ({ children }: ModalTriggerPropsType) => {
+const DropDownTrigger = ({ children, classNames }: ModalTriggerPropsType) => {
   const { handleToggleDropDown } = useDropDown();
 
   return (
     <div>
       <button
         onClick={() => handleToggleDropDown()}
-        className="text-sm rounded-sm font-medium font-medium uppercase w-full bg-purple-primary text-primary-text flex items-center justify-center gap-1 px-2 py-1 cursor-pointer"
+        className={`text-sm rounded-sm font-medium uppercase w-full justify-center cursor-pointer ${classNames}`}
       >
         {children}
       </button>
