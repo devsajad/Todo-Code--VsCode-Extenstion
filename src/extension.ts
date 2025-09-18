@@ -1,6 +1,22 @@
 import * as vscode from "vscode";
 import * as path from "path";
 import * as fs from "fs";
+
+export type TaskType = {
+  id: string;
+  source: "comment" | "manual";
+  categoryId: string;
+  text: string;
+  file?: string;
+  line?: number;
+  description?: string;
+  priority?: number;
+  date?: Date;
+  startDate?: Date;
+  endDate?: Date;
+  completed: boolean;
+};
+
 const DEFAULT_CATEGORIES = [
   {
     id: "feature",
@@ -127,7 +143,57 @@ export function activate(context: vscode.ExtensionContext) {
               return;
             }
 
-            // Add your remove and update task handlers here as well...
+            case "remove-task": {
+              const savedTasks = context.workspaceState.get<TaskType[]>(
+                "manualTasks",
+                []
+              );
+              const { taskId } = message.data;
+              const updatedTasks = savedTasks.filter(
+                (task) => task.id !== taskId
+              );
+              await context.workspaceState.update("manualTasks", updatedTasks);
+              return;
+            }
+
+            case "update-task": {
+              const savedTasks = context.workspaceState.get<TaskType[]>(
+                "manualTasks",
+                []
+              );
+              const updatedTask = message.data;
+              const updatedTasks = savedTasks.map((task) =>
+                task.id === updatedTask.id ? updatedTask : task
+              );
+              await context.workspaceState.update("manualTasks", updatedTasks);
+              return;
+            }
+
+            case "complete-comment-task": {
+              const { file, line } = message.data;
+              if (!file || !line) {
+                return;
+              }
+
+              try {
+                const uri = vscode.Uri.file(file);
+                const document = await vscode.workspace.openTextDocument(uri);
+
+                const lineToRemove = document.lineAt(line - 1);
+
+                const edit = new vscode.WorkspaceEdit();
+
+                edit.delete(uri, lineToRemove.rangeIncludingLineBreak);
+
+                await vscode.workspace.applyEdit(edit);
+              } catch (error) {
+                console.error("Failed to complete comment task:", error);
+                vscode.window.showErrorMessage(
+                  "Could not remove the task comment from the file."
+                );
+              }
+              return;
+            }
           }
         },
         undefined,
@@ -170,12 +236,16 @@ async function scanWorkspaceForTodos(context: vscode.ExtensionContext) {
             id: `${file.fsPath}-${i + 1}`,
             categoryId: match[1].toLowerCase(),
             text: match[3].trim(),
-            description: null,
             file: file.fsPath,
             line: i + 1,
+            source: "comment",
+            completed: false,
+
+            description: null,
             priority: null,
             date: null,
-            source: "comment",
+            startDate: null,
+            endDate: null,
           });
         }
       }

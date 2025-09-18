@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { VscSend } from "react-icons/vsc";
 import { useModal } from "../../components/ui/Modal/ModalContext";
-import { useAppSelector } from "../../store/hook";
+import { useAppDispatch, useAppSelector } from "../../store/hook";
 import CategoryPicker from "./CategoryPicker";
 import PriorityPicker from "./PriorityPicker";
+import DateRangePicker from "@/components/DatePicker";
+import type { DateRange } from "react-day-picker";
+import { addManualTaskThunk } from "./store/TasksSlice";
 
 const AddTaskForm = () => {
   const { handleCloseModal } = useModal();
@@ -13,29 +16,32 @@ const AddTaskForm = () => {
   const [selectedCategoryId, setSelectedCategoryId] = useState(
     categories[0]?.id || ""
   );
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(); // ✅ 2. Add state for the date
+  const [dateRange, setDateRange] = useState<DateRange | undefined>();
+  const dispatch = useAppDispatch();
 
-  // const handleSubmit = (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   if (!taskText || !selectedCategoryId) return;
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!titleInput || !selectedCategoryId) return;
 
-  // dispatch(addManualTask({
-  //   text: taskText,
-  //   categoryId: selectedCategoryId,
-  //   priority: selectedPriority,
-  //   date: selectedDate,
-  // }));
+    dispatch(
+      addManualTaskThunk({
+        text: titleInput,
+        categoryId: selectedCategoryId,
+        priority: selectedPriority,
+        startDate: dateRange?.from,
+        endDate: dateRange?.to,
+      })
+    );
 
-  //   // handleCloseModal(); // Assuming you get this from context or props
-  // };
+    handleCloseModal();
+  };
 
-  // Prevent rendering if there are no categories to choose from
   if (categories.length === 0) {
     return <p>Please add a category first.</p>;
   }
 
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <div className="flex flex-col mb-6 space-y-2">
         <label htmlFor="title" className="font-medium uppercase text-base">
           Title
@@ -52,25 +58,28 @@ const AddTaskForm = () => {
       </div>
 
       <div className="flex flex-col mb-6 space-y-2">
-        <label htmlFor="title" className="font-medium uppercase text-base">
+        <label
+          htmlFor="description"
+          className="font-medium uppercase text-base"
+        >
           Description
         </label>
         <input
           className="border-1 border-white-text/30 px-2 py-1"
           type="text"
-          name="title"
-          id="title"
+          name="description"
+          id="description"
           placeholder="Enter your task description"
         />
       </div>
 
-      {/* <div className="mb-6">
-        <label className="block mb-2">Due Date</label>
-        <DatePicker
-          selectedDate={selectedDate}
-          onDateSelect={setSelectedDate}
+      <div className="flex flex-col mb-6 space-y-2">
+        <label className="font-medium uppercase text-base">Date Range</label>
+        <DateRangePicker
+          selectedRange={dateRange}
+          onRangeSelect={setDateRange}
         />
-      </div> */}
+      </div>
 
       <div className="mb-6">
         <label className="font-medium uppercase text-base inline-block mb-3">

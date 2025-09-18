@@ -19,7 +19,7 @@ const CategoryPicker = ({
         const IconComponent = ICON_MAP[category.icon];
 
         return (
-          <div className="relative group">
+          <div className="relative group" key={category.id}>
             <button
               key={category.id}
               type="button"

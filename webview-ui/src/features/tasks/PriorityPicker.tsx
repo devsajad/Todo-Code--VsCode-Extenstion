@@ -6,12 +6,6 @@ interface PriorityPickerProps {
   onPrioritySelect: (priority: number) => void;
 }
 
-// const getPriorityColor = (priority: number): string => {
-//   if (priority >= 8) return "bg-red-600 hover:bg-red-500";
-//   if (priority >= 4) return "bg-yellow-500 hover:bg-yellow-400";
-//   return "bg-green-600 hover:bg-green-500";
-// };
-
 const PriorityPicker = ({
   maxPriority = 10,
   selectedPriority,
@@ -21,11 +15,12 @@ const PriorityPicker = ({
 
   return (
     <div className="flex flex-wrap items-center gap-2">
-      {priorities.map((priority) => (
+      {priorities.map((priority, index) => (
         <button
           key={priority}
           type="button"
           onClick={() => onPrioritySelect(priority)}
+          style={{ opacity: `${(index + 2) * 10}%` }}
           className={`w-8 h-8 flex items-center justify-center bg-button-background font-bold text-button-foreground cursor-pointer transition-all
             ${
               selectedPriority === priority

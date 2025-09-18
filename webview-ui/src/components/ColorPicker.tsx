@@ -20,11 +20,7 @@ const ColorPicker = ({
           onClick={() => onColorSelect(color)}
           style={{ backgroundColor: color }}
           className={`w-6 h-6 rounded-full cursor-pointer focus:outline-none transition-transform hover:scale-110
-            ${
-              selectedColor === color
-                ? "ring-2 ring-offset-2 ring-offset-gray-800 ring-white"
-                : ""
-            }
+            ${selectedColor === color ? "ring-2 ring-white scale-110" : ""}
           `}
           aria-label={`Select color ${color}`}
         />

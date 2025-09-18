@@ -2,7 +2,7 @@
 
 @theme {
   --font-sans: var(--vscode-font-family);
-  
+
   --color-gray-bg: var(--vscode-editor-background);
   --color-gray-secondry: var(--vscode-sideBar-background);
 
@@ -10,9 +10,6 @@
   --color-primary-text: var(--vscode-statusBarItem-remoteForeground);
 
   --color-gray-subtext: #afafaf;
-  --color-red-error: #f5234b;
-  --color-green-success: #1ec337;
-  --color-yellow-warning: #f5c200;
 
   --color-white-text: var(--vscode-foreground);
 
@@ -27,4 +24,51 @@
   button {
     @apply cursor-pointer;
   }
+  input {
+    @apply border-gray-600! placeholder:text-xs placeholder:md:text-sm placeholder:text-gray-400;
+  }
+}
+
+/* .rdp {
+  --rdp-cell-size: 32px !important;
+  --rdp-accent-color: #6e21c3 !important;
+  --rdp-background-color: #4a4a4a !important;
+  --rdp-color: #cccccc !important;
+  border: 1px solid #5a5a5a !important;
+  border-radius: 4px !important;
+  padding: 0.5rem !important;
+}
+.rdp-button:hover:not([disabled]):not(.rdp-day_selected) {
+  background-color: #5a5a5a !important;
+} */
+
+#date-picker .rdp-root {
+  padding: 6px;
+
+  --rdp-accent-color: var(--vscode-statusBarItem-remoteBackground);
+  --rdp-accent-background-color: var(--vscode-sideBar-background);
+
+  --rdp-day-height: 33px;
+  --rdp-day-width: 33px;
+
+  --rdp-day_button-border: none;
+  --rdp-day_button-height: 35px;
+  --rdp-day_button-width: 35px;
+
+  --rdp-nav_button-height: 1.1rem;
+  --rdp-nav_button-width: 1.1rem;
+  --rdp-nav-height: 2rem;
+
+  --rdp-range_start-color: var(--vscode-statusBarItem-remoteForeground);
+  --rdp-range_end-color: var(--vscode-statusBarItem-remoteForeground);
+
+  --rdp-weekday-padding: 0.5rem 0rem;
+}
+#date-picker .rdp-month_caption,
+#date-picker .rdp-nav {
+  @apply font-medium text-sm;
+}
+
+#date-picker .rdp-selected {
+  @apply text-sm;
 }

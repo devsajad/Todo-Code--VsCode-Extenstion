@@ -77,6 +77,8 @@ const AddCategoryForm = () => {
         />
       </div>
 
+      <input type="date" className="bg-gray-700 p-2 rounded" />
+
       <button
         type="submit"
         className="flex items-center gap-1 bg-purple-primary text-primary-text py-1 px-2 ml-auto"

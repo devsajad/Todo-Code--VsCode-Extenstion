@@ -9,6 +9,9 @@ export type TaskType = {
   description?: string;
   priority?: number;
   date?: Date;
+  startDate?: Date;
+  endDate?: Date;
+  completed: boolean;
 };
 
 export type CategoryType = {
