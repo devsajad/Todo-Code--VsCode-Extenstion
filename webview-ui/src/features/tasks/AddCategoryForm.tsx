@@ -53,7 +53,10 @@ const AddCategoryForm = () => {
 
       <div className="mb-6">
         <label className="block mb-2 font-medium uppercase text-base">
-          Icon
+          Icon{" "}
+          <span className="font-light lowercase">
+            ( {selectedIcon.slice(3)} )
+          </span>
         </label>
         <IconPicker
           icons={CATEGORIES_ICONS}
@@ -64,7 +67,8 @@ const AddCategoryForm = () => {
 
       <div className="mb-8">
         <label className="block mb-2 font-bold text-base uppercase">
-          Color
+          Color{" "}
+          <span className="font-light lowercase">( {selectedColor} )</span>
         </label>
         <ColorPicker
           colors={CATEGORIES_COLORS}
@@ -75,7 +79,7 @@ const AddCategoryForm = () => {
 
       <button
         type="submit"
-        className="flex items-center gap-1 bg-button-background text-button-foreground py-1 px-2 ml-auto"
+        className="flex items-center gap-1 bg-purple-primary text-primary-text py-1 px-2 ml-auto"
       >
         <span>Add</span>
         <VscSend />

@@ -19,7 +19,7 @@ const IconPicker = ({ icons, selectedIcon, onIconSelect }: IconPickerProps) => {
             key={iconName}
             type="button"
             onClick={() => onIconSelect(iconName)}
-            className={`p-2 rounded-md cursor-pointer transition-colors
+            className={`p-2 cursor-pointer transition-colors
               ${
                 selectedIcon === iconName
                   ? "bg-purple-primary text-white"

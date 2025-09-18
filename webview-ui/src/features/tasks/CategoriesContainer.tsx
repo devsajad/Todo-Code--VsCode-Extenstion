@@ -10,6 +10,8 @@ const CategoriesContainer = ({ name, color, icon, id }: CategoryType) => {
   const tasks = useAppSelector((state) => state.tasks);
   const filteredTask = tasks.filter((task) => task.categoryId === id);
 
+  if (filteredTask.length === 0) return null;
+
   return (
     <header className="space-y-3">
       <div className="flex items-center justify-between">
