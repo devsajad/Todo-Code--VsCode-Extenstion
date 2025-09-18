@@ -9,7 +9,7 @@ interface IconPickerProps {
 
 const IconPicker = ({ icons, selectedIcon, onIconSelect }: IconPickerProps) => {
   return (
-    <div className="flex flex-wrap items-center gap-3 py-2">
+    <div className="flex flex-wrap items-center gap-2 py-2">
       {icons.map((iconName) => {
         const IconComponent = ICON_MAP[iconName];
         if (!IconComponent) return null;
@@ -19,10 +19,10 @@ const IconPicker = ({ icons, selectedIcon, onIconSelect }: IconPickerProps) => {
             key={iconName}
             type="button"
             onClick={() => onIconSelect(iconName)}
-            className={`p-2 duration-300 cursor-pointer transition-colors
+            className={`p-2 rounded-md duration-300 cursor-pointer transition-colors
               ${
                 selectedIcon === iconName
-                  ? "bg-purple-primary text-white ring-1 scale-110 ring-white"
+                  ? "bg-purple-primary text-white ring-2 ring-white"
                   : "bg-button-background hover:bg-gray-600"
               }
             `}

@@ -18,7 +18,7 @@ const CategoriesContainer = ({ name, color, icon, id }: CategoryType) => {
         <p className="text-base">{name}</p>
         {IconComponent && <IconComponent className="text-base" />}
       </div>
-      <div style={{ background: color }} className={`h-0.5`}></div>
+      <div style={{ background: color }} className={`h-[4px] rounded-full`}></div>
       <TasksList tasks={filteredTask} />
     </header>
   );

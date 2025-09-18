@@ -9,7 +9,10 @@ const ModalContent = ({ children }: { children: ReactNode }) => {
   if (isShowModal)
     return (
       <div className="fixed inset-0 bg-gray-bg/60 backdrop-blur-sm flex items-center justify-center px-6">
-        <div className="bg-gray-secondry p-6 max-w-md grow" ref={ref}>
+        <div
+          className="bg-gray-secondry p-6 max-w-md grow rounded-xl"
+          ref={ref}
+        >
           {children}
         </div>
       </div>

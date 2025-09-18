@@ -8,7 +8,7 @@ const DropDownContent = ({ children }: { children: ReactNode }) => {
     <>
       <div className="relative">
         {isShowDropDown && (
-          <div className="absolute left-0 top-0 text-sm bg-button-background">
+          <div className="absolute right-0 top-0 text-sm bg-button-background rounded-md">
             <ul className="divide-y-2 divide-gray-bg">{children}</ul>
           </div>
         )}

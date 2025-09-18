@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import { VscSend } from "react-icons/vsc";
 import ColorPicker from "../../components/ColorPicker";
 import IconPicker from "../../components/IconPicker";
+import { useDropDown } from "../../components/ui/DropDown/DropDownContext";
 import { useModal } from "../../components/ui/Modal/ModalContext";
 import { useAppDispatch } from "../../store/hook";
 import { CATEGORIES_COLORS, CATEGORIES_ICONS } from "../constants/constants";
 import { addCategoryThunk } from "./store/CategoriesSlice";
-import { useDropDown } from "../../components/ui/DropDown/DropDownContext";
 
 const AddCategoryForm = () => {
   const { handleCloseModal } = useModal();
@@ -33,11 +32,11 @@ const AddCategoryForm = () => {
 
   return (
     <form onSubmit={(e) => handleSubmit(e)}>
-      <h2 className="text-purple-primary font-bold text-center max-w-55 py-2 mx-auto text-lg mb-6 uppercase">
+      <h2 className="text-purple-primary font-bold text-center max-w-55 py-2 mx-auto text-lg mb-6">
         Create New Category
       </h2>
-      <div className="flex flex-col mb-6 space-y-2">
-        <label htmlFor="title" className="font-medium uppercase text-base">
+      <div className="flex flex-col mb-4 space-y-1">
+        <label htmlFor="title" className="font-medium  text-base">
           Name
         </label>
         <input
@@ -51,8 +50,8 @@ const AddCategoryForm = () => {
         />
       </div>
 
-      <div className="mb-6">
-        <label className="block mb-2 font-medium uppercase text-base">
+      <div className="mb-4">
+        <label className="block mb-1 font-medium  text-base">
           Icon{" "}
           <span className="font-light lowercase">
             ( {selectedIcon.slice(3)} )
@@ -65,8 +64,8 @@ const AddCategoryForm = () => {
         />
       </div>
 
-      <div className="mb-8">
-        <label className="block mb-2 font-bold text-base uppercase">
+      <div className="mb-5">
+        <label className="block mb-1 font-medium text-base ">
           Color{" "}
           <span className="font-light lowercase">( {selectedColor} )</span>
         </label>
@@ -77,12 +76,8 @@ const AddCategoryForm = () => {
         />
       </div>
 
-      <button
-        type="submit"
-        className="flex items-center gap-1 bg-purple-primary text-primary-text py-1 px-2 ml-auto"
-      >
-        <span>Add</span>
-        <VscSend />
+      <button type="submit" className="btn-primary">
+        <span className="font-medium">Add Task</span>
       </button>
     </form>
   );

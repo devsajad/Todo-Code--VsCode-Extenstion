@@ -21,10 +21,10 @@ const PriorityPicker = ({
           type="button"
           onClick={() => onPrioritySelect(priority)}
           style={{ opacity: `${(index + 2) * 10}%` }}
-          className={`w-8 h-8 flex items-center justify-center bg-button-background font-bold text-button-foreground cursor-pointer transition-all
+          className={`hover:scale-110 rounded-sm w-8 h-8 flex items-center justify-center bg-button-background font-medium text-button-foreground cursor-pointer transition-all
             ${
               selectedPriority === priority
-                ? "ring-1 ring-button-foreground scale-110"
+                ? "ring-1 ring-button-foreground"
                 : "scale-100"
             }
           `}

@@ -31,7 +31,7 @@ const DateRangePicker = ({
     <div className="relative" ref={ref}>
       <button
         type="button"
-        className="w-full flex items-center justify-between p-2 ring-1 ring-gray-600"
+        className="w-full rounded-md flex items-center justify-between p-2 ring-1 ring-gray-600"
         onClick={() => setIsOpen(!isOpen)}
       >
         <span className="text-gray-400 text-xs md:text-sm text-left mr-2">
@@ -41,8 +41,12 @@ const DateRangePicker = ({
       </button>
 
       {isOpen && (
-        <div className="absolute z-10 bg-gray-bg bottom-0 translate-y-full left-1/2 -translate-x-1/2" id="date-picker">
+        <div
+          className="absolute z-10 bg-gray-bg -bottom-2.5 translate-y-full left-1/2 -translate-x-1/2 md:left-0 md:translate-x-0"
+          id="date-picker"
+        >
           <DayPicker
+            animate
             mode="range"
             startMonth={new Date()}
             selected={selectedRange}

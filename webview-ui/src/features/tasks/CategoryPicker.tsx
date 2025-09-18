@@ -14,7 +14,7 @@ const CategoryPicker = ({
   onCategorySelect,
 }: CategoryPickerProps) => {
   return (
-    <div className="flex flex-wrap items-center gap-3 py-2">
+    <div className="flex flex-wrap items-center gap-2 py-2">
       {categories.map((category) => {
         const IconComponent = ICON_MAP[category.icon];
 
@@ -25,12 +25,8 @@ const CategoryPicker = ({
               type="button"
               onClick={() => onCategorySelect(category.id)}
               style={{ backgroundColor: category.color }}
-              className={`w-10 h-10 flex items-center justify-center cursor-pointer transition-transform hover:scale-110 focus:outline-none
-                ${
-                  selectedCategoryId === category.id
-                    ? "ring-2 ring-white scale-110"
-                    : ""
-                }
+              className={`w-10 h-10 rounded-md flex items-center justify-center cursor-pointer transition-transform hover:scale-110 focus:outline-none
+                ${selectedCategoryId === category.id ? "ring-2 ring-white" : ""}
                 `}
             >
               {IconComponent && (
@@ -38,7 +34,7 @@ const CategoryPicker = ({
               )}
             </button>
             <div
-              className="px-1 py-0.5 absolute whitespace-nowrap -bottom-2 translate-y-full hidden group-hover:block"
+              className="px-1 py-0.5 z-100 rounded-sm absolute whitespace-nowrap -bottom-2 translate-y-full invisible pointer-events-none scale-90 opacity-0 group-hover:visible group-hover:scale-100 group-hover:opacity-100 transition-all duration-200"
               style={{ backgroundColor: category.color }}
             >
               {category.name}

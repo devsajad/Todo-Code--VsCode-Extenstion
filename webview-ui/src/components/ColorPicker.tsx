@@ -12,7 +12,7 @@ const ColorPicker = ({
   onColorSelect,
 }: ColorPickerProps) => {
   return (
-    <div className="flex items-center gap-3 py-2">
+    <div className="flex items-center gap-1.5 py-2">
       {colors.map((color) => (
         <button
           key={color}
@@ -20,7 +20,7 @@ const ColorPicker = ({
           onClick={() => onColorSelect(color)}
           style={{ backgroundColor: color }}
           className={`w-6 h-6 rounded-full cursor-pointer focus:outline-none transition-transform hover:scale-110
-            ${selectedColor === color ? "ring-2 ring-white scale-110" : ""}
+            ${selectedColor === color ? "ring-2 ring-white" : ""}
           `}
           aria-label={`Select color ${color}`}
         />

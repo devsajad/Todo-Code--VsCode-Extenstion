@@ -10,7 +10,7 @@ const TasksList = ({ tasks }: propsType) => {
     <ul className="space-y-2">
       {tasks.map((task, index) => (
         <li
-          className="bg-gray-secondry p-2 flex items-center gap-3"
+          className="bg-gray-secondry p-2 flex items-center gap-3 rounded-lg"
           key={index}
         >
           <div className="rounded-full w-3 h-3 border-1 border-white"></div>

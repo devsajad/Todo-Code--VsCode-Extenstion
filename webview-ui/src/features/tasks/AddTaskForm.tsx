@@ -42,14 +42,14 @@ const AddTaskForm = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="flex flex-col mb-6 space-y-2">
-        <label htmlFor="title" className="font-medium uppercase text-base">
+      <div className="flex flex-col mb-6 space-y-1">
+        <label htmlFor="title" className="font-medium text-base">
           Title
         </label>
         <input
           value={titleInput}
           onChange={(e) => setTitleInput(e.target.value)}
-          className="border-1 border-white-text/30 px-2 py-1"
+          className="border-1 border-white-text/30 px-2 py-2"
           type="text"
           name="title"
           id="title"
@@ -57,15 +57,12 @@ const AddTaskForm = () => {
         />
       </div>
 
-      <div className="flex flex-col mb-6 space-y-2">
-        <label
-          htmlFor="description"
-          className="font-medium uppercase text-base"
-        >
+      <div className="flex flex-col mb-6 space-y-1">
+        <label htmlFor="description" className="font-medium  text-base">
           Description
         </label>
         <input
-          className="border-1 border-white-text/30 px-2 py-1"
+          className="border-1 border-white-text/30 px-2 py-2 rounded-md"
           type="text"
           name="description"
           id="description"
@@ -73,8 +70,8 @@ const AddTaskForm = () => {
         />
       </div>
 
-      <div className="flex flex-col mb-6 space-y-2">
-        <label className="font-medium uppercase text-base">Date Range</label>
+      <div className="flex flex-col mb-6 space-y-1">
+        <label className="font-medium  text-base">Date Range</label>
         <DateRangePicker
           selectedRange={dateRange}
           onRangeSelect={setDateRange}
@@ -82,7 +79,7 @@ const AddTaskForm = () => {
       </div>
 
       <div className="mb-6">
-        <label className="font-medium uppercase text-base inline-block mb-3">
+        <label className="font-medium  text-base inline-block mb-1">
           Choose Category{" "}
           <span className="font-light text-sm">({selectedCategoryId})</span>
         </label>
@@ -93,8 +90,8 @@ const AddTaskForm = () => {
         />
       </div>
 
-      <div className="mb-12">
-        <label className="font-medium uppercase text-base inline-block mb-3">
+      <div className="mb-8">
+        <label className="font-medium  text-base inline-block mb-1">
           Priority
         </label>
         <PriorityPicker
@@ -105,10 +102,9 @@ const AddTaskForm = () => {
 
       <button
         type="submit"
-        className="flex items-center gap-1 bg-purple-primary text-primary-text py-1 px-2 ml-auto"
+        className="btn-primary"
       >
-        <span>Add</span>
-        <VscSend />
+        <span className="font-medium">Add Task</span>
       </button>
     </form>
   );
