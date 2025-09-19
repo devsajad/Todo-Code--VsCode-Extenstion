@@ -20,19 +20,19 @@ export type TaskType = {
 
 const DEFAULT_CATEGORIES = [
   {
-    id: "feature",
+    id: "features",
     color: "#22c55e",
     icon: "VscGitPullRequest",
-    name: "App Features",
+    name: "features",
   },
   {
-    id: "fix-bug",
+    id: "fix-bugs",
     color: "#ef4444",
     icon: "VscBug",
     name: "Fix Bugs",
   },
   {
-    id: "refactor",
+    id: "refactors",
     color: "#eab308",
     icon: "VscSync",
     name: "Refactors",
@@ -40,7 +40,6 @@ const DEFAULT_CATEGORIES = [
 ];
 
 export function activate(context: vscode.ExtensionContext) {
-  // 1. Register the Sidebar View Provider
   const sidebarProvider = new TodoViewProvider(context);
   context.subscriptions.push(
     vscode.window.registerWebviewViewProvider(
@@ -78,11 +77,36 @@ export function activate(context: vscode.ExtensionContext) {
           switch (message.command) {
             // --- DATA FETCHING ---
             case "get-data":
-              const categories = context.workspaceState.get(
-                "todoCategories",
-                DEFAULT_CATEGORIES
-              );
-              const manualTasks = context.workspaceState.get("manualTasks", []);
+              console.log("Received get-data request from webview");
+
+              // Get categories with fallback
+              let categories = context.workspaceState.get("todoCategories");
+              if (
+                !categories ||
+                !Array.isArray(categories) ||
+                categories.length === 0
+              ) {
+                console.log(
+                  "Categories empty, using defaults and updating storage"
+                );
+                categories = DEFAULT_CATEGORIES;
+                context.workspaceState.update(
+                  "todoCategories",
+                  DEFAULT_CATEGORIES
+                );
+              }
+
+              // Get manual tasks with fallback
+              let manualTasks = context.workspaceState.get(
+                "manualTasks"
+              ) as TaskType[];
+
+              if (!manualTasks || !Array.isArray(manualTasks)) {
+                console.log("Manual tasks empty, initializing");
+                manualTasks = [];
+                context.workspaceState.update("manualTasks", []);
+              }
+
               const commentTasks = await scanWorkspaceForTodos(context);
 
               panel.webview.postMessage({
@@ -239,12 +263,17 @@ async function scanWorkspaceForTodos(context: vscode.ExtensionContext) {
     "todoCategories",
     DEFAULT_CATEGORIES
   );
-  const categoriesIds = categories.map((category) => category.id);
+  const categoryNames = categories.map((category) =>
+    category.name.toLowerCase()
+  );
+  console.log("Categories for scanning:", categories);
+  console.log("Category names for regex:", categoryNames);
 
-  const todoPattern = `(?:\/\/|\\*)\\s*##(${categoriesIds.join(
+  const todoPattern = `(?:\/\/|\\*)\\s*(${categoryNames.join(
     "|"
-  )})(:|\\s)(.*)`;
+  )})\\s*:\\s*(.*)`;
 
+  console.log("Todo regex pattern:", todoPattern);
   const todoRegex = new RegExp(todoPattern, "i"); // 'i' for case-insensitive
 
   const files = await vscode.workspace.findFiles(
@@ -261,10 +290,17 @@ async function scanWorkspaceForTodos(context: vscode.ExtensionContext) {
         const match = line.text.match(todoRegex);
 
         if (match) {
+          // Find the category ID based on the matched name
+          const matchedName = match[1].toLowerCase();
+          const category = categories.find(
+            (cat) => cat.name.toLowerCase() === matchedName
+          );
+          const categoryId = category ? category.id : matchedName;
+
           allTodos.push({
             id: `${file.fsPath}-${i + 1}`,
-            categoryId: match[1].toLowerCase(),
-            text: match[3].trim(),
+            categoryId: categoryId,
+            text: match[2].trim(),
             file: file.fsPath,
             line: i + 1,
             source: "comment",
@@ -366,3 +402,7 @@ function getNonce() {
 }
 
 export function deactivate() {}
+
+// features: Add user authentication
+// fix bugs : Fix the empty categories issue
+/* refactors: Refactor the webview creation logic */

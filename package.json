@@ -16,6 +16,10 @@
       {
         "command": "code-todos.start",
         "title": "Start Todos Coders"
+      },
+      {
+        "command": "code-todos.debug",
+        "title": "Debug Todo State"
       }
     ],
     "viewsContainers": {
