@@ -4,9 +4,9 @@ import { vscode } from "@/utils/vscode";
 import React from "react";
 import { IoMdClose, IoMdCreate, IoMdOpen } from "react-icons/io";
 import type { TaskType } from "../types/types";
-import AddEditTaskForm from "./AddEditTaskForm";
-import DeleteTaskForm from "./DeleteTaskForm";
-import ToggleTaskButton from "./ToggleTaskButton";
+import TaskAddEditForm from "./TaskAddEditForm";
+import TaskDeleteForm from "./TaskDeleteForm";
+import TaskToggleButton from "./TaskToggleButton";
 
 type propsType = {
   tasks: TaskType[];
@@ -30,7 +30,7 @@ const TasksList = ({ tasks }: propsType) => {
           className={`bg-gray-secondry p-2 flex items-center gap-3 rounded-lg shadow-sm group/outer`}
           key={task.id}
         >
-          <ToggleTaskButton task={task} />
+          <TaskToggleButton task={task} />
           <div>
             <p className={`text-sm ${task.completed && "line-through"} mb-0.5`}>
               {task.text}
@@ -48,7 +48,6 @@ const TasksList = ({ tasks }: propsType) => {
           </div>
 
           <div className="ml-auto flex gap-1 absolute right-2 transition-all duration-200 group-hover/outer:opacity-100 group-hover/outer:visible group-hover/outer:scale-100 opacity-0 invisible scale-90 pointer-events-none group-hover/outer:pointer-events-auto">
-            
             {task.file && task.line && (
               <button
                 onClick={() => handleOpenFile(task.file!, task.line!)}
@@ -67,7 +66,7 @@ const TasksList = ({ tasks }: propsType) => {
                 </button>
               </Modal.Trigger>
               <Modal.Content>
-                <AddEditTaskForm task={task} />
+                <TaskAddEditForm task={task} />
               </Modal.Content>
             </Modal>
 
@@ -79,7 +78,7 @@ const TasksList = ({ tasks }: propsType) => {
                 </button>
               </Modal.Trigger>
               <Modal.Content>
-                <DeleteTaskForm task={task} />
+                <TaskDeleteForm task={task} />
               </Modal.Content>
             </Modal>
           </div>

@@ -1,16 +1,16 @@
 import React from "react";
 
-interface PriorityPickerProps {
+interface TaskPriorityPickerProps {
   maxPriority?: number;
   selectedPriority: number;
   onPrioritySelect: (priority: number) => void;
 }
 
-const PriorityPicker = ({
+const TaskPriorityPicker = ({
   maxPriority = 10,
   selectedPriority,
   onPrioritySelect,
-}: PriorityPickerProps) => {
+}: TaskPriorityPickerProps) => {
   const priorities = Array.from({ length: maxPriority }, (_, i) => i + 1);
 
   return (
@@ -36,4 +36,4 @@ const PriorityPicker = ({
   );
 };
 
-export default PriorityPicker;
+export default TaskPriorityPicker;

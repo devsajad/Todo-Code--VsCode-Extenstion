@@ -8,7 +8,7 @@ import { CATEGORIES_COLORS, CATEGORIES_ICONS } from "../constants/constants";
 import { addCategoryThunk, updateCategoryThunk } from "./store/CategoriesSlice";
 import type { CategoryType } from "../types/types";
 
-const AddEditCategoryForm = ({ category }: { category?: CategoryType }) => {
+const CategoryAddEditForm = ({ category }: { category?: CategoryType }) => {
   const { handleCloseModal } = useModal();
   const { handleCloseDropDown } = useDropDown();
   const [nameInput, setNameInput] = useState<string>(
@@ -103,4 +103,4 @@ const AddEditCategoryForm = ({ category }: { category?: CategoryType }) => {
   );
 };
 
-export default AddEditCategoryForm;
+export default CategoryAddEditForm;

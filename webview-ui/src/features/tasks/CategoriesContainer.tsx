@@ -2,7 +2,7 @@ import React from "react";
 import { useAppSelector } from "../../store/hook.js";
 import { ICON_MAP } from "../constants/constants.js";
 import type { CategoryType } from "../types/types.js";
-import MoreCategoryButton from "./MoreCategoryButton.js";
+import CategoryMoreButton from "./CategoryMoreButton.js";
 import TasksList from "./TasksList.js";
 
 const CategoriesContainer = ({ category }: { category: CategoryType }) => {
@@ -19,7 +19,7 @@ const CategoriesContainer = ({ category }: { category: CategoryType }) => {
         <div className="flex items-center gap-2">
           {IconComponent && <IconComponent className="text-base" />}
           <p className="text-base">{category.name}</p>
-          <MoreCategoryButton category={category} />
+          <CategoryMoreButton category={category} />
         </div>
 
         <div

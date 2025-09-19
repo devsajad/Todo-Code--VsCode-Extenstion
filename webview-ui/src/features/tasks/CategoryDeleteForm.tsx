@@ -5,7 +5,7 @@ import type { CategoryType } from "../types/types";
 import { removeCategoryThunk } from "./store/CategoriesSlice";
 import ConfirmFormAction from "@/components/ConfirmFormAction";
 
-const DeleteCategoryForm = ({ category }: { category: CategoryType }) => {
+const CategoryDeleteForm = ({ category }: { category: CategoryType }) => {
   const { handleCloseModal } = useModal();
   const dispatch = useAppDispatch();
 
@@ -33,4 +33,4 @@ const DeleteCategoryForm = ({ category }: { category: CategoryType }) => {
   );
 };
 
-export default DeleteCategoryForm;
+export default CategoryDeleteForm;

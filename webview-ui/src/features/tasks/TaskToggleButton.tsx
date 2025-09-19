@@ -8,7 +8,7 @@ type propsType = {
   task: TaskType;
 };
 
-const ToggleTaskButton = ({ task }: propsType) => {
+const TaskToggleButton = ({ task }: propsType) => {
   const dispatch = useAppDispatch();
 
   function handleToggleTask(task: TaskType) {
@@ -27,4 +27,4 @@ const ToggleTaskButton = ({ task }: propsType) => {
   );
 };
 
-export default ToggleTaskButton;
+export default TaskToggleButton;

@@ -2,8 +2,8 @@ import React from "react";
 import { IoMdAdd } from "react-icons/io";
 import { DropDown } from "../../components/ui/DropDown/DropDown";
 import Modal from "../../components/ui/Modal/Modal";
-import AddEditCategoryForm from "./AddEditCategoryForm";
-import AddEditTaskForm from "./AddEditTaskForm";
+import CategoryAddEditForm from "./CategoryAddEditForm";
+import TaskAddEditForm from "./TaskAddEditForm";
 
 const TaskDropDown = () => {
   return (
@@ -20,7 +20,7 @@ const TaskDropDown = () => {
           </Modal.Trigger>
 
           <Modal.Content>
-            <AddEditTaskForm  />
+            <TaskAddEditForm />
           </Modal.Content>
         </Modal>
 
@@ -30,7 +30,7 @@ const TaskDropDown = () => {
           </Modal.Trigger>
 
           <Modal.Content>
-            <AddEditCategoryForm />
+            <CategoryAddEditForm />
           </Modal.Content>
         </Modal>
       </DropDown.Content>

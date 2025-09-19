@@ -3,10 +3,10 @@ import Modal from "@/components/ui/Modal/Modal";
 import React from "react";
 import { IoIosMore, IoMdCreate, IoMdTrash } from "react-icons/io";
 import type { CategoryType } from "../types/types";
-import AddEditCategoryForm from "./AddEditCategoryForm";
-import DeleteCategoryForm from "./DeleteCategoryForm";
+import CategoryAddEditForm from "./CategoryAddEditForm";
+import CategoryDeleteForm from "./CategoryDeleteForm";
 
-const MoreCategoryButton = ({ category }: { category: CategoryType }) => {
+const CategoryMoreButton = ({ category }: { category: CategoryType }) => {
   return (
     <div className="ml-auto">
       <DropDown>
@@ -26,7 +26,7 @@ const MoreCategoryButton = ({ category }: { category: CategoryType }) => {
             </Modal.Trigger>
 
             <Modal.Content>
-              <AddEditCategoryForm category={category} />
+              <CategoryAddEditForm category={category} />
             </Modal.Content>
           </Modal>
 
@@ -41,7 +41,7 @@ const MoreCategoryButton = ({ category }: { category: CategoryType }) => {
             </Modal.Trigger>
 
             <Modal.Content>
-              <DeleteCategoryForm category={category} />
+              <CategoryDeleteForm category={category} />
             </Modal.Content>
           </Modal>
         </DropDown.Content>
@@ -50,4 +50,4 @@ const MoreCategoryButton = ({ category }: { category: CategoryType }) => {
   );
 };
 
-export default MoreCategoryButton;
+export default CategoryMoreButton;

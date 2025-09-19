@@ -4,11 +4,11 @@ import type { DateRange } from "react-day-picker";
 import { useModal } from "../../components/ui/Modal/ModalContext";
 import { useAppDispatch, useAppSelector } from "../../store/hook";
 import CategoryPicker from "./CategoryPicker";
-import PriorityPicker from "./PriorityPicker";
+import TaskPriorityPicker from "./TaskPriorityPicker";
 import { addManualTaskThunk, updateTaskThunk } from "./store/TasksSlice";
 import type { TaskType } from "../types/types";
 
-const AddEditTaskForm = ({ task }: { task?: TaskType }) => {
+const TaskAddEditForm = ({ task }: { task?: TaskType }) => {
   const { handleCloseModal } = useModal();
   const categories = useAppSelector((state) => state.categories);
 
@@ -109,7 +109,7 @@ const AddEditTaskForm = ({ task }: { task?: TaskType }) => {
         <label className="font-medium  text-base inline-block mb-1">
           Priority
         </label>
-        <PriorityPicker
+        <TaskPriorityPicker
           selectedPriority={selectedPriority}
           onPrioritySelect={setSelectedPriority}
         />
@@ -124,4 +124,4 @@ const AddEditTaskForm = ({ task }: { task?: TaskType }) => {
   );
 };
 
-export default AddEditTaskForm;
+export default TaskAddEditForm;

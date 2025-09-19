@@ -5,7 +5,7 @@ import React from "react";
 import type { TaskType } from "../types/types";
 import { removeTaskThunk } from "./store/TasksSlice";
 
-const DeleteTaskForm = ({ task }: { task: TaskType }) => {
+const TaskDeleteForm = ({ task }: { task: TaskType }) => {
   const { handleCloseModal } = useModal();
   const dispatch = useAppDispatch();
 
@@ -31,4 +31,4 @@ const DeleteTaskForm = ({ task }: { task: TaskType }) => {
   );
 };
 
-export default DeleteTaskForm;
+export default TaskDeleteForm;
