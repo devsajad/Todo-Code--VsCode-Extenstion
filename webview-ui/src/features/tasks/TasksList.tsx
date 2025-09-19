@@ -27,14 +27,14 @@ const TasksList = ({ tasks }: propsType) => {
     <ul className="space-y-2 relative">
       {tasks.map((task) => (
         <li
-          className={`bg-gray-secondry p-2 flex items-center gap-3 rounded-lg shadow-sm group/outer`}
+          className={`transition-all duration-300 bg-gray-secondry p-2 flex items-center gap-3 rounded-lg shadow-sm group/outer ${
+            task.completed && "bg-gray-secondry/20"
+          }`}
           key={task.id}
         >
           <TaskToggleButton task={task} />
           <div>
-            <p className={`text-sm ${task.completed && "line-through"} mb-0.5`}>
-              {task.text}
-            </p>
+            <p className={`text-sm mb-0.5`}>{task.text}</p>
             {task.file ? (
               <p className="text-gray-500 text-xs">
                 File <span>{task?.file?.split(/[\\/]/).pop()}</span>, line{" "}

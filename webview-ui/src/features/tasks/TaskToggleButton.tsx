@@ -14,6 +14,7 @@ const TaskToggleButton = ({ task }: propsType) => {
   function handleToggleTask(task: TaskType) {
     dispatch(toggleTaskCompletion(task));
   }
+
   return (
     <button
       className="shrink-0 rounded-full size-5 border-1 border-gray-subtext cursor-pointer flex items-center justify-center"
@@ -22,7 +23,11 @@ const TaskToggleButton = ({ task }: propsType) => {
         task.completed ? "Mark task as incomplete" : "Mark task as complete"
       }
     >
-      {task.completed && <IoIosCheckmark className="w-full h-full" />}
+      <IoIosCheckmark
+        className={`w-full h-full transition-all duration-200 ${
+          task.completed ? "visible-state" : "invisible-state"
+        }`}
+      />
     </button>
   );
 };
