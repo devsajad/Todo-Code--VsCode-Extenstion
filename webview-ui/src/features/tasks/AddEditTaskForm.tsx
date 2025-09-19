@@ -5,34 +5,46 @@ import { useModal } from "../../components/ui/Modal/ModalContext";
 import { useAppDispatch, useAppSelector } from "../../store/hook";
 import CategoryPicker from "./CategoryPicker";
 import PriorityPicker from "./PriorityPicker";
-import { addManualTaskThunk } from "./store/TasksSlice";
+import { addManualTaskThunk, updateTaskThunk } from "./store/TasksSlice";
+import type { TaskType } from "../types/types";
 
-const AddTaskForm = () => {
+const AddEditTaskForm = ({ task }: { task: TaskType }) => {
   const { handleCloseModal } = useModal();
-  const [titleInput, setTitleInput] = useState<string>("");
-  const [descriptionInput, setDescriptionInput] = useState<string>("");
   const categories = useAppSelector((state) => state.categories);
-  const [selectedPriority, setSelectedPriority] = useState<number>(5);
-  const [selectedCategoryId, setSelectedCategoryId] = useState(
-    categories[0]?.id || ""
+
+  const [titleInput, setTitleInput] = useState<string>(() => task?.text || "");
+  const [descriptionInput, setDescriptionInput] = useState<string>(
+    () => task?.description || ""
   );
-  const [dateRange, setDateRange] = useState<DateRange | undefined>();
+  const [selectedPriority, setSelectedPriority] = useState<number>(
+    () => task?.priority ?? 5
+  );
+  const [selectedCategoryId, setSelectedCategoryId] = useState(
+    () => task?.categoryId || categories[0]?.id || ""
+  );
+  const [dateRange, setDateRange] = useState<DateRange | undefined>(() =>
+    task?.startDate && task?.endDate
+      ? { from: new Date(task.startDate), to: new Date(task.endDate) }
+      : undefined
+  );
   const dispatch = useAppDispatch();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
     if (!titleInput || !selectedCategoryId) return;
 
-    dispatch(
-      addManualTaskThunk({
-        text: titleInput,
-        categoryId: selectedCategoryId,
-        priority: selectedPriority,
-        startDate: dateRange?.from,
-        endDate: dateRange?.to,
-        description: descriptionInput,
-      })
-    );
+    const taskObject = {
+      text: titleInput,
+      categoryId: selectedCategoryId,
+      priority: selectedPriority,
+      startDate: dateRange?.from,
+      endDate: dateRange?.to,
+      description: descriptionInput,
+    };
+
+    if (task) dispatch(updateTaskThunk({ ...task, ...taskObject }));
+    else dispatch(addManualTaskThunk(taskObject));
 
     handleCloseModal();
   };
@@ -42,7 +54,7 @@ const AddTaskForm = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} onClick={(e) => e.stopPropagation()}>
       <div className="flex flex-col mb-6 space-y-1">
         <label htmlFor="title" className="font-medium text-base">
           Title
@@ -104,10 +116,10 @@ const AddTaskForm = () => {
       </div>
 
       <button type="submit" className="btn-primary">
-        <span className="font-medium">Add Task</span>
+        <span className="font-medium">{task ? "Edit Task" : "Add Task"}</span>
       </button>
     </form>
   );
 };
 
-export default AddTaskForm;
+export default AddEditTaskForm;

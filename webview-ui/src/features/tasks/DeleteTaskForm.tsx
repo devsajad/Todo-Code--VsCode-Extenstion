@@ -1,16 +1,16 @@
+import ConfirmFormAction from "@/components/ConfirmFormAction";
 import { useModal } from "@/components/ui/Modal/ModalContext";
 import { useAppDispatch } from "@/store/hook";
 import React from "react";
-import type { CategoryType } from "../types/types";
-import { removeCategoryThunk } from "./store/CategoriesSlice";
-import ConfirmFormAction from "@/components/ConfirmFormAction";
+import type { TaskType } from "../types/types";
+import { removeTaskThunk } from "./store/TasksSlice";
 
-const DeleteCategoryForm = ({ category }: { category: CategoryType }) => {
+const DeleteTaskForm = ({ task }: { task: TaskType }) => {
   const { handleCloseModal } = useModal();
   const dispatch = useAppDispatch();
 
   function handleDeleteCateogry() {
-    dispatch(removeCategoryThunk(category.id));
+    dispatch(removeTaskThunk(task.id));
     handleCloseModal();
   }
 
@@ -23,14 +23,12 @@ const DeleteCategoryForm = ({ category }: { category: CategoryType }) => {
         actionName="Delete"
       >
         <h2 className="font-bold uppercase text-purple-primary text-center mx-auto text-lg">
-          Delete Category
+          Delete Task
         </h2>
-        <p className="text-center">
-          All tasks in {category.name} will be deleted. Are you sure?
-        </p>
+        <p className="text-center">Your task will be deleted. Are you sure?</p>
       </ConfirmFormAction>
     </>
   );
 };
 
-export default DeleteCategoryForm;
+export default DeleteTaskForm;

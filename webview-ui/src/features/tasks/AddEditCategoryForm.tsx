@@ -48,7 +48,10 @@ const AddEditCategoryForm = ({ category }: { category?: CategoryType }) => {
   };
 
   return (
-    <form onSubmit={(e) => handleSubmit(e)}>
+    <form
+      onSubmit={(e) => handleSubmit(e)}
+      onClick={(e) => e.stopPropagation()}
+    >
       <h2 className="font-bold uppercase text-purple-primary text-center max-w-55 py-2 mx-auto text-lg mb-6">
         {category ? "Edit Category" : "Create New Category"}
       </h2>

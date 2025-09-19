@@ -201,6 +201,28 @@ export function activate(context: vscode.ExtensionContext) {
               }
               return;
             }
+            // Open file message
+            case "open-file": {
+              const { file, line } = message.data;
+              if (!file || !line) {
+                return;
+              }
+
+              // Convert the file path string to a URI
+              const fileUri = vscode.Uri.file(file);
+
+              // Use the VS Code API to open the document and show it in the editor
+              vscode.window.showTextDocument(fileUri, {
+                // The selection option will scroll to the specific line and place the cursor there
+                selection: new vscode.Range(
+                  // The line number is 1-based, but the Range constructor is 0-based
+                  new vscode.Position(line - 1, 0),
+                  new vscode.Position(line - 1, 0)
+                ),
+              });
+
+              return;
+            }
           }
         },
         undefined,

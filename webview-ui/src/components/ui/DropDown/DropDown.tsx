@@ -14,7 +14,7 @@ const DropDown = ({ children }: ModalProps) => {
   const handleToggleDropDown = () => setIsShowDropDown((s) => !s);
   const handleCloseDropDown = () => setIsShowDropDown(false);
 
-  const ref = useClickOutside(handleCloseDropDown, true);
+  const ref = useClickOutside(handleCloseDropDown, false);
 
   return (
     <DropDownContext.Provider
