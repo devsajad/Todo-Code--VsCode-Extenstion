@@ -25,7 +25,7 @@ const DeleteTaskForm = ({ task }: { task: TaskType }) => {
         <h2 className="font-bold uppercase text-purple-primary text-center mx-auto text-lg">
           Delete Task
         </h2>
-        <p className="text-center">Your task will be deleted. Are you sure?</p>
+        <p className="text-center text-base">Your task will be deleted. Are you sure?</p>
       </ConfirmFormAction>
     </>
   );

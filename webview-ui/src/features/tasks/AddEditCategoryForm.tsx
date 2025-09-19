@@ -52,7 +52,7 @@ const AddEditCategoryForm = ({ category }: { category?: CategoryType }) => {
       onSubmit={(e) => handleSubmit(e)}
       onClick={(e) => e.stopPropagation()}
     >
-      <h2 className="font-bold uppercase text-purple-primary text-center max-w-55 py-2 mx-auto text-lg mb-6">
+      <h2 className="font-bold uppercase text-purple-primary text-center max-w-55 py-2 mx-auto text-lg mb-4">
         {category ? "Edit Category" : "Create New Category"}
       </h2>
       <div className="flex flex-col mb-4 space-y-1">
@@ -97,7 +97,7 @@ const AddEditCategoryForm = ({ category }: { category?: CategoryType }) => {
       </div>
 
       <button type="submit" className="btn-primary">
-        <span className="font-medium">Add Task</span>
+        <span className="font-bold text-base">Submit</span>
       </button>
     </form>
   );

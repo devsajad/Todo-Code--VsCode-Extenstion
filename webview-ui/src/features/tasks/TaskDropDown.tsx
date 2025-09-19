@@ -20,7 +20,7 @@ const TaskDropDown = () => {
           </Modal.Trigger>
 
           <Modal.Content>
-            <AddEditTaskForm />
+            <AddEditTaskForm  />
           </Modal.Content>
         </Modal>
 

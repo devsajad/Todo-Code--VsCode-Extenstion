@@ -25,7 +25,7 @@ const DeleteCategoryForm = ({ category }: { category: CategoryType }) => {
         <h2 className="font-bold uppercase text-purple-primary text-center mx-auto text-lg">
           Delete Category
         </h2>
-        <p className="text-center">
+        <p className="text-center text-base">
           All tasks in {category.name} will be deleted. Are you sure?
         </p>
       </ConfirmFormAction>

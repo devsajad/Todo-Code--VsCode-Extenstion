@@ -8,7 +8,7 @@ import PriorityPicker from "./PriorityPicker";
 import { addManualTaskThunk, updateTaskThunk } from "./store/TasksSlice";
 import type { TaskType } from "../types/types";
 
-const AddEditTaskForm = ({ task }: { task: TaskType }) => {
+const AddEditTaskForm = ({ task }: { task?: TaskType }) => {
   const { handleCloseModal } = useModal();
   const categories = useAppSelector((state) => state.categories);
 
@@ -116,7 +116,9 @@ const AddEditTaskForm = ({ task }: { task: TaskType }) => {
       </div>
 
       <button type="submit" className="btn-primary">
-        <span className="font-medium">{task ? "Edit Task" : "Add Task"}</span>
+        <span className="font-bold text-base">
+          {task ? "Edit Task" : "Add Task"}
+        </span>
       </button>
     </form>
   );
