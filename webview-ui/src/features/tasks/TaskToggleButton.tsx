@@ -1,8 +1,8 @@
-import React from "react";
 import { useAppDispatch } from "@/store/hook";
+import React from "react";
 import { IoIosCheckmark } from "react-icons/io";
 import type { TaskType } from "../types/types";
-import { toggleTaskCompletion } from "./store/TasksSlice";
+import { toggleTaskCompletionThunk } from "./store/TasksSlice";
 
 type propsType = {
   task: TaskType;
@@ -12,7 +12,7 @@ const TaskToggleButton = ({ task }: propsType) => {
   const dispatch = useAppDispatch();
 
   function handleToggleTask(task: TaskType) {
-    dispatch(toggleTaskCompletion(task));
+    dispatch(toggleTaskCompletionThunk(task));
   }
 
   return (

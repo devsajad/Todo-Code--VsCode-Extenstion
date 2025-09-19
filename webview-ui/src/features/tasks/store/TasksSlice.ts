@@ -56,9 +56,23 @@ export const addManualTaskThunk =
     vscode.postMessage({ command: "add-manual-task", data: newTask });
   };
 
-export const removeTaskThunk = (taskId: string) => (dispatch: AppDispatch) => {
-  dispatch(removeTask({ id: taskId }));
-  vscode.postMessage({ command: "remove-task", data: { taskId } });
+export const removeTaskThunk = (task: TaskType) => (dispatch: AppDispatch) => {
+  dispatch(removeTask({ id: task.id }));
+
+  if (task.source === "manual") {
+    vscode.postMessage({
+      command: "remove-manual-task",
+      data: { taskId: task.id },
+    });
+  } else if (task.source === "comment") {
+    vscode.postMessage({
+      command: "remove-comment-task",
+      data: {
+        file: task.file,
+        line: task.line,
+      },
+    });
+  }
 };
 
 export const updateTaskThunk = (task: TaskType) => (dispatch: AppDispatch) => {
@@ -68,19 +82,17 @@ export const updateTaskThunk = (task: TaskType) => (dispatch: AppDispatch) => {
 
 export const toggleTaskCompletionThunk =
   (task: TaskType) => (dispatch: AppDispatch) => {
-    if (task.source === "manual") {
-      dispatch(toggleTaskCompletion({ id: task.id }));
+    dispatch(toggleTaskCompletion({ id: task.id }));
 
+    if (task.source === "manual") {
       vscode.postMessage({
         command: "update-task",
         data: { ...task, completed: !task.completed },
       });
     } else if (task.source === "comment") {
-      dispatch(removeTask({ id: task.id }));
-      // warning : with this message we will remove the comment from the file
       vscode.postMessage({
-        command: "complete-comment-task",
-        data: { file: task.file, line: task.line },
+        command: "toggle-comment-completion",
+        data: task,
       });
     }
   };

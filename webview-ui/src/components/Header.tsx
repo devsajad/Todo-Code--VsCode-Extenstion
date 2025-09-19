@@ -4,7 +4,7 @@ export const Header = ({ children }: { children: ReactNode }) => {
   return (
     <div className="max-w-7xl mx-auto px-6 ">
       <header className="py-6 flex items-center gap-6 justify-between">
-        <h1 className="uppercase text-xl font-medium text-purple-primary">
+        <h1 className="uppercase text-xl font-bold text-purple-primary">
           Todo Codev
         </h1>
         {children}

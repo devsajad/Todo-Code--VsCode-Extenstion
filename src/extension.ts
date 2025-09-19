@@ -2,21 +2,7 @@ import * as vscode from "vscode";
 import * as path from "path";
 import * as fs from "fs";
 import { TodoViewProvider } from "./TodoViewProvider";
-
-export type TaskType = {
-  id: string;
-  source: "comment" | "manual";
-  categoryId: string;
-  text: string;
-  file?: string;
-  line?: number;
-  description?: string;
-  priority?: number;
-  date?: Date;
-  startDate?: Date;
-  endDate?: Date;
-  completed: boolean;
-};
+import { CategoryType, TaskType } from "./types/types";
 
 const DEFAULT_CATEGORIES = [
   {
@@ -77,42 +63,34 @@ export function activate(context: vscode.ExtensionContext) {
           switch (message.command) {
             // --- DATA FETCHING ---
             case "get-data":
-              console.log("Received get-data request from webview");
+              const categories = context.workspaceState.get(
+                "todoCategories",
+                DEFAULT_CATEGORIES
+              );
+              const manualTasks = context.workspaceState.get<TaskType[]>(
+                "manualTasks",
+                []
+              );
 
-              // Get categories with fallback
-              let categories = context.workspaceState.get("todoCategories");
-              if (
-                !categories ||
-                !Array.isArray(categories) ||
-                categories.length === 0
-              ) {
-                console.log(
-                  "Categories empty, using defaults and updating storage"
-                );
-                categories = DEFAULT_CATEGORIES;
-                context.workspaceState.update(
-                  "todoCategories",
-                  DEFAULT_CATEGORIES
-                );
-              }
+              // ✅ 1. Load the new list of completed comment tasks
+              const completedCommentTasks = context.workspaceState.get<
+                TaskType[]
+              >("completedCommentTasks", []);
 
-              // Get manual tasks with fallback
-              let manualTasks = context.workspaceState.get(
-                "manualTasks"
-              ) as TaskType[];
+              // ✅ 2. Scan for ACTIVE comment tasks
+              const activeCommentTasks = await scanWorkspaceForTodos(context);
 
-              if (!manualTasks || !Array.isArray(manualTasks)) {
-                console.log("Manual tasks empty, initializing");
-                manualTasks = [];
-                context.workspaceState.update("manualTasks", []);
-              }
-
-              const commentTasks = await scanWorkspaceForTodos(context);
+              // ✅ 3. Combine ALL tasks together
+              const allTasks = [
+                ...manualTasks,
+                ...activeCommentTasks,
+                ...completedCommentTasks,
+              ];
 
               panel.webview.postMessage({
                 command: "update-data",
                 data: {
-                  tasks: [...manualTasks, ...commentTasks],
+                  tasks: allTasks,
                   categories: categories,
                 },
               });
@@ -174,7 +152,8 @@ export function activate(context: vscode.ExtensionContext) {
               return;
             }
 
-            case "remove-task": {
+            // ✅ RENAME this case from "remove-task" to "remove-manual-task"
+            case "remove-manual-task": {
               const savedTasks = context.workspaceState.get<TaskType[]>(
                 "manualTasks",
                 []
@@ -184,6 +163,32 @@ export function activate(context: vscode.ExtensionContext) {
                 (task) => task.id !== taskId
               );
               await context.workspaceState.update("manualTasks", updatedTasks);
+              return;
+            }
+
+            // ✅ ADD this new case to handle deleting comments from files
+            case "remove-comment-task": {
+              const { file, line } = message.data;
+              if (!file || !line) {
+                return;
+              }
+
+              try {
+                const uri = vscode.Uri.file(file);
+                const document = await vscode.workspace.openTextDocument(uri);
+                const lineToRemove = document.lineAt(line - 1);
+
+                const edit = new vscode.WorkspaceEdit();
+                // Delete the entire line, including the line break
+                edit.delete(uri, lineToRemove.rangeIncludingLineBreak);
+
+                await vscode.workspace.applyEdit(edit);
+              } catch (error) {
+                console.error("Failed to remove comment task:", error);
+                vscode.window.showErrorMessage(
+                  "Could not remove the task comment from the file."
+                );
+              }
               return;
             }
 
@@ -200,29 +205,62 @@ export function activate(context: vscode.ExtensionContext) {
               return;
             }
 
-            case "complete-comment-task": {
-              const { file, line } = message.data;
-              if (!file || !line) {
-                return;
-              }
+            case "toggle-comment-completion": {
+              const task = message.data as TaskType;
+              if (!task || !task.file || task.line === undefined) return;
 
-              try {
-                const uri = vscode.Uri.file(file);
+              const uri = vscode.Uri.file(task.file);
+              const edit = new vscode.WorkspaceEdit();
+              const savedCompletedTasks = context.workspaceState.get<
+                TaskType[]
+              >("completedCommentTasks", []);
+
+              // The task received from the UI still has its OLD completed status
+              if (task.completed === false) {
+                // --- ACTION: MARKING AS COMPLETE ---
+                // Remove the comment line from the file
                 const document = await vscode.workspace.openTextDocument(uri);
-
-                const lineToRemove = document.lineAt(line - 1);
-
-                const edit = new vscode.WorkspaceEdit();
-
+                const lineToRemove = document.lineAt(task.line - 1);
                 edit.delete(uri, lineToRemove.rangeIncludingLineBreak);
 
-                await vscode.workspace.applyEdit(edit);
-              } catch (error) {
-                console.error("Failed to complete comment task:", error);
-                vscode.window.showErrorMessage(
-                  "Could not remove the task comment from the file."
+                // Add the task to our new persistent list
+                const updatedCompletedTasks = [
+                  ...savedCompletedTasks,
+                  { ...task, completed: true },
+                ];
+                await context.workspaceState.update(
+                  "completedCommentTasks",
+                  updatedCompletedTasks
+                );
+              } else {
+                // --- ACTION: MARKING AS INCOMPLETE ---
+                // Re-create the original comment string
+                const category = context.workspaceState
+                  .get<CategoryType[]>("todoCategories", DEFAULT_CATEGORIES)
+                  .find((c) => c.id === task.categoryId);
+                const commentText = `// ${category?.name || task.categoryId}: ${
+                  task.text
+                }\n`;
+
+                // Insert the comment back into the file at its original line
+                edit.insert(
+                  uri,
+                  new vscode.Position(task.line - 1, 0),
+                  commentText
+                );
+
+                // Remove the task from our persistent list
+                const updatedCompletedTasks = savedCompletedTasks.filter(
+                  (t) => t.id !== task.id
+                );
+                await context.workspaceState.update(
+                  "completedCommentTasks",
+                  updatedCompletedTasks
                 );
               }
+
+              // Apply the file change (either deleting or inserting)
+              await vscode.workspace.applyEdit(edit);
               return;
             }
             // Open file message
@@ -298,7 +336,7 @@ async function scanWorkspaceForTodos(context: vscode.ExtensionContext) {
           const categoryId = category ? category.id : matchedName;
 
           allTodos.push({
-            id: `${file.fsPath}-${i + 1}`,
+            id: `comment-${crypto.randomUUID()}`,
             categoryId: categoryId,
             text: match[2].trim(),
             file: file.fsPath,
