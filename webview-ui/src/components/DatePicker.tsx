@@ -28,7 +28,7 @@ const DateRangePicker = ({
       : "Select start to end date range";
 
   return (
-    <div className="relative" ref={ref}>
+    <div className="relative z-20" ref={ref}>
       <button
         type="button"
         className="w-full rounded-md flex items-center justify-between p-2 ring-1 ring-gray-600"
@@ -42,7 +42,7 @@ const DateRangePicker = ({
 
       {isOpen && (
         <div
-          className="absolute z-10 bg-gray-bg -bottom-2.5 translate-y-full left-1/2 -translate-x-1/2 md:left-0 md:translate-x-0"
+          className="absolute bg-gray-bg -bottom-2.5 translate-y-full left-1/2 -translate-x-1/2 md:left-0 md:translate-x-0"
           id="date-picker"
         >
           <DayPicker

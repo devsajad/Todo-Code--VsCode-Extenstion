@@ -1,6 +1,7 @@
 import React from "react";
 import type { CategoryType } from "../types/types";
 import { ICON_MAP } from "../constants/constants";
+import Tooltip from "@/components/Tooltip";
 
 interface CategoryPickerProps {
   categories: CategoryType[];
@@ -33,12 +34,7 @@ const CategoryPicker = ({
                 <IconComponent className="w-6 h-6 text-white opacity-80" />
               )}
             </button>
-            <div
-              className="px-1 py-0.5 z-100 rounded-sm absolute whitespace-nowrap -bottom-2 translate-y-full invisible pointer-events-none scale-90 opacity-0 group-hover:visible group-hover:scale-100 group-hover:opacity-100 transition-all duration-200"
-              style={{ backgroundColor: category.color }}
-            >
-              {category.name}
-            </div>
+            <Tooltip color={category.color}>{category.name}</Tooltip>
           </div>
         );
       })}
