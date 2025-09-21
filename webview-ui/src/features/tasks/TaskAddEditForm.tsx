@@ -27,6 +27,7 @@ const TaskAddEditForm = ({ task }: { task?: TaskType }) => {
       ? { from: new Date(task.startDate), to: new Date(task.endDate) }
       : undefined
   );
+
   const dispatch = useAppDispatch();
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -43,7 +44,7 @@ const TaskAddEditForm = ({ task }: { task?: TaskType }) => {
       description: descriptionInput,
     };
 
-    if (task) dispatch(updateTaskThunk({ ...task, ...taskObject }));
+    if (task) dispatch(updateTaskThunk(task, { ...task, ...taskObject }));
     else dispatch(addManualTaskThunk(taskObject));
 
     handleCloseModal();

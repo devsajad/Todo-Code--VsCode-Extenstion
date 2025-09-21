@@ -127,19 +127,28 @@ export function activate(context: vscode.ExtensionContext) {
               return;
             }
 
-            case "update-category": {
-              const savedCategories = context.workspaceState.get(
-                "todoCategories",
-                DEFAULT_CATEGORIES
-              );
-              const updatedCategory = message.data;
+            case "update-category-and-cascade": {
+              const { originalCategory, updatedCategory } = message.data;
+
+              // 1. Update the category list in workspaceState
+              const savedCategories = context.workspaceState.get<
+                CategoryType[]
+              >("todoCategories", DEFAULT_CATEGORIES);
               const updatedCategories = savedCategories.map((cat) =>
-                cat.id === updatedCategory.id ? updatedCategory : cat
+                cat.id === originalCategory.id ? updatedCategory : cat
               );
               await context.workspaceState.update(
                 "todoCategories",
                 updatedCategories
               );
+
+              // 2. If the name changed, trigger the workspace-wide refactor
+              if (originalCategory.name !== updatedCategory.name) {
+                await refactorCategoryNameInWorkspace(
+                  originalCategory.name,
+                  updatedCategory.name
+                );
+              }
               return;
             }
 
@@ -192,22 +201,52 @@ export function activate(context: vscode.ExtensionContext) {
               return;
             }
 
-            case "update-task": {
-              const savedTasks = context.workspaceState.get<TaskType[]>(
-                "manualTasks",
-                []
-              );
-              const updatedTask = message.data;
-              const updatedTasks = savedTasks.map((task) =>
-                task.id === updatedTask.id ? updatedTask : task
-              );
-              await context.workspaceState.update("manualTasks", updatedTasks);
+            // Inside your onDidReceiveMessage listener's switch statement
+
+            case "update-comment-task": {
+              // ✅ 1. Destructure the new data from the message
+              const { updatedTask, originalText } = message.data as {
+                updatedTask: TaskType;
+                originalText: string;
+              };
+
+              if (!updatedTask.file || updatedTask.line === undefined) {
+                return;
+              }
+
+              try {
+                const uri = vscode.Uri.file(updatedTask.file);
+                const document = await vscode.workspace.openTextDocument(uri);
+                const lineToReplace = document.lineAt(updatedTask.line - 1);
+
+                // 2. Get the full, original text of the line (e.g., "/* features: old text */")
+                const originalLineText = lineToReplace.text;
+
+                // 3. ✅ Use a simple and reliable string replacement
+                // This preserves all original indentation and comment syntax (/*, */, //, etc.)
+                const newLineText = originalLineText.replace(
+                  originalText,
+                  updatedTask.text
+                );
+
+                // 4. Use WorkspaceEdit to replace the entire old line with the new one
+                const edit = new vscode.WorkspaceEdit();
+                edit.replace(uri, lineToReplace.range, newLineText);
+                await vscode.workspace.applyEdit(edit);
+              } catch (error) {
+                console.error("Failed to update comment task:", error);
+                vscode.window.showErrorMessage(
+                  "Could not update the task comment in the file."
+                );
+              }
               return;
             }
 
             case "toggle-comment-completion": {
               const task = message.data as TaskType;
-              if (!task || !task.file || task.line === undefined) return;
+              if (!task || !task.file || task.line === undefined) {
+                return null;
+              }
 
               const uri = vscode.Uri.file(task.file);
               const edit = new vscode.WorkspaceEdit();
@@ -444,3 +483,44 @@ export function deactivate() {}
 // features: Add user authentication
 // fix bugs : Fix the empty categories issue
 /* refactors: Refactor the webview creation logic */
+
+// in src/extension.ts
+
+/**
+ * Finds all instances of a category name in comments and replaces them.
+ * @param originalName The old category name to find.
+ * @param newName The new category name to replace it with.
+ */
+async function refactorCategoryNameInWorkspace(
+  originalName: string,
+  newName: string
+) {
+  const edit = new vscode.WorkspaceEdit();
+  // Use a simple regex to find the line based on the old name
+  const findPattern = `(?:\/\/|\\*)\\s*${originalName}\\s*:\\s*(.*)`;
+  const findRegex = new RegExp(findPattern, "i"); // "i" for case-insensitive
+
+  // Find all relevant files in the workspace
+  const files = await vscode.workspace.findFiles(
+    "**/*.{js,ts,jsx,tsx}",
+    "**/node_modules/**"
+  );
+
+  for (const file of files) {
+    const document = await vscode.workspace.openTextDocument(file);
+    for (let i = 0; i < document.lineCount; i++) {
+      const line = document.lineAt(i);
+      if (findRegex.test(line.text)) {
+        // If we find a match, perform a case-insensitive replace on that line
+        const newLineText = line.text.replace(
+          new RegExp(originalName, "i"),
+          newName
+        );
+        // Add this change to our collection of edits
+        edit.replace(file, line.range, newLineText);
+      }
+    }
+  }
+  // Apply all collected edits across all files in a single, undoable action
+  await vscode.workspace.applyEdit(edit);
+}

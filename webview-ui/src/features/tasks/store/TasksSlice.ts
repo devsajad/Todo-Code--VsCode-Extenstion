@@ -2,6 +2,7 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { AppDispatch } from "@/store/store";
 import type { TaskType } from "../../types/types";
 import { vscode } from "@/utils/vscode";
+import type { RootState } from "@/store/store";
 
 const initialState: TaskType[] = [];
 
@@ -75,10 +76,27 @@ export const removeTaskThunk = (task: TaskType) => (dispatch: AppDispatch) => {
   }
 };
 
-export const updateTaskThunk = (task: TaskType) => (dispatch: AppDispatch) => {
-  dispatch(updateTask(task));
-  vscode.postMessage({ command: "update-task", data: task });
-};
+export const updateTaskThunk =
+  (originalTask: TaskType, updatedTask: TaskType) =>
+  (dispatch: AppDispatch) => {
+    dispatch(updateTask(updatedTask));
+
+    if (updatedTask.source === "manual") {
+      vscode.postMessage({
+        command: "update-manual-task",
+        data: updatedTask,
+      });
+    } else if (updatedTask.source === "comment") {
+      vscode.postMessage({
+        command: "update-comment-task",
+
+        data: {
+          updatedTask: updatedTask,
+          originalText: originalTask.text,
+        },
+      });
+    }
+  };
 
 export const toggleTaskCompletionThunk =
   (task: TaskType) => (dispatch: AppDispatch) => {
@@ -97,5 +115,18 @@ export const toggleTaskCompletionThunk =
     }
   };
 
+export const removeTasksByCategory =
+  (categoryId: string) =>
+  (dispatch: AppDispatch, getState: () => RootState) => {
+    const tasks = getState().tasks;
+
+    const tasksToRemove = tasks.filter(
+      (task) => task.categoryId === categoryId
+    );
+
+    tasksToRemove.forEach((task) => {
+      dispatch(removeTask({ id: task.id }));
+    });
+  };
 // --- Reducer ---
 export default tasksSlice.reducer;

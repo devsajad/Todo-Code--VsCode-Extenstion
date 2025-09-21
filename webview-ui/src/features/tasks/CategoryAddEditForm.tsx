@@ -5,7 +5,10 @@ import { useDropDown } from "../../components/ui/DropDown/DropDownContext";
 import { useModal } from "../../components/ui/Modal/ModalContext";
 import { useAppDispatch } from "../../store/hook";
 import { CATEGORIES_COLORS, CATEGORIES_ICONS } from "../constants/constants";
-import { addCategoryThunk, updateCategoryThunk } from "./store/CategoriesSlice";
+import {
+  addCategoryThunk,
+  updateCategoryAndCascadeThunk,
+} from "./store/CategoriesSlice";
 import type { CategoryType } from "../types/types";
 
 const CategoryAddEditForm = ({ category }: { category?: CategoryType }) => {
@@ -27,7 +30,7 @@ const CategoryAddEditForm = ({ category }: { category?: CategoryType }) => {
 
     if (category)
       dispatch(
-        updateCategoryThunk({
+        updateCategoryAndCascadeThunk(category, {
           name: nameInput,
           color: selectedColor,
           icon: selectedIcon,

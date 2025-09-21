@@ -2,6 +2,7 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { AppDispatch } from "../../../store/store";
 import type { CategoryType } from "../../types/types";
 import { vscode } from "../../../utils/vscode";
+import { removeTasksByCategory } from "./TasksSlice";
 
 const initialState: CategoryType[] = [];
 
@@ -53,6 +54,7 @@ export const addCategoryThunk =
 export const removeCategoryThunk =
   (categoryId: string) => (dispatch: AppDispatch) => {
     dispatch(removeCategory({ id: categoryId }));
+    dispatch(removeTasksByCategory(categoryId));
 
     vscode.postMessage({
       command: "remove-category",
@@ -60,13 +62,22 @@ export const removeCategoryThunk =
     });
   };
 
-export const updateCategoryThunk =
-  (category: CategoryType) => (dispatch: AppDispatch) => {
-    dispatch(updateCategory(category));
+export const updateCategoryAndCascadeThunk =
+  (originalCategory: CategoryType, updatedData: Partial<CategoryType>) =>
+  (dispatch: AppDispatch) => {
+    const updatedCategory: CategoryType = {
+      ...originalCategory,
+      ...updatedData,
+    };
+
+    dispatch(updateCategory(updatedCategory));
 
     vscode.postMessage({
-      command: "update-category",
-      data: category,
+      command: "update-category-and-cascade",
+      data: {
+        originalCategory,
+        updatedCategory,
+      },
     });
   };
 
