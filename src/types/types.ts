@@ -37,6 +37,7 @@ export type TaskType = {
   startDate?: Date;
   endDate?: Date;
   completed: boolean;
+  originalLineText?: string;
 };
 
 export type CategoryType = {

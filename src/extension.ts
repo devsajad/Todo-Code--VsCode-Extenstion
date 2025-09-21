@@ -242,10 +242,14 @@ export function activate(context: vscode.ExtensionContext) {
               return;
             }
 
+            // Inside your onDidReceiveMessage listener's switch statement
+
+            // Inside your onDidReceiveMessage listener's switch statement
+
             case "toggle-comment-completion": {
               const task = message.data as TaskType;
               if (!task || !task.file || task.line === undefined) {
-                return null;
+                return;
               }
 
               const uri = vscode.Uri.file(task.file);
@@ -254,18 +258,24 @@ export function activate(context: vscode.ExtensionContext) {
                 TaskType[]
               >("completedCommentTasks", []);
 
-              // The task received from the UI still has its OLD completed status
+              // The task from the UI has its OLD completed status
               if (task.completed === false) {
                 // --- ACTION: MARKING AS COMPLETE ---
-                // Remove the comment line from the file
                 const document = await vscode.workspace.openTextDocument(uri);
-                const lineToRemove = document.lineAt(task.line - 1);
-                edit.delete(uri, lineToRemove.rangeIncludingLineBreak);
+                const lineToModify = document.lineAt(task.line - 1);
+                const originalLineText = lineToModify.text;
 
-                // Add the task to our new persistent list
+                // ✅ THE FIX: Replace the line's content with an empty string, preserving the line itself.
+                edit.replace(uri, lineToModify.range, "");
+
+                // Add the task to our persistent list, including the original text
                 const updatedCompletedTasks = [
                   ...savedCompletedTasks,
-                  { ...task, completed: true },
+                  {
+                    ...task,
+                    completed: true,
+                    originalLineText: originalLineText,
+                  },
                 ];
                 await context.workspaceState.update(
                   "completedCommentTasks",
@@ -273,20 +283,14 @@ export function activate(context: vscode.ExtensionContext) {
                 );
               } else {
                 // --- ACTION: MARKING AS INCOMPLETE ---
-                // Re-create the original comment string
-                const category = context.workspaceState
-                  .get<CategoryType[]>("todoCategories", DEFAULT_CATEGORIES)
-                  .find((c) => c.id === task.categoryId);
-                const commentText = `// ${category?.name || task.categoryId}: ${
-                  task.text
-                }\n`;
+                // This part now works perfectly because we are writing back to an empty line.
+                const commentTextToRestore = task.originalLineText ?? ""; // Use the saved text
 
-                // Insert the comment back into the file at its original line
-                edit.insert(
-                  uri,
-                  new vscode.Position(task.line - 1, 0),
-                  commentText
-                );
+                // We need to know the range of the (now empty) line to replace it.
+                const document = await vscode.workspace.openTextDocument(uri);
+                const lineToRestore = document.lineAt(task.line - 1);
+
+                edit.replace(uri, lineToRestore.range, commentTextToRestore);
 
                 // Remove the task from our persistent list
                 const updatedCompletedTasks = savedCompletedTasks.filter(
@@ -298,10 +302,10 @@ export function activate(context: vscode.ExtensionContext) {
                 );
               }
 
-              // Apply the file change (either deleting or inserting)
               await vscode.workspace.applyEdit(edit);
               return;
             }
+
             // Open file message
             case "open-file": {
               const { file, line } = message.data;
@@ -335,29 +339,30 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(disposable);
 }
 
-async function scanWorkspaceForTodos(context: vscode.ExtensionContext) {
-  const categories = context.workspaceState.get(
+async function scanWorkspaceForTodos(
+  context: vscode.ExtensionContext
+): Promise<TaskType[]> {
+  const categories: CategoryType[] = context.workspaceState.get(
     "todoCategories",
     DEFAULT_CATEGORIES
   );
-  const categoryNames = categories.map((category) =>
-    category.name.toLowerCase()
-  );
-  console.log("Categories for scanning:", categories);
-  console.log("Category names for regex:", categoryNames);
 
-  const todoPattern = `(?:\/\/|\\*)\\s*(${categoryNames.join(
+  const categoryNames = categories.map((category) =>
+    category.name.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&")
+  );
+
+  // This regex is broad enough, we'll just clean the result.
+  // ✅ NEW, MORE UNIVERSAL PATTERN
+  const todoPattern = `(?:\/\/|#|\\*|{\\/\\*)\\s*(${categoryNames.join(
     "|"
   )})\\s*:\\s*(.*)`;
-
-  console.log("Todo regex pattern:", todoPattern);
-  const todoRegex = new RegExp(todoPattern, "i"); // 'i' for case-insensitive
+  const todoRegex = new RegExp(todoPattern, "i");
 
   const files = await vscode.workspace.findFiles(
-    "**/*.{js,ts,jsx,tsx}",
-    "**/node_modules/**"
+    "**/*", // ✅ Scan all files
+    "**/node_modules/**" // Still exclude node_modules
   );
-  const allTodos = [];
+  const allTodos: TaskType[] = [];
 
   for (const file of files) {
     try {
@@ -367,39 +372,47 @@ async function scanWorkspaceForTodos(context: vscode.ExtensionContext) {
         const match = line.text.match(todoRegex);
 
         if (match) {
-          // Find the category ID based on the matched name
-          const matchedName = match[1].toLowerCase();
-          const category = categories.find(
-            (cat) => cat.name.toLowerCase() === matchedName
+          const matchedCategoryName = match[1].trim();
+          let taskText = match[2]; // Get the raw text
+
+          // ✅ FIX: Clean up trailing comment characters like */ or */}
+          taskText = taskText.replace(/(\*\/\}|\*\/)\s*$/, "").trim();
+
+          const foundCategory = categories.find(
+            (cat) =>
+              cat.name.toLowerCase() === matchedCategoryName.toLowerCase()
           );
-          const categoryId = category ? category.id : matchedName;
 
-          allTodos.push({
-            id: `comment-${crypto.randomUUID()}`,
-            categoryId: categoryId,
-            text: match[2].trim(),
-            file: file.fsPath,
-            line: i + 1,
-            source: "comment",
-            completed: false,
-
-            description: null,
-            priority: null,
-            date: null,
-            startDate: null,
-            endDate: null,
-          });
+          if (foundCategory) {
+            allTodos.push({
+              id: `comment-${crypto.randomUUID()}`,
+              categoryId: foundCategory.id,
+              text: taskText, // Use the cleaned text
+              file: file.fsPath,
+              line: i + 1,
+              source: "comment",
+              completed: false,
+              // ... other properties
+            });
+          }
         }
       }
     } catch (e) {
-      console.error(`Could not read file: ${file.fsPath}`, e);
+      // Silently ignore binary files or files that can't be read as text
+      if (
+        e instanceof Error &&
+        e.message.includes("cannot be opened with this editor")
+      ) {
+        // This is expected for binary files, do nothing.
+      } else {
+        console.error(`Could not read file: ${file.fsPath}`, e);
+      }
     }
   }
 
   console.log(`Finished scanning. Found ${allTodos.length} todos.`);
   return allTodos;
 }
-
 // SERVER FUNCTIONS
 // This function now acts as a router to load the correct HTML
 function getWebviewContent(
