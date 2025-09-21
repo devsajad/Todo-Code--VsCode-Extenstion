@@ -7,11 +7,9 @@ import CategoryPicker from "./CategoryPicker";
 import TaskPriorityPicker from "./TaskPriorityPicker";
 import { addManualTaskThunk, updateTaskThunk } from "./store/TasksSlice";
 import type { TaskType } from "../types/types";
-import { useDropDown } from "@/components/ui/DropDown/DropDownContext";
 
 const TaskAddEditForm = ({ task }: { task?: TaskType }) => {
   const { handleCloseModal } = useModal();
-  const { handleCloseDropDown } = useDropDown();
   const categories = useAppSelector((state) => state.categories);
 
   const [titleInput, setTitleInput] = useState<string>(() => task?.text || "");
@@ -58,7 +56,6 @@ const TaskAddEditForm = ({ task }: { task?: TaskType }) => {
     else dispatch(addManualTaskThunk(taskObject));
 
     resetStates();
-    handleCloseDropDown();
     handleCloseModal();
   };
 
