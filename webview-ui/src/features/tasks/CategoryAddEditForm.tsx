@@ -25,6 +25,12 @@ const CategoryAddEditForm = ({ category }: { category?: CategoryType }) => {
   );
   const dispatch = useAppDispatch();
 
+  const resetState = () => {
+    setNameInput(category?.name || "");
+    setSelectedColor(category?.color || CATEGORIES_COLORS[0]);
+    setSelectedIcon(category?.icon || CATEGORIES_ICONS[0]);
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -46,6 +52,7 @@ const CategoryAddEditForm = ({ category }: { category?: CategoryType }) => {
         })
       );
 
+    resetState();
     handleCloseModal();
     handleCloseDropDown();
   };
