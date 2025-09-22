@@ -14,7 +14,6 @@ const ModalRenderer = () => {
   const dispatch = useAppDispatch();
   const { type, data } = useAppSelector((state) => state.modal);
   const handleClose = () => dispatch(closeModal());
-  console.log("object");
   if (!type) {
     return null;
   }

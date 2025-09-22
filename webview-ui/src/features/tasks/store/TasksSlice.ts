@@ -119,14 +119,13 @@ export const removeTasksByCategory =
   (categoryId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const tasks = getState().tasks;
-    console.log("remving task run");
+
     const tasksToRemove = tasks.filter(
       (task) => task.categoryId === categoryId
     );
 
     tasksToRemove.forEach((task) => {
       dispatch(removeTaskThunk(task));
-      console.log("task removed");
     });
   };
 // --- Reducer ---

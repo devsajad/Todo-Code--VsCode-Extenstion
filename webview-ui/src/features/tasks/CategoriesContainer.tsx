@@ -1,6 +1,6 @@
 import React from "react";
 import { useAppSelector } from "../../store/hook.js";
-import { ICON_MAP } from "../constants/constants.js";
+import { ICON_MAP } from "./constants/constants.js";
 import type { CategoryType } from "../../types/types.js";
 import CategoryMoreButton from "./CategoryMoreButton.js";
 import TasksList from "./TasksList.js";

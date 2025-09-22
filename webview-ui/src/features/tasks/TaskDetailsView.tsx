@@ -1,11 +1,13 @@
-import { useAppSelector } from "@/store/hook";
+import { useAppDispatch, useAppSelector } from "@/store/hook";
 import React from "react";
-import { IoMdOpen } from "react-icons/io";
-import { IoFlagOutline } from "react-icons/io5";
-import { ICON_MAP } from "../constants/constants";
+import { IoMdCreate, IoMdOpen, IoMdTrash } from "react-icons/io";
+import { IoCheckmarkDoneSharp, IoFlagOutline } from "react-icons/io5";
+import { ICON_MAP } from "./constants/constants";
 import type { TaskType } from "../../types/types";
 import { getDateDisplayInfo, getPriorityInfo } from "./utils/utils";
 import { vscode } from "@/utils/vscode";
+import { toggleTaskCompletionThunk } from "./store/TasksSlice";
+import { closeModal, openModal } from "@/components/ui/Modal/store/modalSlice";
 
 const TaskDetailView = ({ task }: { task: TaskType }) => {
   const categories = useAppSelector((state) => state.categories);
@@ -14,6 +16,21 @@ const TaskDetailView = ({ task }: { task: TaskType }) => {
   const priorityInfo = getPriorityInfo(task.priority);
   const startDateInfo = getDateDisplayInfo(task.startDate);
   const endDateInfo = getDateDisplayInfo(task.endDate);
+
+  const dispatch = useAppDispatch();
+
+  const handleToggleComplete = () => {
+    dispatch(toggleTaskCompletionThunk(task));
+    dispatch(closeModal());
+  };
+
+  const handleEdit = () => {
+    dispatch(openModal({ type: "addEditTask", data: { task: task } }));
+  };
+
+  const handleDelete = () => {
+    dispatch(openModal({ type: "deleteTask", data: { task: task } }));
+  };
 
   const handleOpenFile = (file: string, line: number) => {
     vscode.postMessage({
@@ -117,7 +134,35 @@ const TaskDetailView = ({ task }: { task: TaskType }) => {
         </div>
       )}
 
-      {/* You can add Edit/Delete buttons in a footer here later */}
+      {/* add Edit/Delete buttons footer */}
+      <footer className="mt-6 pt-4 border-t border-white-text/10 flex items-center justify-between">
+        <button
+          onClick={handleToggleComplete}
+          className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-green-accent/20 text-green-accent font-semibold hover:bg-green-accent/30 transition-colors"
+        >
+          <IoCheckmarkDoneSharp />
+          <span>
+            {task.completed ? "Mark as Incomplete" : "Mark as Complete"}
+          </span>
+        </button>
+
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleEdit}
+            className="flex items-center justify-center size-8 rounded-md bg-button-background hover:bg-gray-600 transition-colors"
+            title="Edit Task"
+          >
+            <IoMdCreate />
+          </button>
+          <button
+            onClick={handleDelete}
+            className="flex items-center justify-center size-8 rounded-md bg-red-accent/20 text-red-accent hover:bg-red-accent/30 transition-colors"
+            title="Delete Task"
+          >
+            <IoMdTrash />
+          </button>
+        </div>
+      </footer>
     </div>
   );
 };
