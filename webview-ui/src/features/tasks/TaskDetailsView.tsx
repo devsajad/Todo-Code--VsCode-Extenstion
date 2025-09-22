@@ -45,14 +45,14 @@ const TaskDetailView = ({ task }: { task: TaskType }) => {
   const CategoryIcon = category ? ICON_MAP[category.icon] : null;
 
   return (
-    <div className="p-4 bg-gray-secondry text-white-text w-[500px] max-w-full rounded-lg">
+    <div className="p-4 bg-gray-secondry text-white-text max-w-[500px] rounded-lg">
       {/* Header: Task Text */}
-      <header className="mb-6">
+      <header className="mb-6 text-center md:text-left">
         <h2 className="text-xl font-bold">{task.text}</h2>
       </header>
 
       {/* Metadata Section */}
-      <div className="grid grid-cols-2 gap-4 mb-6 text-sm">
+      <div className="grid  sm:grid-cols-2 grid-cols-1 gap-4 mb-6 text-sm">
         {/* Category */}
         {category && (
           <div className="flex flex-col gap-1 font-normal">
@@ -135,15 +135,13 @@ const TaskDetailView = ({ task }: { task: TaskType }) => {
       )}
 
       {/* add Edit/Delete buttons footer */}
-      <footer className="mt-6 pt-4 border-t border-white-text/10 flex items-center justify-between">
+      <footer className="mt-6 pt-4 border-t border-white-text/10 flex items-center gap-2 justify-between">
         <button
           onClick={handleToggleComplete}
           className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-green-accent/20 text-green-accent font-semibold hover:bg-green-accent/30 transition-colors"
         >
           <IoCheckmarkDoneSharp />
-          <span>
-            {task.completed ? "Mark as Incomplete" : "Mark as Complete"}
-          </span>
+          <span>{task.completed ? "Incompleted" : "Completed"}</span>
         </button>
 
         <div className="flex items-center gap-2">

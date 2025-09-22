@@ -201,6 +201,18 @@ export function activate(context: vscode.ExtensionContext) {
               return;
             }
 
+            case "update-manual-task": {
+              const savedTasks = context.workspaceState.get<TaskType[]>(
+                "manualTasks",
+                []
+              );
+              const updatedTask = message.data;
+              const updatedTasks = savedTasks.map((task) =>
+                task.id === updatedTask.id ? updatedTask : task
+              );
+              await context.workspaceState.update("manualTasks", updatedTasks);
+              return;
+            }
             // Inside your onDidReceiveMessage listener's switch statement
 
             case "update-comment-task": {

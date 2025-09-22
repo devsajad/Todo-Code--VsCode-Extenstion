@@ -104,7 +104,7 @@ export const toggleTaskCompletionThunk =
 
     if (task.source === "manual") {
       vscode.postMessage({
-        command: "update-task",
+        command: "update-manual-task",
         data: { ...task, completed: !task.completed },
       });
     } else if (task.source === "comment") {
