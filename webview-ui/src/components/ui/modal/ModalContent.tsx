@@ -11,7 +11,7 @@ const ModalContent = ({ children }: { children: ReactNode }) => {
   if (!mainElement) return null;
   return createPortal(
     <div
-      className={`fixed z-10 inset-0 transition-all duration-300 bg-gray-bg/60 backdrop-blur-sm flex items-center justify-center px-6 ${
+      className={`fixed z-10 inset-0 transition-all duration-200 bg-gray-bg/60 backdrop-blur-sm flex items-center justify-center px-6 ${
         isShowModal ? "visible-state" : "invisible-state"
       }`}
     >

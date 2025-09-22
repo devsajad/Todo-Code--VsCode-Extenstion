@@ -17,7 +17,7 @@ const TaskToggleButton = ({ task }: propsType) => {
 
   return (
     <button
-      className="shrink-0 rounded-full size-5 border-1 border-gray-subtext cursor-pointer flex items-center justify-center"
+      className="shrink-0 self-start rounded-full size-5 border-1 border-gray-subtext cursor-pointer flex items-center justify-center"
       onClick={() => handleToggleTask(task)}
       aria-label={
         task.completed ? "Mark task as incomplete" : "Mark task as complete"

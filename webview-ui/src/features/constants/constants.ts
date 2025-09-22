@@ -15,13 +15,13 @@ import {
 } from "react-icons/vsc";
 
 export const CATEGORIES_COLORS = [
-  "#22c55e",
-  "#ef4444",
+  "#1ec337",
+  "#ff383c",
+  "#f5c200",
+  "#cb30e0",
+  "#007aff",
   "#f97316",
-  "#eab308",
-  "#3b82f6",
   "#8b5cf6",
-  "#ec4899",
 ];
 
 export const CATEGORIES_ICONS = [

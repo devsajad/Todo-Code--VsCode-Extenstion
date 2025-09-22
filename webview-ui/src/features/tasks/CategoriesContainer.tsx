@@ -11,7 +11,6 @@ const CategoriesContainer = ({ category }: { category: CategoryType }) => {
   const tasks = useAppSelector((state) => state.tasks);
   const filteredTask = tasks.filter((task) => task.categoryId === category.id);
 
-  // if (filteredTask.length === 0) return null;
 
   return (
     <div className="space-y-3">
@@ -27,7 +26,7 @@ const CategoriesContainer = ({ category }: { category: CategoryType }) => {
           className={`h-[4px] rounded-full`}
         ></div>
       </header>
-
+      
       <TasksList tasks={filteredTask} />
     </div>
   );

@@ -1,9 +1,6 @@
-@import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Rubik", sans-serif;
-
   --color-gray-bg: var(--vscode-editor-background);
   --color-gray-secondry: var(--vscode-sideBar-background);
 
@@ -14,13 +11,19 @@
 
   --color-white-text: var(--vscode-foreground);
 
+  --color-green-accent: #1ec337;
+  --color-yellow-accent: #f5c200;
+  --color-blue-accent: #007aff;
+  --color-purple-accent: #cb30e0;
+  --color-red-accent: #ff383c;
+
   --color-button-background: var(--vscode-button-background);
   --color-button-foreground: var(--vscode-button-foreground);
 }
 
 @layer base {
   body {
-    @apply text-white-text bg-gray-bg relative font-sans;
+    @apply text-white-text bg-gray-bg relative;
   }
   button {
     @apply cursor-pointer;
