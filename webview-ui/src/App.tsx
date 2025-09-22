@@ -7,6 +7,7 @@ import { setTasks } from "./features/tasks/store/TasksSlice";
 import TaskDropDown from "./features/tasks/TaskDropDown";
 import { useAppDispatch, useAppSelector } from "./store/hook";
 import { vscode } from "./utils/vscode";
+import ModalRenderer from "./components/ui/Modal/ModalRenderer";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -40,6 +41,7 @@ function App() {
           <CategoriesContainer key={index} category={category} />
         ))}
       </Main>
+      <ModalRenderer />
     </>
   );
 }

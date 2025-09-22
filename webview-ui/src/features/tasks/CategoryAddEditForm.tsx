@@ -1,19 +1,16 @@
+import { closeModal } from "@/components/ui/Modal/store/modalSlice";
 import React, { useState } from "react";
 import ColorPicker from "../../components/ColorPicker";
 import IconPicker from "../../components/IconPicker";
-import { useDropDown } from "../../components/ui/DropDown/DropDownContext";
-import { useModal } from "../../components/ui/Modal/ModalContext";
 import { useAppDispatch } from "../../store/hook";
+import type { CategoryType } from "../../types/types";
 import { CATEGORIES_COLORS, CATEGORIES_ICONS } from "../constants/constants";
 import {
   addCategoryThunk,
   updateCategoryAndCascadeThunk,
 } from "./store/CategoriesSlice";
-import type { CategoryType } from "../types/types";
 
 const CategoryAddEditForm = ({ category }: { category?: CategoryType }) => {
-  const { handleCloseModal } = useModal();
-  const { handleCloseDropDown } = useDropDown();
   const [nameInput, setNameInput] = useState<string>(
     () => category?.name || ""
   );
@@ -53,8 +50,7 @@ const CategoryAddEditForm = ({ category }: { category?: CategoryType }) => {
       );
 
     resetState();
-    handleCloseModal();
-    handleCloseDropDown();
+    dispatch(closeModal());
   };
 
   return (

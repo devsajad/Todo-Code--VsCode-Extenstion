@@ -1,4 +1,7 @@
-import { CATEGORIES_ICONS, CATEGORIES_COLORS } from "./../constants/constants";
+import {
+  CATEGORIES_ICONS,
+  CATEGORIES_COLORS,
+} from "../features/constants/constants";
 export type TaskType = {
   id: string;
   source: "comment" | "manual";
@@ -11,7 +14,7 @@ export type TaskType = {
   date?: Date;
   startDate?: Date;
   endDate?: Date;
-  completed : boolean;
+  completed: boolean;
 };
 
 export type CategoryType = {

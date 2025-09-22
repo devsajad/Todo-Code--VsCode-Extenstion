@@ -1,23 +1,21 @@
 import React from "react";
+import type { TaskType } from "../../types/types";
 import TaskItemInfo from "./TaskItemInfo";
-import type { TaskType } from "../types/types";
-import Modal from "@/components/ui/Modal/Modal";
-import ModalTrigger from "@/components/ui/Modal/ModalTrigger";
-import ModalContent from "@/components/ui/Modal/ModalContent";
-import TaskDetailView from "./TaskDetailsView";
+import { useAppDispatch } from "@/store/hook";
+import { openModal } from "@/components/ui/Modal/store/modalSlice";
 
 const TaskItem = ({ task }: { task: TaskType }) => {
+  const dispatch = useAppDispatch();
+
   return (
-    <Modal>
-      <ModalTrigger>
-        <button className="text-left grow-1">
-          <TaskItemInfo task={task} />
-        </button>
-      </ModalTrigger>
-      <ModalContent>
-        <TaskDetailView task={task} />
-      </ModalContent>
-    </Modal>
+    <button
+      className="text-left grow-1"
+      onClick={() =>
+        dispatch(openModal({ type: "taskDetail", data: { task: task } }))
+      }
+    >
+      <TaskItemInfo task={task} />
+    </button>
   );
 };
 

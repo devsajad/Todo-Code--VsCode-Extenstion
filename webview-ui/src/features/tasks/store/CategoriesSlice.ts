@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { AppDispatch } from "../../../store/store";
-import type { CategoryType } from "../../types/types";
+import type { CategoryType } from "../../../types/types";
 import { vscode } from "../../../utils/vscode";
 import { removeTasksByCategory } from "./TasksSlice";
 

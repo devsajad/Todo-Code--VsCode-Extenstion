@@ -1,13 +1,14 @@
 import Tooltip from "@/components/Tooltip";
-import Modal from "@/components/ui/Modal/Modal";
+import { openModal } from "@/components/ui/Modal/store/modalSlice";
+import { useAppDispatch } from "@/store/hook";
 import { vscode } from "@/utils/vscode";
-import { IoMdClose, IoMdCreate, IoMdOpen } from "react-icons/io";
-import type { TaskType } from "../types/types";
-import TaskAddEditForm from "./TaskAddEditForm";
-import TaskDeleteForm from "./TaskDeleteForm";
 import React from "react";
+import { IoMdClose, IoMdCreate, IoMdOpen } from "react-icons/io";
+import type { TaskType } from "../../types/types";
 
 const TaskItemModify = ({ task }: { task: TaskType }) => {
+  const dispatch = useAppDispatch();
+
   const handleOpenFile = (file: string, line: number) => {
     vscode.postMessage({
       command: "open-file",
@@ -30,29 +31,25 @@ const TaskItemModify = ({ task }: { task: TaskType }) => {
         </button>
       )}
 
-      <Modal>
-        <Modal.Trigger>
-          <button className="group bg-green-600 rounded-sm size-5 flex items-center justify-center">
-            <IoMdCreate className="size-4" />
-            <Tooltip color="oklch(62.7% 0.194 149.214)">Edit</Tooltip>
-          </button>
-        </Modal.Trigger>
-        <Modal.Content>
-          <TaskAddEditForm task={task} />
-        </Modal.Content>
-      </Modal>
+      <button
+        onClick={() =>
+          dispatch(openModal({ type: "addEditTask", data: { task: task } }))
+        }
+        className="group bg-green-600 rounded-sm size-5 flex items-center justify-center"
+      >
+        <IoMdCreate className="size-4" />
+        <Tooltip color="oklch(62.7% 0.194 149.214)">Edit</Tooltip>
+      </button>
 
-      <Modal>
-        <Modal.Trigger>
-          <button className="group bg-red-600 rounded-sm size-5 flex items-center justify-center">
-            <IoMdClose className="size-4" />
-            <Tooltip color="oklch(57.7% 0.245 27.325)">Delete</Tooltip>
-          </button>
-        </Modal.Trigger>
-        <Modal.Content>
-          <TaskDeleteForm task={task} />
-        </Modal.Content>
-      </Modal>
+      <button
+        onClick={() =>
+          dispatch(openModal({ type: "deleteTask", data: { task: task } }))
+        }
+        className="group bg-red-600 rounded-sm size-5 flex items-center justify-center"
+      >
+        <IoMdClose className="size-4" />
+        <Tooltip color="oklch(57.7% 0.245 27.325)">Delete</Tooltip>
+      </button>
     </div>
   );
 };

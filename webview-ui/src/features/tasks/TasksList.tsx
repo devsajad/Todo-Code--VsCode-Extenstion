@@ -1,5 +1,5 @@
 import React from "react";
-import type { TaskType } from "../types/types";
+import type { TaskType } from "../../types/types";
 import TaskItem from "./TaskItem";
 import TaskItemModify from "./TaskItemModify";
 import TaskToggleButton from "./TaskToggleButton";

@@ -3,7 +3,7 @@ import React from "react";
 import { IoMdOpen } from "react-icons/io";
 import { IoFlagOutline } from "react-icons/io5";
 import { ICON_MAP } from "../constants/constants";
-import type { TaskType } from "../types/types";
+import type { TaskType } from "../../types/types";
 import { getDateDisplayInfo, getPriorityInfo } from "./utils/utils";
 import { vscode } from "@/utils/vscode";
 

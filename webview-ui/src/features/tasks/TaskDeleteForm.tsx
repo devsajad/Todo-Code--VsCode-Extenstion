@@ -1,13 +1,13 @@
 import ConfirmFormAction from "@/components/ConfirmFormAction";
-import { useModal } from "@/components/ui/Modal/ModalContext";
 import { useAppDispatch } from "@/store/hook";
 import React from "react";
-import type { TaskType } from "../types/types";
+import type { TaskType } from "../../types/types";
 import { removeTaskThunk } from "./store/TasksSlice";
+import { closeModal } from "@/components/ui/Modal/store/modalSlice";
 
 const TaskDeleteForm = ({ task }: { task: TaskType }) => {
-  const { handleCloseModal } = useModal();
   const dispatch = useAppDispatch();
+  const handleCloseModal = () => dispatch(closeModal());
 
   function handleDeleteCateogry() {
     dispatch(removeTaskThunk(task));

@@ -1,7 +1,7 @@
 import React from "react";
 import { useAppSelector } from "../../store/hook.js";
 import { ICON_MAP } from "../constants/constants.js";
-import type { CategoryType } from "../types/types.js";
+import type { CategoryType } from "../../types/types.js";
 import CategoryMoreButton from "./CategoryMoreButton.js";
 import TasksList from "./TasksList.js";
 
@@ -10,7 +10,6 @@ const CategoriesContainer = ({ category }: { category: CategoryType }) => {
 
   const tasks = useAppSelector((state) => state.tasks);
   const filteredTask = tasks.filter((task) => task.categoryId === category.id);
-
 
   return (
     <div className="space-y-3">
@@ -26,7 +25,7 @@ const CategoriesContainer = ({ category }: { category: CategoryType }) => {
           className={`h-[4px] rounded-full`}
         ></div>
       </header>
-      
+
       <TasksList tasks={filteredTask} />
     </div>
   );

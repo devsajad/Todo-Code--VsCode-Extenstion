@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { AppDispatch } from "@/store/store";
-import type { TaskType } from "../../types/types";
+import type { TaskType } from "../../../types/types";
 import { vscode } from "@/utils/vscode";
 import type { RootState } from "@/store/store";
 

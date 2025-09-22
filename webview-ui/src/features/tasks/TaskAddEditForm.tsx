@@ -1,15 +1,16 @@
 import DateRangePicker from "@/components/DatePicker";
 import React, { useState } from "react";
 import type { DateRange } from "react-day-picker";
-import { useModal } from "../../components/ui/Modal/ModalContext";
 import { useAppDispatch, useAppSelector } from "../../store/hook";
+import type { TaskType } from "../../types/types";
 import CategoryPicker from "./CategoryPicker";
 import TaskPriorityPicker from "./TaskPriorityPicker";
 import { addManualTaskThunk, updateTaskThunk } from "./store/TasksSlice";
-import type { TaskType } from "../types/types";
+import { closeModal } from "@/components/ui/Modal/store/modalSlice";
 
 const TaskAddEditForm = ({ task }: { task?: TaskType }) => {
-  const { handleCloseModal } = useModal();
+  const dispatch = useAppDispatch();
+  const handleCloseModal = () => dispatch(closeModal());
   const categories = useAppSelector((state) => state.categories);
 
   const [titleInput, setTitleInput] = useState<string>(() => task?.text || "");
@@ -27,8 +28,6 @@ const TaskAddEditForm = ({ task }: { task?: TaskType }) => {
       ? { from: new Date(task.startDate), to: new Date(task.endDate) }
       : undefined
   );
-
-  const dispatch = useAppDispatch();
 
   function resetStates() {
     setTitleInput("");

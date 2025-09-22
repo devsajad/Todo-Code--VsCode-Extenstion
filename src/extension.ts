@@ -362,6 +362,7 @@ async function scanWorkspaceForTodos(
     "**/*", // ✅ Scan all files
     "**/node_modules/**" // Still exclude node_modules
   );
+
   const allTodos: TaskType[] = [];
 
   for (const file of files) {

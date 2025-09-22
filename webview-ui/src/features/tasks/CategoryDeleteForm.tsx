@@ -1,13 +1,13 @@
-import { useModal } from "@/components/ui/Modal/ModalContext";
 import { useAppDispatch } from "@/store/hook";
 import React from "react";
-import type { CategoryType } from "../types/types";
+import type { CategoryType } from "../../types/types";
 import { removeCategoryThunk } from "./store/CategoriesSlice";
 import ConfirmFormAction from "@/components/ConfirmFormAction";
+import { closeModal } from "@/components/ui/Modal/store/modalSlice";
 
 const CategoryDeleteForm = ({ category }: { category: CategoryType }) => {
-  const { handleCloseModal } = useModal();
   const dispatch = useAppDispatch();
+  const handleCloseModal = () => dispatch(closeModal());
 
   function handleDeleteCateogry() {
     dispatch(removeCategoryThunk(category.id));

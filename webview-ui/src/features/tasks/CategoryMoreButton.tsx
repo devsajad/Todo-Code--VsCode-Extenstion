@@ -1,12 +1,13 @@
 import { DropDown } from "@/components/ui/DropDown/DropDown";
-import Modal from "@/components/ui/Modal/Modal";
+import { openModal } from "@/components/ui/Modal/store/modalSlice";
+import { useAppDispatch } from "@/store/hook";
 import React from "react";
 import { IoIosMore, IoMdCreate, IoMdTrash } from "react-icons/io";
-import type { CategoryType } from "../types/types";
-import CategoryAddEditForm from "./CategoryAddEditForm";
-import CategoryDeleteForm from "./CategoryDeleteForm";
+import type { CategoryType } from "../../types/types";
 
 const CategoryMoreButton = ({ category }: { category: CategoryType }) => {
+  const dispatch = useAppDispatch();
+
   return (
     <div className="ml-auto">
       <DropDown>
@@ -15,35 +16,39 @@ const CategoryMoreButton = ({ category }: { category: CategoryType }) => {
         </DropDown.Trigger>
 
         <DropDown.Content>
-          <Modal>
-            <Modal.Trigger>
-              <DropDown.Item>
-                <div className="flex items-center justify-between w-24">
-                  <p>Edit</p>
-                  <IoMdCreate />
-                </div>
-              </DropDown.Item>
-            </Modal.Trigger>
+          <DropDown.Item>
+            <div
+              className="flex items-center justify-between w-24"
+              onClick={() =>
+                dispatch(
+                  openModal({
+                    type: "addEditCategory",
+                    data: { category: category },
+                  })
+                )
+              }
+            >
+              <p>Edit</p>
+              <IoMdCreate />
+            </div>
+          </DropDown.Item>
 
-            <Modal.Content>
-              <CategoryAddEditForm category={category} />
-            </Modal.Content>
-          </Modal>
-
-          <Modal>
-            <Modal.Trigger>
-              <DropDown.Item>
-                <div className="flex items-center justify-between w-24">
-                  <p>Delete</p>
-                  <IoMdTrash />
-                </div>
-              </DropDown.Item>
-            </Modal.Trigger>
-
-            <Modal.Content>
-              <CategoryDeleteForm category={category} />
-            </Modal.Content>
-          </Modal>
+          <DropDown.Item>
+            <div
+              className="flex items-center justify-between w-24"
+              onClick={() =>
+                dispatch(
+                  openModal({
+                    type: "deleteCategory",
+                    data: { category: category },
+                  })
+                )
+              }
+            >
+              <p>Delete</p>
+              <IoMdTrash />
+            </div>
+          </DropDown.Item>
         </DropDown.Content>
       </DropDown>
     </div>

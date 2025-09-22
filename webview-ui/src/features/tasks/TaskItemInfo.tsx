@@ -1,6 +1,6 @@
 import React from "react";
 import { IoCalendarOutline, IoFlagOutline } from "react-icons/io5";
-import type { TaskType } from "../types/types";
+import type { TaskType } from "../../types/types";
 import { getDateDisplayInfo, getPriorityInfo } from "./utils/utils";
 
 const TaskItemInfo = ({ task }: { task: TaskType }) => {

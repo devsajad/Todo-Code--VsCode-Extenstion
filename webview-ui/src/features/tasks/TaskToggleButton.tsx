@@ -1,7 +1,7 @@
 import { useAppDispatch } from "@/store/hook";
 import React from "react";
 import { IoIosCheckmark } from "react-icons/io";
-import type { TaskType } from "../types/types";
+import type { TaskType } from "../../types/types";
 import { toggleTaskCompletionThunk } from "./store/TasksSlice";
 
 type propsType = {

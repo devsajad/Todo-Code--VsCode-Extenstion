@@ -11,7 +11,7 @@ export const DropDownContext = createContext<DropDownContextType | null>(null);
 export const useDropDown = () => {
   const context = useContext(DropDownContext);
   if (!context) {
-    throw new Error("Component must be rendered within a ModalManager");
+    throw new Error("Using DropDownContext context outside provider");
   }
   return context;
 };
