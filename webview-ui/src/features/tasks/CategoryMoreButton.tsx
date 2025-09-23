@@ -18,7 +18,7 @@ const CategoryMoreButton = ({ category }: { category: CategoryType }) => {
         <DropDown.Content>
           <DropDown.Item>
             <div
-              className="flex items-center justify-between w-24"
+              className="flex items-center justify-between w-full"
               onClick={() =>
                 dispatch(
                   openModal({
@@ -35,7 +35,7 @@ const CategoryMoreButton = ({ category }: { category: CategoryType }) => {
 
           <DropDown.Item>
             <div
-              className="flex items-center justify-between w-24"
+              className="flex items-center justify-between w-full"
               onClick={() =>
                 dispatch(
                   openModal({

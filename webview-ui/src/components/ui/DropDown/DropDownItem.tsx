@@ -8,8 +8,14 @@ const DropDownItem = ({
   onClick?: () => void;
 }) => {
   return (
-    <li className="whitespace-nowrap">
-      <button className="px-2 py-1 w-full text-left" onClick={onClick}>
+    <li>
+      <button
+        className="w-full text-left flex items-center justify-between gap-2 px-3 py-1.5 text-sm rounded-md text-white-text/80
+                   hover:bg-purple-primary hover:text-primary-text 
+                   focus:bg-purple-primary focus:text-primary-text focus:outline-none
+                   transition-colors duration-100"
+        onClick={onClick}
+      >
         {children}
       </button>
     </li>

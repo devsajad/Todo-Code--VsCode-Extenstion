@@ -11,7 +11,7 @@ const categoriesSlice = createSlice({
   initialState,
 
   reducers: {
-    setCategories: (state, action: PayloadAction<CategoryType[]>) => {
+    setCategories: (_, action: PayloadAction<CategoryType[]>) => {
       return action.payload;
     },
     addCategory: (state, action: PayloadAction<CategoryType>) => {

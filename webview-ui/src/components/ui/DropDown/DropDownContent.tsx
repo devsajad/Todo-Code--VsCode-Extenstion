@@ -11,17 +11,17 @@ const DropDownContent = ({
   const { isShowDropDown } = useDropDown();
 
   return (
-    <>
-      <div className="relative z-5">
-        <div
-          className={`absolute right-0 top-1 text-sm bg-button-background rounded-md duration-200 transition-all ${classNames} ${
-            isShowDropDown ? "visible-state" : "invisible-state"
-          }`}
-        >
-          <ul className="divide-y-2 divide-gray-bg">{children}</ul>
-        </div>
-      </div>
-    </>
+    <div
+      className={`absolute z-10 right-0 top-full mt-2 w-30 md:w-40 origin-top-right rounded-md bg-gray-secondry shadow-lg ring-1 ring-white-text/10 focus:outline-none transition-all ease-in-out duration-150
+        ${classNames}
+        ${
+          isShowDropDown
+            ? "opacity-100 scale-100"
+            : "opacity-0 scale-95 pointer-events-none"
+        }`}
+    >
+      <ul className="p-1">{children}</ul>
+    </div>
   );
 };
 

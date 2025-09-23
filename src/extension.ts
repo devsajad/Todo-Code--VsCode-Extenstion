@@ -371,8 +371,8 @@ async function scanWorkspaceForTodos(
   const todoRegex = new RegExp(todoPattern, "i");
 
   const files = await vscode.workspace.findFiles(
-    "**/*", // ✅ Scan all files
-    "**/node_modules/**" // Still exclude node_modules
+    "**/*.{js,ts,jsx,tsx,html,css,scss,json,md,py,rb,java,cs,go,php,sh,yml,yaml,dockerfile}",
+    "**/{node_modules,dist,build,out,vendor,.git}/**"
   );
 
   const allTodos: TaskType[] = [];

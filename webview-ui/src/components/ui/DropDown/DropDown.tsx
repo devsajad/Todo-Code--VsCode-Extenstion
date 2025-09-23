@@ -5,26 +5,22 @@ import DropDownItem from "./DropDownItem";
 import DropDownTrigger from "./DropDownTrigger";
 import useClickOutside from "../../../hooks/useClickOutside";
 
-interface ModalProps {
-  children: React.ReactNode;
-}
-
-const DropDown = ({ children }: ModalProps) => {
+const DropDown = ({ children }: { children: React.ReactNode }) => {
   const [isShowDropDown, setIsShowDropDown] = useState<boolean>(false);
   const handleToggleDropDown = () => setIsShowDropDown((s) => !s);
   const handleCloseDropDown = () => setIsShowDropDown(false);
 
-  const ref = useClickOutside(handleCloseDropDown, false);
+  const ref = useClickOutside(handleCloseDropDown, isShowDropDown);
 
   return (
     <DropDownContext.Provider
       value={{
-        handleToggleDropDown,
         isShowDropDown,
+        handleToggleDropDown,
         handleCloseDropDown,
       }}
     >
-      <div className="space-y-0. relative group" ref={ref}>
+      <div className="relative" ref={ref}>
         {children}
       </div>
     </DropDownContext.Provider>

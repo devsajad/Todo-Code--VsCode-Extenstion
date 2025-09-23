@@ -3,7 +3,13 @@ import { DropDown } from "@/components/ui/DropDown/DropDown";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
 import React from "react";
 import { HiOutlineViewColumns } from "react-icons/hi2";
-import { IoFilter, IoList } from "react-icons/io5";
+import {
+  IoCalendarOutline,
+  IoFilter,
+  IoFlagOutline,
+  IoList,
+  IoListOutline,
+} from "react-icons/io5";
 import { setShowCompleted, setSortBy, setviewMode } from "./store/FilterSlice";
 
 const TaskFilter = () => {
@@ -12,7 +18,7 @@ const TaskFilter = () => {
   const { showCompleted, viewMode } = useAppSelector((state) => state.filters);
 
   return (
-    <div className="max-w-7xl mx-auto px-6 mb-10 flex items-center justify-between">
+    <div className="max-w-7xl mx-auto px-6 mb-8 flex items-center justify-between">
       <div className="flex items-center gap-2">
         <FilterButton
           isActive={showCompleted === null}
@@ -37,20 +43,24 @@ const TaskFilter = () => {
       <div className="flex items-center gap-4">
         <DropDown>
           <DropDown.Trigger>
-            <button className="flex items-center gap-1.5 text-white-text/80 hover:text-white-text transition-colors group">
+            <div className="flex items-center gap-1.5 text-white-text/80 hover:text-white-text transition-colors group">
               <IoFilter />
               <span className="text-xs">Sort</span>
-            </button>
+            </div>
           </DropDown.Trigger>
           <DropDown.Content>
+            {/* ✅ 2. Use the new Ionicons 5 components */}
             <DropDown.Item onClick={() => dispatch(setSortBy("default"))}>
-              Default
+              <span>Default</span>
+              <IoListOutline />
             </DropDown.Item>
             <DropDown.Item onClick={() => dispatch(setSortBy("priority"))}>
-              Priority
+              <span>Priority</span>
+              <IoFlagOutline />
             </DropDown.Item>
             <DropDown.Item onClick={() => dispatch(setSortBy("endDate"))}>
-              Due Date
+              <span>Due Date</span>
+              <IoCalendarOutline />
             </DropDown.Item>
           </DropDown.Content>
         </DropDown>
