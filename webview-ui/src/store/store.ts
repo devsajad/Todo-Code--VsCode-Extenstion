@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import tasksReducer from "../features/tasks/store/TasksSlice";
 import categoriesReducer from "../features/tasks/store/CategoriesSlice";
+import filterReducer from "../features/tasks/store/FilterSlice";
 import modalReducer from "@/components/ui/Modal/store/modalSlice";
 
 export const store = configureStore({
@@ -8,6 +9,7 @@ export const store = configureStore({
     tasks: tasksReducer,
     categories: categoriesReducer,
     modal: modalReducer,
+    filters: filterReducer,
   },
 });
 

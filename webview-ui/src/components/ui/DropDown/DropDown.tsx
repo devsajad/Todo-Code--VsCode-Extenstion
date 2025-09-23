@@ -24,7 +24,7 @@ const DropDown = ({ children }: ModalProps) => {
         handleCloseDropDown,
       }}
     >
-      <div className="space-y-0.5" ref={ref}>
+      <div className="space-y-0. relative group" ref={ref}>
         {children}
       </div>
     </DropDownContext.Provider>

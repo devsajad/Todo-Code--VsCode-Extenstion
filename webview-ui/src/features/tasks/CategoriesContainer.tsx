@@ -4,12 +4,15 @@ import { ICON_MAP } from "./constants/constants.js";
 import type { CategoryType } from "../../types/types.js";
 import CategoryMoreButton from "./CategoryMoreButton.js";
 import TasksList from "./TasksList.js";
+import { selectVisibleTasks } from "./store/selectors.js";
 
 const CategoriesContainer = ({ category }: { category: CategoryType }) => {
   const IconComponent = category.icon ? ICON_MAP[category.icon] : null;
 
-  const tasks = useAppSelector((state) => state.tasks);
-  const filteredTask = tasks.filter((task) => task.categoryId === category.id);
+  const visibleTasks = useAppSelector(selectVisibleTasks);
+  const filteredTask = visibleTasks.filter(
+    (task) => task.categoryId === category.id
+  );
 
   return (
     <div className="space-y-3">

@@ -79,7 +79,9 @@ const TaskDetailView = ({ task }: { task: TaskType }) => {
               className={`flex items-center gap-2 font-semibold text-gray-subtext ${priorityInfo.className}`}
             >
               <IoFlagOutline className="size-4" />
-              <span className="font-normal">{priorityInfo.text}</span>
+              <span className="font-normal">
+                {priorityInfo.text} ({task.priority})
+              </span>
             </div>
           </div>
         )}

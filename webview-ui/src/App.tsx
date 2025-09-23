@@ -8,6 +8,7 @@ import TaskDropDown from "./features/tasks/TaskDropDown";
 import { useAppDispatch, useAppSelector } from "./store/hook";
 import { vscode } from "./utils/vscode";
 import ModalRenderer from "./components/ui/Modal/ModalRenderer";
+import Taskfilter from "./features/tasks/Taskfilter";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -36,6 +37,7 @@ function App() {
       <Header>
         <TaskDropDown />
       </Header>
+      <Taskfilter />
       <Main>
         {categories.map((category, index) => (
           <CategoriesContainer key={index} category={category} />

@@ -9,7 +9,7 @@ const TaskDropDown = () => {
   return (
     <DropDown>
       <DropDown.Trigger classNames="bg-purple-primary text-primary-text px-2 py-1 flex gap-1 items-center rounded-sm">
-        <p className="font-medium">Add</p>
+        <p className="font-medium ">Add</p>
         <IoMdAdd />
       </DropDown.Trigger>
 
