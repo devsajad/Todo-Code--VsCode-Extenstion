@@ -8,7 +8,13 @@ import TaskPriorityPicker from "./TaskPriorityPicker";
 import { addManualTaskThunk, updateTaskThunk } from "./store/TasksSlice";
 import { closeModal } from "@/components/ui/Modal/store/modalSlice";
 
-const TaskAddEditForm = ({ task }: { task?: TaskType }) => {
+const TaskAddEditForm = ({
+  task,
+  categoryId,
+}: {
+  task?: TaskType;
+  categoryId?: string;
+}) => {
   const dispatch = useAppDispatch();
   const handleCloseModal = () => dispatch(closeModal());
   const categories = useAppSelector((state) => state.categories);
@@ -21,7 +27,7 @@ const TaskAddEditForm = ({ task }: { task?: TaskType }) => {
     () => task?.priority ?? 5
   );
   const [selectedCategoryId, setSelectedCategoryId] = useState(
-    () => task?.categoryId || categories[0]?.id || ""
+    () => task?.categoryId || categoryId || categories[0]?.id || ""
   );
   const [dateRange, setDateRange] = useState<DateRange | undefined>(() =>
     task?.startDate && task?.endDate
@@ -51,7 +57,7 @@ const TaskAddEditForm = ({ task }: { task?: TaskType }) => {
       description: descriptionInput,
     };
 
-    if (task) dispatch(updateTaskThunk(task, { ...task, ...taskObject }));
+    if (task?.id) dispatch(updateTaskThunk(task, { ...task, ...taskObject }));
     else dispatch(addManualTaskThunk(taskObject));
 
     resetStates();

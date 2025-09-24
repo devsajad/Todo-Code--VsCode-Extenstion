@@ -149,6 +149,7 @@ export function activate(context: vscode.ExtensionContext) {
                   updatedCategory.name
                 );
               }
+
               return;
             }
 
@@ -338,6 +339,26 @@ export function activate(context: vscode.ExtensionContext) {
                 ),
               });
 
+              return;
+            }
+
+            // Inside your onDidReceiveMessage listener's switch statement
+
+            // --- THEME MANAGEMENT ---
+            case "get-theme": {
+              // Get the saved theme, defaulting to 'vscode'
+              const theme = context.globalState.get("theme", "vscode");
+              panel.webview.postMessage({
+                command: "set-theme",
+                data: { theme },
+              });
+              return;
+            }
+
+            case "set-theme": {
+              const { theme } = message.data;
+              // Save the new theme choice to global storage
+              await context.globalState.update("theme", theme);
               return;
             }
           }

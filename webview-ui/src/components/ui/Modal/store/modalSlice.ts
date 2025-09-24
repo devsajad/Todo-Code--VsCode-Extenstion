@@ -4,10 +4,17 @@ import type { CategoryType, TaskType } from "@/types/types";
 interface ModalData {
   task?: TaskType;
   category?: CategoryType;
+  categoryId?: string;
 }
-
+type TypeUnions =
+  | "taskDetail"
+  | "addEditTask"
+  | "deleteTask"
+  | "addEditCategory"
+  | "deleteCategory"
+  | null;
 interface ModalState {
-  type: string | null;
+  type: TypeUnions;
   data: ModalData;
 }
 
@@ -22,7 +29,7 @@ const modalSlice = createSlice({
   reducers: {
     openModal: (
       state,
-      action: PayloadAction<{ type: string; data?: ModalData }>
+      action: PayloadAction<{ type: TypeUnions; data?: ModalData }>
     ) => {
       state.type = action.payload.type;
       state.data = action.payload.data || {};

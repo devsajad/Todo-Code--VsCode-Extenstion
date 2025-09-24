@@ -24,7 +24,9 @@ const ModalRenderer = () => {
         return data.task ? <TaskDetailView task={data.task} /> : null;
 
       case "addEditTask":
-        return <TaskAddEditForm task={data.task} />;
+        return (
+          <TaskAddEditForm task={data.task} categoryId={data.categoryId} />
+        );
 
       case "deleteTask":
         return data.task ? <TaskDeleteForm task={data.task} /> : null;
@@ -45,9 +47,7 @@ const ModalRenderer = () => {
   if (!renderModalContent) return null;
 
   return (
-    <ModalContainer isOpen={true} onClose={handleClose}>
-      {renderModalContent}
-    </ModalContainer>
+    <ModalContainer onClose={handleClose}>{renderModalContent}</ModalContainer>
   );
 };
 

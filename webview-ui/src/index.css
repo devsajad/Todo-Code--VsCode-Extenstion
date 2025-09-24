@@ -3,22 +3,21 @@
 @theme {
   --color-gray-bg: var(--vscode-editor-background);
   --color-gray-secondry: var(--vscode-sideBar-background);
-
-  --color-purple-primary: var(--vscode-statusBarItem-remoteBackground);
-  --color-primary-text: var(--vscode-statusBarItem-remoteForeground);
-
-  --color-gray-subtext: #afafaf;
-
   --color-white-text: var(--vscode-foreground);
+
+  --color-purple-primary: var(--vscode-activityBarBadge-background);
+  --color-primary-text: var(--vscode-activityBarBadge-foreground);
+
+  --color-gray-subtext: var(--vscode-descriptionForeground, #afafaf);
+
+  --color-button-background: var(--vscode-button-background);
+  --color-button-foreground: var(--vscode-button-foreground);
 
   --color-green-accent: #1ec337;
   --color-yellow-accent: #f5c200;
   --color-blue-accent: #007aff;
   --color-purple-accent: #cb30e0;
   --color-red-accent: #ff383c;
-
-  --color-button-background: var(--vscode-button-background);
-  --color-button-foreground: var(--vscode-button-foreground);
 }
 
 @layer base {

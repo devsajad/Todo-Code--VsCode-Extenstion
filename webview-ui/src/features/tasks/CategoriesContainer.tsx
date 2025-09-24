@@ -30,6 +30,7 @@ const CategoriesContainer = ({ category }: { category: CategoryType }) => {
       </header>
 
       <TasksList tasks={filteredTask} />
+      
     </div>
   );
 };
