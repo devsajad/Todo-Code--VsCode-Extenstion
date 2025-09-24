@@ -3,6 +3,7 @@ import { CategoryType, TaskType } from "../types/types";
 import { DEFAULT_CATEGORIES } from "../constants";
 import { scanWorkspaceForTodos } from "../core/workspaceScanner";
 import { refactorCategoryNameInWorkspace } from "../core/workspaceRefactor";
+import { updateDecorations } from "../core/syntaxHighlighter";
 
 /**
  * Handles all webview messages and routes them to appropriate handlers
@@ -61,6 +62,8 @@ export async function handleWebviewMessage(
           "todoCategories",
           updatedCategories
         );
+        // Update syntax highlighting decorations
+        updateDecorations(context);
       } catch (error) {
         console.error("Error adding category:", error);
         vscode.window.showErrorMessage("Failed to save the new category.");
@@ -82,6 +85,8 @@ export async function handleWebviewMessage(
           "todoCategories",
           updatedCategories
         );
+        // Update syntax highlighting decorations
+        updateDecorations(context);
       } catch (error) {
         console.error("Error removing category:", error);
         vscode.window.showErrorMessage("Failed to remove the category.");
@@ -109,6 +114,8 @@ export async function handleWebviewMessage(
             updatedCategory.name
           );
         }
+        // Update syntax highlighting decorations
+        updateDecorations(context);
       } catch (error) {
         console.error("Error updating category and cascading changes:", error);
         vscode.window.showErrorMessage(

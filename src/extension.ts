@@ -2,6 +2,10 @@ import * as vscode from "vscode";
 import { TodoViewProvider } from "./TodoViewProvider";
 import { getWebviewContent } from "./webview/getWebviewContent";
 import { handleWebviewMessage } from "./commands/messageHandler";
+import {
+  initializeSyntaxHighlighting,
+  disposeSyntaxHighlighting,
+} from "./core/syntaxHighlighter";
 
 /**
  * Main extension activation function
@@ -26,6 +30,9 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   context.subscriptions.push(disposable);
+
+  // Initialize syntax highlighting
+  initializeSyntaxHighlighting(context);
 }
 
 /**
@@ -67,7 +74,10 @@ function createTodoPanel(context: vscode.ExtensionContext): void {
  * Extension deactivation function
  */
 
-export function deactivate() {}
+export function deactivate() {
+  // Clean up syntax highlighting decorations
+  disposeSyntaxHighlighting();
+}
 
 // Example comments for testing the scanner:
 // features: Add user authentication
