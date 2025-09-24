@@ -14,6 +14,8 @@ const CategoriesContainer = ({ category }: { category: CategoryType }) => {
     (task) => task.categoryId === category.id
   );
 
+  
+
   return (
     <div className="space-y-3">
       <header className="space-y-2">

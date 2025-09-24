@@ -5,7 +5,7 @@
   --color-gray-secondry: var(--vscode-sideBar-background);
   --color-white-text: var(--vscode-foreground);
 
-  --color-purple-primary: var(--vscode-activityBarBadge-background);
+  --color-purple-primary: #007aff;
   --color-primary-text: var(--vscode-activityBarBadge-foreground);
 
   --color-gray-subtext: var(--vscode-descriptionForeground, #afafaf);

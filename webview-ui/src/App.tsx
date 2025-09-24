@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Header } from "./components/Header";
 import Main from "./components/Main";
 import CategoriesContainer from "./features/tasks/CategoriesContainer";
@@ -9,8 +9,10 @@ import { useAppDispatch, useAppSelector } from "./store/hook";
 import { vscode } from "./utils/vscode";
 import ModalRenderer from "./components/ui/Modal/ModalRenderer";
 import Taskfilter from "./features/tasks/Taskfilter";
+import SkeletonLoader from "./components/SkeletonLoader";
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
   const dispatch = useAppDispatch();
   const categories = useAppSelector((state) => state.categories);
 
@@ -21,6 +23,8 @@ function App() {
       if (message.command === "update-data") {
         dispatch(setTasks(message.data.tasks));
         dispatch(setCategories(message.data.categories));
+
+        setIsLoading(false);
       }
     };
 
@@ -31,6 +35,8 @@ function App() {
     });
     return () => window.removeEventListener("message", handleMessage);
   }, [dispatch]);
+
+  if (isLoading) return <SkeletonLoader />;
 
   return (
     <>
