@@ -18,6 +18,16 @@
   --color-blue-accent: #007aff;
   --color-purple-accent: #cb30e0;
   --color-red-accent: #ff383c;
+
+  /* sidebar */
+  --color-sidebar-header: var(--vscode-sideBarSectionHeader-background);
+  --color-sidebar-border: var(--vscode-sideBarSectionHeader-border);
+  --color-sidebar-foreground: var(
+    --vscode-sideBarSectionHeader-foreground,
+    #fff
+  );
+  --color-list-hover: var(--vscode-list-hoverBackground);
+  --color-list-hover-foreground: var(--vscode-list-hoverForeground);
 }
 
 @layer base {

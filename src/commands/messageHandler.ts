@@ -4,6 +4,29 @@ import { DEFAULT_CATEGORIES } from "../constants";
 import { scanWorkspaceForTodos } from "../core/workspaceScanner";
 import { refactorCategoryNameInWorkspace } from "../core/workspaceRefactor";
 import { updateDecorations } from "../core/syntaxHighlighter";
+import { mainPanel } from "../extension";
+import { sidebarWebview } from "../TodoViewProvider";
+
+/**
+ * Utils functions
+ */
+async function broadcastCategories(context: vscode.ExtensionContext) {
+  const categories = context.workspaceState.get<CategoryType[]>(
+    "todoCategories",
+    DEFAULT_CATEGORIES
+  );
+
+  const message = { command: "categories-updated", data: categories };
+
+  if (mainPanel) {
+    mainPanel.webview.postMessage(message);
+  }
+  if (sidebarWebview) {
+    sidebarWebview.postMessage(message);
+  }
+
+  updateDecorations(context);
+}
 
 /**
  * Handles all webview messages and routes them to appropriate handlers
@@ -52,18 +75,21 @@ export async function handleWebviewMessage(
     // --- CATEGORY CRUD ---
     case "add-category": {
       try {
-        const savedCategories = context.workspaceState.get(
+        const savedCategories = context.workspaceState.get<CategoryType[]>(
           "todoCategories",
           DEFAULT_CATEGORIES
         );
         const newCategory = message.data;
         const updatedCategories = [...savedCategories, newCategory];
+
+        // Save the new list to storage
         await context.workspaceState.update(
           "todoCategories",
           updatedCategories
         );
-        // Update syntax highlighting decorations
-        updateDecorations(context);
+
+        // ✅ Broadcast the changes to all UIs and update decorations
+        await broadcastCategories(context);
       } catch (error) {
         console.error("Error adding category:", error);
         vscode.window.showErrorMessage("Failed to save the new category.");
@@ -73,7 +99,7 @@ export async function handleWebviewMessage(
 
     case "remove-category": {
       try {
-        const savedCategories = context.workspaceState.get(
+        const savedCategories = context.workspaceState.get<CategoryType[]>(
           "todoCategories",
           DEFAULT_CATEGORIES
         );
@@ -81,12 +107,14 @@ export async function handleWebviewMessage(
         const updatedCategories = savedCategories.filter(
           (cat) => cat.id !== categoryIdToRemove
         );
+
         await context.workspaceState.update(
           "todoCategories",
           updatedCategories
         );
-        // Update syntax highlighting decorations
-        updateDecorations(context);
+
+        // ✅ Broadcast the changes to all UIs and update decorations
+        await broadcastCategories(context);
       } catch (error) {
         console.error("Error removing category:", error);
         vscode.window.showErrorMessage("Failed to remove the category.");
@@ -104,18 +132,21 @@ export async function handleWebviewMessage(
         const updatedCategories = savedCategories.map((cat) =>
           cat.id === originalCategory.id ? updatedCategory : cat
         );
+
         await context.workspaceState.update(
           "todoCategories",
           updatedCategories
         );
+
         if (originalCategory.name !== updatedCategory.name) {
           await refactorCategoryNameInWorkspace(
             originalCategory.name,
             updatedCategory.name
           );
         }
-        // Update syntax highlighting decorations
-        updateDecorations(context);
+
+        // ✅ Broadcast the changes to all UIs and update decorations
+        await broadcastCategories(context);
       } catch (error) {
         console.error("Error updating category and cascading changes:", error);
         vscode.window.showErrorMessage(

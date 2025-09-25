@@ -7,7 +7,6 @@ import {
   disposeSyntaxHighlighting,
 } from "./core/syntaxHighlighter";
 
-// ✅ 1. Declare a variable to hold the panel instance. Export it so other files can access it.
 export let mainPanel: vscode.WebviewPanel | undefined = undefined;
 
 /**
@@ -38,7 +37,6 @@ export function activate(context: vscode.ExtensionContext) {
  * Creates and configures the main todo panel, managing its state.
  */
 function createTodoPanel(context: vscode.ExtensionContext): void {
-  // ✅ 2. If the panel already exists, just reveal it and stop.
   if (mainPanel) {
     mainPanel.reveal(vscode.ViewColumn.One);
     return;
@@ -55,10 +53,8 @@ function createTodoPanel(context: vscode.ExtensionContext): void {
     }
   );
 
-  // ✅ 3. Set our module-level variable to the new panel instance.
   mainPanel = panel;
 
-  // ✅ 4. When the panel is closed by the user, clear our reference.
   panel.onDidDispose(
     () => {
       mainPanel = undefined;

@@ -1,8 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { AppDispatch } from "../../../store/store";
 import type { CategoryType } from "../../../types/types";
 import { vscode } from "../../../utils/vscode";
-import { removeTasksByCategory } from "./TasksSlice";
 
 const initialState: CategoryType[] = [];
 
@@ -34,16 +32,15 @@ const categoriesSlice = createSlice({
 export const { setCategories, addCategory, removeCategory, updateCategory } =
   categoriesSlice.actions;
 
-// --- Thunk Action Creators ---
-
+/**
+ * Thunks
+ */
 export const addCategoryThunk =
-  (categoryData: Omit<CategoryType, "id">) => (dispatch: AppDispatch) => {
+  (categoryData: Omit<CategoryType, "id">) => () => {
     const newCategory: CategoryType = {
       ...categoryData,
       id: categoryData.name.toLowerCase().replace(/\s+/g, "-"),
     };
-
-    dispatch(addCategory(newCategory));
 
     vscode.postMessage({
       command: "add-category",
@@ -51,26 +48,20 @@ export const addCategoryThunk =
     });
   };
 
-export const removeCategoryThunk =
-  (categoryId: string) => (dispatch: AppDispatch) => {
-    dispatch(removeCategory({ id: categoryId }));
-    dispatch(removeTasksByCategory(categoryId));
-
-    vscode.postMessage({
-      command: "remove-category",
-      data: { id: categoryId },
-    });
-  };
+export const removeCategoryThunk = (categoryId: string) => () => {
+  vscode.postMessage({
+    command: "remove-category",
+    data: { id: categoryId },
+  });
+};
 
 export const updateCategoryAndCascadeThunk =
   (originalCategory: CategoryType, updatedData: Partial<CategoryType>) =>
-  (dispatch: AppDispatch) => {
+  () => {
     const updatedCategory: CategoryType = {
       ...originalCategory,
       ...updatedData,
     };
-
-    dispatch(updateCategory(updatedCategory));
 
     vscode.postMessage({
       command: "update-category-and-cascade",

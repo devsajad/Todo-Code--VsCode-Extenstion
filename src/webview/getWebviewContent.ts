@@ -11,10 +11,8 @@ export function getWebviewContent(
   extensionUri: vscode.Uri
 ): string {
   if (isDevelopment) {
-    // In development, we load from the Vite dev server for HMR
     return getWebviewContentDev();
   } else {
-    // In production, we load the static files from the 'dist' folder
     return getWebviewContentProd(webview, extensionUri);
   }
 }

@@ -11,6 +11,7 @@ import ModalRenderer from "./components/ui/Modal/ModalRenderer";
 import Taskfilter from "./features/tasks/Taskfilter";
 import SkeletonLoader from "./components/SkeletonLoader";
 import { setCategoryFilter } from "./features/tasks/store/FilterSlice";
+import { openModal } from "./components/ui/Modal/store/modalSlice";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -28,8 +29,16 @@ function App() {
         setIsLoading(false);
       }
 
+      if (message.command === "categories-updated") {
+        dispatch(setCategories(message.data));
+      }
+
       if (message.command === "set-category-filter") {
         dispatch(setCategoryFilter(message.data.categoryId));
+      }
+
+      if (message.command === "open-modal") {
+        dispatch(openModal(message.data));
       }
     };
 
@@ -41,7 +50,7 @@ function App() {
   const categoriesToRender =
     filterByCategories.length === 0
       ? allCategories
-      : allCategories.filter((cat) => filterByCategories.includes(cat.id)); // Otherwise, show only the selected ones
+      : allCategories.filter((cat) => filterByCategories.includes(cat.id));
 
   if (isLoading) return <SkeletonLoader />;
 
