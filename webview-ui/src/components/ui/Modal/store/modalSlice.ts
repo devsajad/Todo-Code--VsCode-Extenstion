@@ -7,6 +7,7 @@ interface ModalData {
   categoryId?: string;
 }
 type TypeUnions =
+  | "settings"
   | "taskDetail"
   | "addEditTask"
   | "deleteTask"

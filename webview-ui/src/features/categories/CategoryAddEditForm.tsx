@@ -103,7 +103,7 @@ const CategoryAddEditForm = ({ category }: { category?: CategoryType }) => {
       </div>
 
       <button type="submit" className="btn-primary">
-        <span className="font-bold text-base">Submit</span>
+        <span className="font-medium text-base">Submit</span>
       </button>
     </form>
   );

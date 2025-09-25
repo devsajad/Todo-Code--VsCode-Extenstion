@@ -2,22 +2,21 @@ import * as vscode from "vscode";
 import { CategoryType } from "../types/types";
 import { DEFAULT_CATEGORIES } from "../constants";
 
-// Store decoration types for each category
+// This map stores the created style rules for each category
 const decorationTypes = new Map<string, vscode.TextEditorDecorationType>();
 
 /**
- * Initialize or update decoration types based on current categories
+ * Creates the style rules (DecorationTypes) for each category.
+ * This function is unchanged, respecting your original styling.
  */
 function updateDecorationTypes(categories: CategoryType[]): void {
-  // Clear existing decorations
   decorationTypes.forEach((decoration) => decoration.dispose());
   decorationTypes.clear();
 
-  // Create new decoration types for each category
   categories.forEach((category) => {
     const decorationType = vscode.window.createTextEditorDecorationType({
       backgroundColor: category.color,
-      color: "#ffffff", // White text
+      color: "#ffffff",
       borderRadius: "3px",
       fontWeight: "bold",
       textDecoration: "none",
@@ -28,149 +27,144 @@ function updateDecorationTypes(categories: CategoryType[]): void {
 }
 
 /**
- * Apply syntax highlighting to all visible text editors
+ * ✅ NEW: A dedicated function to clear all decorations from all visible editors.
  */
-export function updateDecorations(context: vscode.ExtensionContext): void {
-  const categories: CategoryType[] = context.workspaceState.get(
-    "todoCategories",
-    DEFAULT_CATEGORIES
-  );
-
-  // Update decoration types if categories changed
-  updateDecorationTypes(categories);
-
-  // Apply decorations to all visible editors
+function clearAllDecorations(): void {
   vscode.window.visibleTextEditors.forEach((editor) => {
-    applyDecorationsToEditor(editor, categories);
+    decorationTypes.forEach((decorationType) => {
+      editor.setDecorations(decorationType, []);
+    });
   });
 }
 
 /**
- * Apply decorations to a specific text editor
+ * Scans a single editor and applies the correct decorations.
+ * This logic remains the same.
  */
 function applyDecorationsToEditor(
   editor: vscode.TextEditor,
   categories: CategoryType[]
 ): void {
   const document = editor.document;
+  if (document.uri.scheme !== "file") return;
 
-  // Skip non-text files
-  if (document.uri.scheme !== "file") {
-    return;
-  }
-
-  // Create category name patterns for regex
   const categoryNames = categories.map((category) =>
     category.name.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&")
   );
+  if (categoryNames.length === 0) return;
 
-  // Create regex pattern to match todo comments
   const todoPattern = `(?:\/\/|#|\\*|{\\/\\*)\\s*(${categoryNames.join(
     "|"
   )})\\s*:\\s*(.*)`;
   const todoRegex = new RegExp(todoPattern, "gi");
 
-  // Clear existing decorations for all categories
-  categories.forEach((category) => {
-    const decorationType = decorationTypes.get(category.id);
-    if (decorationType) {
-      editor.setDecorations(decorationType, []);
-    }
-  });
-
-  // Group decorations by category
   const decorationsByCategory = new Map<string, vscode.DecorationOptions[]>();
-  categories.forEach((category) => {
-    decorationsByCategory.set(category.id, []);
-  });
+  categories.forEach((category) => decorationsByCategory.set(category.id, []));
 
-  // Scan document for todo comments
   for (let lineIndex = 0; lineIndex < document.lineCount; lineIndex++) {
     const line = document.lineAt(lineIndex);
-    let match;
 
-    // Reset regex lastIndex for each line
-    todoRegex.lastIndex = 0;
-
-    while ((match = todoRegex.exec(line.text)) !== null) {
+    for (const match of line.text.matchAll(todoRegex)) {
       const matchedCategoryName = match[1].trim();
-      const startPos = match.index;
-      const endPos = match.index + match[0].length;
-
-      // Find the matching category
       const foundCategory = categories.find(
         (cat) => cat.name.toLowerCase() === matchedCategoryName.toLowerCase()
       );
 
-      if (foundCategory) {
-        const startPosition = new vscode.Position(lineIndex, startPos);
-        const endPosition = new vscode.Position(lineIndex, endPos);
+      if (foundCategory && match.index !== undefined) {
+        const startOffset = line.text.indexOf(match[1], match.index);
+
+        const endOffset = startOffset + match[1].length;
+
+        const startPosition = new vscode.Position(lineIndex, startOffset);
+        const endPosition = new vscode.Position(lineIndex, endOffset);
+
         const decoration: vscode.DecorationOptions = {
           range: new vscode.Range(startPosition, endPosition),
           hoverMessage: `Todo: ${foundCategory.name}`,
         };
 
-        const categoryDecorations = decorationsByCategory.get(foundCategory.id);
-        if (categoryDecorations) {
-          categoryDecorations.push(decoration);
-        }
-      }
-
-      // Prevent infinite loop if regex doesn't advance
-      if (match.index === todoRegex.lastIndex) {
-        todoRegex.lastIndex++;
+        decorationsByCategory.get(foundCategory.id)?.push(decoration);
       }
     }
   }
 
-  // Apply decorations for each category
-  decorationsByCategory.forEach((decorations, categoryId) => {
-    const decorationType = decorationTypes.get(categoryId);
-    if (decorationType) {
-      editor.setDecorations(decorationType, decorations);
-    }
+  // Clear old decorations before applying new ones
+  decorationTypes.forEach((decorationType, categoryId) => {
+    editor.setDecorations(
+      decorationType,
+      decorationsByCategory.get(categoryId) || []
+    );
   });
 }
 
-/**
- * Initialize syntax highlighting feature
- */
+export function updateDecorations(context: vscode.ExtensionContext): void {
+  const isEnabled = context.globalState.get("highlighterEnabled", true);
+
+  if (!isEnabled) {
+    clearAllDecorations();
+    return;
+  }
+
+  const categories: CategoryType[] = context.workspaceState.get(
+    "todoCategories",
+    DEFAULT_CATEGORIES
+  );
+  updateDecorationTypes(categories);
+
+  vscode.window.visibleTextEditors.forEach((editor) => {
+    applyDecorationsToEditor(editor, categories);
+  });
+}
+
+
 export function initializeSyntaxHighlighting(
   context: vscode.ExtensionContext
 ): void {
-  // Apply decorations when text documents are opened
-  context.subscriptions.push(
-    vscode.window.onDidChangeVisibleTextEditors(() => {
-      updateDecorations(context);
-    })
-  );
+  let timeout: NodeJS.Timeout | undefined = undefined;
 
-  // Apply decorations when document content changes
-  context.subscriptions.push(
-    vscode.workspace.onDidChangeTextDocument((event) => {
-      const editor = vscode.window.visibleTextEditors.find(
-        (editor) => editor.document === event.document
-      );
+  // Create a single debounced trigger function for performance
+  const triggerUpdateDecorations = () => {
+    if (timeout) {
+      clearTimeout(timeout);
+      timeout = undefined;
+    }
+    timeout = setTimeout(() => updateDecorations(context), 500);
+  };
+
+  // Update when the user switches to a different file
+  vscode.window.onDidChangeActiveTextEditor(
+    (editor) => {
       if (editor) {
-        const categories: CategoryType[] = context.workspaceState.get(
-          "todoCategories",
-          DEFAULT_CATEGORIES
-        );
-        applyDecorationsToEditor(editor, categories);
+        triggerUpdateDecorations();
       }
-    })
+    },
+    null,
+    context.subscriptions
   );
 
-  // Note: We'll trigger decoration updates manually when categories are updated
+  // Update when the user types in a file
+  vscode.workspace.onDidChangeTextDocument(
+    (event) => {
+      if (
+        vscode.window.activeTextEditor &&
+        event.document === vscode.window.activeTextEditor.document
+      ) {
+        triggerUpdateDecorations();
+      }
+    },
+    null,
+    context.subscriptions
+  );
 
-  // Initial decoration update
+  // Initial update for any files that are already open
   updateDecorations(context);
 }
 
 /**
- * Dispose all decorations when extension is deactivated
+ * ✅ REFACTORED: Cleans up all decorations when the extension is deactivated.
  */
 export function disposeSyntaxHighlighting(): void {
+  clearAllDecorations();
   decorationTypes.forEach((decoration) => decoration.dispose());
   decorationTypes.clear();
 }

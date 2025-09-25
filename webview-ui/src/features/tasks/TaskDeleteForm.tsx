@@ -22,7 +22,7 @@ const TaskDeleteForm = ({ task }: { task: TaskType }) => {
         variant="destructive"
         actionName="Delete"
       >
-        <h2 className="font-bold uppercase text-purple-primary text-center mx-auto text-lg">
+        <h2 className="font-medium uppercase text-purple-primary text-center mx-auto text-lg">
           Delete Task
         </h2>
         <p className="text-center text-base">

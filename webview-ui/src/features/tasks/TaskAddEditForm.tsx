@@ -131,7 +131,7 @@ const TaskAddEditForm = ({
       </div>
 
       <button type="submit" className="btn-primary">
-        <span className="font-bold text-base">
+        <span className="font-medium text-base">
           {task ? "Edit Task" : "Add Task"}
         </span>
       </button>

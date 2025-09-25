@@ -58,9 +58,20 @@ export async function handleWebviewMessage(
           ...activeCommentTasks,
           ...completedCommentTasks,
         ];
+        const isHighlighterEnabled = context.globalState.get(
+          "highlighterEnabled",
+          true
+        );
+
         panel.webview.postMessage({
           command: "update-data",
-          data: { tasks: allTasks, categories: categories },
+          data: {
+            tasks: allTasks,
+            categories: categories,
+            settings: {
+              isHighlighterEnabled,
+            },
+          },
         });
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -371,6 +382,21 @@ export async function handleWebviewMessage(
       } catch (error) {
         console.error("Error setting theme:", error);
         vscode.window.showErrorMessage("Could not save theme.");
+      }
+      return;
+    }
+
+    case "toggle-highlighter": {
+      try {
+        const { enabled } = message.data;
+        await context.globalState.update("highlighterEnabled", enabled);
+
+        updateDecorations(context);
+      } catch (error) {
+        console.error("Error toggling highlighter:", error);
+        vscode.window.showErrorMessage(
+          "Could not save highlighter preference."
+        );
       }
       return;
     }

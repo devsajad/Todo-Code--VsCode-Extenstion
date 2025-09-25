@@ -12,6 +12,7 @@ import Taskfilter from "./features/tasks/Taskfilter";
 import SkeletonLoader from "./components/SkeletonLoader";
 import { setCategoryFilter } from "./features/tasks/store/FilterSlice";
 import { openModal } from "./components/ui/Modal/store/modalSlice";
+import { setSettings } from "./features/settings/store/settingsSlice";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -26,6 +27,9 @@ function App() {
       if (message.command === "update-data") {
         dispatch(setTasks(message.data.tasks));
         dispatch(setCategories(message.data.categories));
+        if (message.data.settings) {
+          dispatch(setSettings(message.data.settings));
+        }
         setIsLoading(false);
       }
 

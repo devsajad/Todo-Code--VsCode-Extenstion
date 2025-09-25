@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from "@/store/hook";
 import ModalContainer from "./ModalContainer";
 import CategoryAddEditForm from "@/features/categories/CategoryAddEditForm";
 import CategoryDeleteForm from "@/features/categories/CategoryDeleteForm";
+import SettingsModal from "@/features/settings/SettingsModal";
 
 const ModalRenderer = () => {
   const dispatch = useAppDispatch();
@@ -38,6 +39,9 @@ const ModalRenderer = () => {
         return data.category ? (
           <CategoryDeleteForm category={data.category} />
         ) : null;
+
+      case "settings":
+        return <SettingsModal />;
 
       default:
         return null;

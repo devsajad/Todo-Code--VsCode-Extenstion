@@ -74,7 +74,7 @@ const TaskDetailView = ({ task }: { task: TaskType }) => {
         {/* Priority */}
         {priorityInfo && (
           <div className="flex flex-col gap-1">
-            <span className="text-sm font-normal uppercase">Priority</span>
+            <span className="text-sm font-medium uppercase">Priority</span>
             <div
               className={`flex items-center gap-2 font-semibold text-gray-subtext ${priorityInfo.className}`}
             >
