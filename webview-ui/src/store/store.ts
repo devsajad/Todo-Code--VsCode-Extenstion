@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import tasksReducer from "../features/tasks/store/TasksSlice";
-import categoriesReducer from "../features/tasks/store/CategoriesSlice";
+import categoriesReducer from "../features/categories/store/CategoriesSlice";
 import filterReducer from "../features/tasks/store/FilterSlice";
 import modalReducer from "@/components/ui/Modal/store/modalSlice";
 

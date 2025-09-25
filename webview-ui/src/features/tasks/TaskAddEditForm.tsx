@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import type { DateRange } from "react-day-picker";
 import { useAppDispatch, useAppSelector } from "../../store/hook";
 import type { TaskType } from "../../types/types";
-import CategoryPicker from "./CategoryPicker";
+import CategoryPicker from "../categories/CategoryPicker";
 import TaskPriorityPicker from "./TaskPriorityPicker";
 import { addManualTaskThunk, updateTaskThunk } from "./store/TasksSlice";
 import { closeModal } from "@/components/ui/Modal/store/modalSlice";

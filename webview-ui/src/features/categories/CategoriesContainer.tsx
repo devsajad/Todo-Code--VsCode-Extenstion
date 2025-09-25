@@ -1,10 +1,10 @@
 import React from "react";
 import { useAppSelector } from "../../store/hook.js";
-import { ICON_MAP } from "./constants/constants.js";
+import { ICON_MAP } from "../../constants/constants.js";
 import type { CategoryType } from "../../types/types.js";
 import CategoryMoreButton from "./CategoryMoreButton.js";
-import TasksList from "./TasksList.js";
-import { selectVisibleTasks } from "./store/selectors.js";
+import TasksList from "../tasks/TasksList.js";
+import { selectVisibleTasks } from "../tasks/store/selectors.js";
 
 const CategoriesContainer = ({ category }: { category: CategoryType }) => {
   const IconComponent = category.icon ? ICON_MAP[category.icon] : null;

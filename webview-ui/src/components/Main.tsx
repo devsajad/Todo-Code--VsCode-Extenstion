@@ -1,4 +1,4 @@
-import { MAX_CATS_GRID_COLS } from "@/features/tasks/constants/constants";
+import { MAX_CATS_GRID_COLS } from "@/constants/constants";
 import { useAppSelector } from "@/store/hook";
 import React, { type ReactNode } from "react";
 

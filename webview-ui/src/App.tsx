@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Header } from "./components/Header";
 import Main from "./components/Main";
-import CategoriesContainer from "./features/tasks/CategoriesContainer";
-import { setCategories } from "./features/tasks/store/CategoriesSlice";
+import CategoriesContainer from "./features/categories/CategoriesContainer";
+import { setCategories } from "./features/categories/store/CategoriesSlice";
 import { setTasks } from "./features/tasks/store/TasksSlice";
 import TaskDropDown from "./features/tasks/TaskDropDown";
 import { useAppDispatch, useAppSelector } from "./store/hook";

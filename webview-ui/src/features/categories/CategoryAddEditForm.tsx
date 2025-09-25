@@ -4,11 +4,11 @@ import ColorPicker from "../../components/ColorPicker";
 import IconPicker from "../../components/IconPicker";
 import { useAppDispatch } from "../../store/hook";
 import type { CategoryType } from "../../types/types";
-import { CATEGORIES_COLORS, CATEGORIES_ICONS } from "./constants/constants";
+import { CATEGORIES_COLORS, CATEGORIES_ICONS } from "../../constants/constants";
 import {
   addCategoryThunk,
   updateCategoryAndCascadeThunk,
-} from "./store/CategoriesSlice";
+} from "../categories/store/CategoriesSlice";
 
 const CategoryAddEditForm = ({ category }: { category?: CategoryType }) => {
   const [nameInput, setNameInput] = useState<string>(

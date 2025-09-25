@@ -1,5 +1,5 @@
 import React from "react";
-import { ICON_MAP } from "../features/tasks/constants/constants";
+import { ICON_MAP } from "../constants/constants";
 
 interface IconPickerProps {
   icons: string[];

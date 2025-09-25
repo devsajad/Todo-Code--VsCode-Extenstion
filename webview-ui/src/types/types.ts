@@ -1,7 +1,4 @@
-import {
-  CATEGORIES_ICONS,
-  CATEGORIES_COLORS,
-} from "../features/tasks/constants/constants";
+import { CATEGORIES_ICONS, CATEGORIES_COLORS } from "../constants/constants";
 export type TaskType = {
   id: string;
   source: "comment" | "manual";

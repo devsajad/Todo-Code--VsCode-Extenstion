@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "./store/hook";
-import { setCategories } from "./features/tasks/store/CategoriesSlice";
+import { setCategories } from "./features/categories/store/CategoriesSlice";
 import { vscode } from "./utils/vscode";
-import { ICON_MAP } from "./features/tasks/constants/constants";
+import { ICON_MAP } from "./constants/constants";
 import { VscChecklist, VscChevronDown } from "react-icons/vsc";
 import { IoAdd, IoSettingsOutline } from "react-icons/io5";
 

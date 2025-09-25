@@ -7,8 +7,8 @@ import TaskDeleteForm from "@/features/tasks/TaskDeleteForm";
 import TaskDetailView from "@/features/tasks/TaskDetailsView";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
 import ModalContainer from "./ModalContainer";
-import CategoryAddEditForm from "@/features/tasks/CategoryAddEditForm";
-import CategoryDeleteForm from "@/features/tasks/CategoryDeleteForm";
+import CategoryAddEditForm from "@/features/categories/CategoryAddEditForm";
+import CategoryDeleteForm from "@/features/categories/CategoryDeleteForm";
 
 const ModalRenderer = () => {
   const dispatch = useAppDispatch();

@@ -1,6 +1,6 @@
 import React from "react";
 import type { CategoryType } from "../../types/types";
-import { ICON_MAP } from "./constants/constants";
+import { ICON_MAP } from "@/constants/constants";
 import Tooltip from "@/components/Tooltip";
 
 interface CategoryPickerProps {

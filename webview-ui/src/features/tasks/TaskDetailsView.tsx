@@ -2,7 +2,7 @@ import { useAppDispatch, useAppSelector } from "@/store/hook";
 import React from "react";
 import { IoMdCreate, IoMdOpen, IoMdTrash } from "react-icons/io";
 import { IoCheckmarkDoneSharp, IoFlagOutline } from "react-icons/io5";
-import { ICON_MAP } from "./constants/constants";
+import { ICON_MAP } from "../../constants/constants";
 import type { TaskType } from "../../types/types";
 import { getDateDisplayInfo, getPriorityInfo } from "./utils/utils";
 import { vscode } from "@/utils/vscode";
