@@ -10,25 +10,26 @@ import { openModal } from "@/components/ui/Modal/store/modalSlice";
 
 type propsType = {
   tasks: TaskType[];
+  categoryId: string;
 };
 
-const TasksList = ({ tasks }: propsType) => {
+const TasksList = ({ tasks, categoryId }: propsType) => {
   const dispatch = useAppDispatch();
 
   function handleAddTaskClick() {
     dispatch(
       openModal({
         type: "addEditTask",
-        data: { categoryId: tasks[0].categoryId },
+        data: { categoryId: categoryId },
       })
     );
   }
   return (
     <ul className="space-y-2 relative">
-      {tasks.map((task) => (
-        <AnimatePresence>
+      <AnimatePresence>
+        {tasks.map((task) => (
           <motion.li
-            layout
+            layout="preserve-aspect"
             key={task.id}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -45,8 +46,8 @@ const TasksList = ({ tasks }: propsType) => {
             <TaskItem task={task} />
             <TaskItemModify task={task} />
           </motion.li>
-        </AnimatePresence>
-      ))}
+        ))}
+      </AnimatePresence>
       <button
         onClick={handleAddTaskClick}
         className={`p-2 flex items-center gap-2 text-gray-subtext rounded-lg group/outer w-full hover:bg-gray-secondry transition-colors duration-300`}

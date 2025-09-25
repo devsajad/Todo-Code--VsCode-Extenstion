@@ -1,52 +1,79 @@
 import * as vscode from "vscode";
+import { DEFAULT_CATEGORIES } from "./constants";
+import { mainPanel } from "./extension";
+import { getSidebarContent } from "./webview/getSidebarContent";
+import { CategoryType } from "./types/types";
 
 export class TodoViewProvider implements vscode.WebviewViewProvider {
-  // This must match the `id` of the view you defined in package.json
   public static readonly viewType = "code-todos-view";
+  private _view?: vscode.WebviewView;
 
   constructor(private readonly _context: vscode.ExtensionContext) {}
 
-  // This method is called by VS Code when the user clicks your icon
-  public resolveWebviewView(
-    webviewView: vscode.WebviewView,
-    context: vscode.WebviewViewResolveContext,
-    _token: vscode.CancellationToken
-  ) {
-    // We don't need to do much here, just set some basic options
-    // and provide simple HTML for the sidebar itself.
+  public resolveWebviewView(webviewView: vscode.WebviewView) {
+    this._view = webviewView;
     webviewView.webview.options = {
       enableScripts: true,
       localResourceRoots: [this._context.extensionUri],
     };
 
-    webviewView.webview.html = this._getHtmlForSidebar();
+    const isDevelopment =
+      this._context.extensionMode === vscode.ExtensionMode.Development;
+    webviewView.webview.html = getSidebarContent(
+      isDevelopment,
+      webviewView.webview,
+      this._context.extensionUri
+    );
 
-    // The most important part: when the view is created, we trigger
-    // our command to open the main, full-sized editor panel.
+    // ✅ Listen for when the sidebar's visibility changes.
+    // This event fires every time the user clicks the icon to show the view.
+    webviewView.onDidChangeVisibility(() => {
+      if (webviewView.visible) {
+        vscode.commands.executeCommand("code-todos.showPanel");
+      }
+    });
+
+    // ✅ Also trigger the command once when the view is first created.
     vscode.commands.executeCommand("code-todos.showPanel");
-  }
 
-  private _getHtmlForSidebar(): string {
-    return `
-      <!DOCTYPE html>
-      <html lang="en">
-      <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <style>
-          body { 
-            font-family: var(--vscode-font-family); 
-            color: var(--vscode-foreground); 
-            padding: 1rem; 
-            text-align: center;
+    // The message listener for the sidebar's own functionality remains the same.
+    webviewView.webview.onDidReceiveMessage(async (message) => {
+      switch (message.command) {
+        case "get-sidebar-data": {
+          const categories = this._context.workspaceState.get<CategoryType[]>(
+            "todoCategories",
+            DEFAULT_CATEGORIES
+          );
+          webviewView.webview.postMessage({
+            command: "update-categories",
+            data: categories,
+          });
+          return;
+        }
+        case "set-category-filter": {
+          if (mainPanel) {
+            mainPanel.webview.postMessage({
+              command: "set-category-filter",
+              data: message.data,
+            });
           }
-        </style>
-      </head>
-      <body>
-        <h3>Code Todos</h3>
-        <p>Opening the main editor panel...</p>
-      </body>
-      </html>
-    `;
+          return;
+        }
+        case "open-modal": {
+          // If the main panel isn't open, open it first, then send the message.
+          if (!mainPanel) {
+            await vscode.commands.executeCommand("code-todos.showPanel");
+          }
+          // A short delay ensures the panel is ready to receive the message.
+          setTimeout(() => {
+            mainPanel?.webview.postMessage({
+              command: "open-modal",
+              data: message.data,
+            });
+          }, 100);
+          return;
+        }
+      }
+    });
   }
 }

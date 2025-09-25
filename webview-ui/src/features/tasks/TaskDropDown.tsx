@@ -9,7 +9,7 @@ const TaskDropDown = () => {
   const dispatch = useAppDispatch();
   return (
     <DropDown>
-      <DropDown.Trigger classNames="bg-purple-primary text-primary-text px-3 py-1.5 flex items-center gap-1.5 rounded-md font-semibold text-xs hover:opacity-90 transition-opacity">
+      <DropDown.Trigger classNames="bg-purple-primary text-primary-text px-3 py-1.5 flex items-center gap-1.5 rounded-lg font-semibold text-xs hover:opacity-90 transition-opacity">
         <IoMdAdd className="text-base" />
         <span>Add New</span>
       </DropDown.Trigger>

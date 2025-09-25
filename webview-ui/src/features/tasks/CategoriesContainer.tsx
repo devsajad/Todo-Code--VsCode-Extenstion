@@ -10,11 +10,10 @@ const CategoriesContainer = ({ category }: { category: CategoryType }) => {
   const IconComponent = category.icon ? ICON_MAP[category.icon] : null;
 
   const visibleTasks = useAppSelector(selectVisibleTasks);
+
   const filteredTask = visibleTasks.filter(
     (task) => task.categoryId === category.id
   );
-
-  
 
   return (
     <div className="space-y-3">
@@ -31,8 +30,7 @@ const CategoriesContainer = ({ category }: { category: CategoryType }) => {
         ></div>
       </header>
 
-      <TasksList tasks={filteredTask} />
-      
+      <TasksList tasks={filteredTask} categoryId={category.id} />
     </div>
   );
 };

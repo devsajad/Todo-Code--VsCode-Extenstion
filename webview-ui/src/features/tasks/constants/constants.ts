@@ -63,7 +63,7 @@ export const THEMES = {
     "--color-gray-bg": "var(--vscode-editor-background)",
   },
   midnight: {
-    "--color-purple-primary": "#5271FF", 
+    "--color-purple-primary": "#5271FF",
     "--color-primary-text": "#FFFFFF",
     "--color-gray-bg": "#0D1117",
     "--color-gray-secondry": "#161B22",
@@ -79,3 +79,5 @@ export const THEMES = {
     "--color-gray-subtext": "#586E75",
   },
 };
+
+export const MAX_CATS_GRID_COLS = 3;

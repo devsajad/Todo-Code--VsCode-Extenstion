@@ -10,11 +10,13 @@ import { vscode } from "./utils/vscode";
 import ModalRenderer from "./components/ui/Modal/ModalRenderer";
 import Taskfilter from "./features/tasks/Taskfilter";
 import SkeletonLoader from "./components/SkeletonLoader";
+import { setCategoryFilter } from "./features/tasks/store/FilterSlice";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
   const dispatch = useAppDispatch();
-  const categories = useAppSelector((state) => state.categories);
+  const allCategories = useAppSelector((state) => state.categories);
+  const { filterByCategories } = useAppSelector((state) => state.filters);
 
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
@@ -23,18 +25,23 @@ function App() {
       if (message.command === "update-data") {
         dispatch(setTasks(message.data.tasks));
         dispatch(setCategories(message.data.categories));
-
         setIsLoading(false);
+      }
+
+      if (message.command === "set-category-filter") {
+        dispatch(setCategoryFilter(message.data.categoryId));
       }
     };
 
     window.addEventListener("message", handleMessage);
-
-    vscode.postMessage({
-      command: "get-data",
-    });
+    vscode.postMessage({ command: "get-data" });
     return () => window.removeEventListener("message", handleMessage);
   }, [dispatch]);
+
+  const categoriesToRender =
+    filterByCategories.length === 0
+      ? allCategories
+      : allCategories.filter((cat) => filterByCategories.includes(cat.id)); // Otherwise, show only the selected ones
 
   if (isLoading) return <SkeletonLoader />;
 
@@ -45,8 +52,8 @@ function App() {
       </Header>
       <Taskfilter />
       <Main>
-        {categories.map((category, index) => (
-          <CategoriesContainer key={index} category={category} />
+        {categoriesToRender.map((category) => (
+          <CategoriesContainer key={category.id} category={category} />
         ))}
       </Main>
       <ModalRenderer />

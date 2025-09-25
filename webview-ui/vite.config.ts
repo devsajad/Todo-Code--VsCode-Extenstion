@@ -12,6 +12,17 @@ export default defineConfig({
       host: "localhost",
     },
   },
+
+  build: {
+    rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, "index.html"),
+        sidebar: path.resolve(__dirname, "sidebar.html"),
+      },
+    },
+    outDir: "dist",
+  },
+
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

@@ -21,6 +21,13 @@ const filtersSlice = createSlice({
     setSortBy: (state, action: PayloadAction<FiltersState["sortBy"]>) => {
       state.sortBy = action.payload;
     },
+    setCategoryFilter: (state, action: PayloadAction<string | null>) => {
+      if (action.payload === null) {
+        state.filterByCategories = []; // An empty array means show all
+      } else {
+        state.filterByCategories = [action.payload];
+      }
+    },
     toggleCategoryFilter: (state, action: PayloadAction<string>) => {
       const categoryId = action.payload;
       if (state.filterByCategories.includes(categoryId)) {
@@ -50,5 +57,6 @@ export const {
   setShowCompleted,
   clearFilters,
   setviewMode,
+  setCategoryFilter,
 } = filtersSlice.actions;
 export default filtersSlice.reducer;

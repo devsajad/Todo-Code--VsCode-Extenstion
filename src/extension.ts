@@ -7,9 +7,11 @@ import {
   disposeSyntaxHighlighting,
 } from "./core/syntaxHighlighter";
 
+// ✅ 1. Declare a variable to hold the panel instance. Export it so other files can access it.
+export let mainPanel: vscode.WebviewPanel | undefined = undefined;
+
 /**
  * Main extension activation function
- * This is now much cleaner and focused on the core extension setup
  */
 export function activate(context: vscode.ExtensionContext) {
   // Register the sidebar provider
@@ -22,25 +24,29 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   // Register the main panel command
-  const disposable = vscode.commands.registerCommand(
-    "code-todos.showPanel",
-    () => {
+  context.subscriptions.push(
+    vscode.commands.registerCommand("code-todos.showPanel", () => {
       createTodoPanel(context);
-    }
+    })
   );
-
-  context.subscriptions.push(disposable);
 
   // Initialize syntax highlighting
   initializeSyntaxHighlighting(context);
 }
 
 /**
- * Creates and configures the main todo panel
+ * Creates and configures the main todo panel, managing its state.
  */
 function createTodoPanel(context: vscode.ExtensionContext): void {
+  // ✅ 2. If the panel already exists, just reveal it and stop.
+  if (mainPanel) {
+    mainPanel.reveal(vscode.ViewColumn.One);
+    return;
+  }
+
+  // Otherwise, create a new panel.
   const panel = vscode.window.createWebviewPanel(
-    "codeTodosPanel", // A unique ID for this panel type
+    "codeTodosPanel",
     "Code Todos",
     vscode.ViewColumn.One,
     {
@@ -49,18 +55,27 @@ function createTodoPanel(context: vscode.ExtensionContext): void {
     }
   );
 
-  // Determine if we are in development mode by checking the extension's mode
+  // ✅ 3. Set our module-level variable to the new panel instance.
+  mainPanel = panel;
+
+  // ✅ 4. When the panel is closed by the user, clear our reference.
+  panel.onDidDispose(
+    () => {
+      mainPanel = undefined;
+    },
+    null,
+    context.subscriptions
+  );
+
   const isDevelopment =
     context.extensionMode === vscode.ExtensionMode.Development;
-
-  // Set the webview's content based on the mode
   panel.webview.html = getWebviewContent(
     isDevelopment,
     panel.webview,
     context.extensionUri
   );
 
-  // Handle all webview messages
+  // Handle all webview messages by passing the panel and context
   panel.webview.onDidReceiveMessage(
     async (message) => {
       await handleWebviewMessage(message, context, panel);
@@ -73,13 +88,7 @@ function createTodoPanel(context: vscode.ExtensionContext): void {
 /**
  * Extension deactivation function
  */
-
 export function deactivate() {
   // Clean up syntax highlighting decorations
   disposeSyntaxHighlighting();
 }
-
-// Example comments for testing the scanner:
-// features: Add user authentication
-// fix bugs: Fix the empty categories issue
-/* refactors: Refactor the webview creation logic */
