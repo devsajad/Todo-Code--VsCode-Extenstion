@@ -2,7 +2,7 @@ import { closeModal } from "@/components/ui/Modal/store/modalSlice";
 import React, { useState } from "react";
 import ColorPicker from "../../components/ColorPicker";
 import IconPicker from "../../components/IconPicker";
-import { useAppDispatch } from "../../store/hook";
+import { useAppDispatch, useAppSelector } from "../../store/hook";
 import type { CategoryType } from "../../types/types";
 import { CATEGORIES_COLORS, CATEGORIES_ICONS } from "../../constants/constants";
 import {
@@ -22,6 +22,9 @@ const CategoryAddEditForm = ({ category }: { category?: CategoryType }) => {
   );
   const dispatch = useAppDispatch();
 
+  const allCategories = useAppSelector((state) => state.categories);
+  const [error, setError] = useState<string | null>(null);
+
   const resetState = () => {
     setNameInput(category?.name || "");
     setSelectedColor(category?.color || CATEGORIES_COLORS[0]);
@@ -31,6 +34,26 @@ const CategoryAddEditForm = ({ category }: { category?: CategoryType }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    const normalizedNewName = nameInput.toLowerCase().replace(/\s+/g, "");
+
+    if (!normalizedNewName) {
+      setError("Category name cannot be empty.");
+      return;
+    }
+
+    const isDuplicate = allCategories.some(
+      (cat) =>
+        // Normalize the existing category name before comparing
+        cat.name.toLowerCase().replace(/\s+/g, "") === normalizedNewName &&
+        cat.id !== category?.id
+    );
+
+    if (isDuplicate) {
+      setError("A category with this name already exists.");
+      return;
+    }
+
+    setError(null);
     if (category)
       dispatch(
         updateCategoryAndCascadeThunk(category, {
@@ -74,6 +97,7 @@ const CategoryAddEditForm = ({ category }: { category?: CategoryType }) => {
           id="title"
           placeholder="Enter category name"
         />
+        {error && <p className="text-red-accent text-xs mt-1">{error}</p>}
       </div>
 
       <div className="mb-4">

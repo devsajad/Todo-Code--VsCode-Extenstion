@@ -80,4 +80,10 @@ export const THEMES = {
   },
 };
 
+export const THEME_OPTIONS = [
+  { name: "VS Code Default", value: "vscode" },
+  { name: "Midnight", value: "midnight" },
+  { name: "Solarized", value: "solarized" },
+];
+
 export const MAX_CATS_GRID_COLS = 3;

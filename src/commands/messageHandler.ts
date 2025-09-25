@@ -91,15 +91,29 @@ export async function handleWebviewMessage(
           DEFAULT_CATEGORIES
         );
         const newCategory = message.data;
+
+        // Duplication check
+        const normalizedNewName = newCategory.name
+          .toLowerCase()
+          .replace(/\s+/g, "");
+        const isDuplicate = savedCategories.some(
+          (cat) =>
+            cat.name.toLowerCase().replace(/\s+/g, "") === normalizedNewName
+        );
+        if (isDuplicate) {
+          vscode.window.showErrorMessage(
+            `A category named "${newCategory.name}" already exists.`
+          );
+          return;
+        }
+
         const updatedCategories = [...savedCategories, newCategory];
 
-        // Save the new list to storage
         await context.workspaceState.update(
           "todoCategories",
           updatedCategories
         );
 
-        // ✅ Broadcast the changes to all UIs and update decorations
         await broadcastCategories(context);
       } catch (error) {
         console.error("Error adding category:", error);
@@ -140,6 +154,24 @@ export async function handleWebviewMessage(
           "todoCategories",
           DEFAULT_CATEGORIES
         );
+
+        // Duplication check
+        const normalizedNewName = updatedCategory.name
+          .toLowerCase()
+          .replace(/\s+/g, "");
+
+        const isDuplicate = savedCategories.some(
+          (cat) =>
+            cat.name.toLowerCase().replace(/\s+/g, "") === normalizedNewName &&
+            cat.id !== updatedCategory.id
+        );
+        if (isDuplicate) {
+          vscode.window.showErrorMessage(
+            `A category named "${updatedCategory.name}" already exists.`
+          );
+          return;
+        }
+
         const updatedCategories = savedCategories.map((cat) =>
           cat.id === originalCategory.id ? updatedCategory : cat
         );

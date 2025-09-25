@@ -1,15 +1,10 @@
-import ToggleSwitch from "@/components/ToggleSwitch";
 import { closeModal } from "@/components/ui/Modal/store/modalSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
 import React, { useState } from "react";
 import { toggleHighlighterThunk } from "./store/settingsSlice";
 import { setThemeThunk } from "./store/themeSlice";
-
-const THEME_OPTIONS = [
-  { name: "VS Code Default", value: "vscode" },
-  { name: "Midnight", value: "midnight" },
-  { name: "Solarized", value: "solarized" },
-];
+import SyntaxHighlihgterToggle from "./SyntaxHighlihgterToggle";
+import ThemeSelection from "./ThemeSelection";
 
 const SettingsModal = () => {
   const dispatch = useAppDispatch();
@@ -19,7 +14,9 @@ const SettingsModal = () => {
     (state) => state.settings.isHighlighterEnabled
   );
 
-  const [selectedTheme, setSelectedTheme] = useState(currentTheme);
+  const [selectedTheme, setSelectedTheme] = useState<string | null>(
+    currentTheme
+  );
 
   const handleToggle = () => {
     dispatch(toggleHighlighterThunk());
@@ -41,37 +38,15 @@ const SettingsModal = () => {
         Settings
       </h2>
 
-      {/* Theme Selection */}
-      <div className="flex flex-col mb-8 space-y-2">
-        <label htmlFor="theme-select" className="font-medium text-base">
-          Theme
-        </label>
-        <select
-          id="theme-select"
-          value={selectedTheme || "vscode"}
-          onChange={(e) => setSelectedTheme(e.target.value)}
-          className="border-1 border-white-text/30 px-1 py-2 bg-gray-secondry rounded-md"
-        >
-          {THEME_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.name}
-            </option>
-          ))}
-        </select>
-      </div>
+      <ThemeSelection
+        selectedTheme={selectedTheme}
+        onSelectedTheme={setSelectedTheme}
+      />
 
-      {/* Syntax Highlighter Toggle */}
-      <div className="flex flex-col mb-8 space-y-1">
-        <label className="font-medium text-base mb-2">
-          Comment Highlighting
-        </label>
-        <div className="flex items-center gap-2">
-          <ToggleSwitch enabled={highlighterEnabled} onChange={handleToggle} />
-          <span className="text-sm text-gray-subtext">
-            {highlighterEnabled ? "Enabled" : "Disabled"}
-          </span>
-        </div>
-      </div>
+      <SyntaxHighlihgterToggle
+        highlighterEnabled={highlighterEnabled}
+        onToggle={handleToggle}
+      />
 
       <button type="submit" className="btn-primary">
         <span className="font-medium text-base">Save Settings</span>
