@@ -23,7 +23,7 @@ const IconPicker = ({ icons, selectedIcon, onIconSelect }: IconPickerProps) => {
               ${
                 selectedIcon === iconName
                   ? "bg-purple-primary text-white ring-2 ring-white"
-                  : "bg-button-background hover:bg-gray-600"
+                  : "bg-button-secondry hover:bg-button-secondry/50  text-button-foreground "
               }
             `}
             aria-label={`Select icon ${iconName}`}

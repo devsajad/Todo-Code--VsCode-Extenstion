@@ -13,7 +13,11 @@ const ToggleSwitch = ({ enabled, onChange }: ToggleSwitchProps) => {
       role="switch"
       aria-checked={enabled}
       className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ring-offset-2 ring-offset-gray-secondry focus:ring-2 focus:ring-purple-primary
-        ${enabled ? "bg-purple-primary" : "bg-button-background"}
+        ${
+          enabled
+            ? "bg-purple-primary"
+            : "bg-button-secondry hover:bg-button-secondry/50 text-button-foreground"
+        }
       `}
     >
       <span

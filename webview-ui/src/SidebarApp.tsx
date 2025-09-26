@@ -102,7 +102,7 @@ function SidebarApp() {
         </button>
         <button
           onClick={() => handleOpenModal("settings")}
-          className="flex-shrink-0 p-2 rounded-md bg-button-background hover:bg-button-hoverBackground transition-colors"
+          className="flex-shrink-0 p-2 rounded-md bg-button-secondry hover:bg-button-secondry/50  text-button-foreground hover:bg-button-hoverBackground transition-colors"
           title="Settings"
         >
           <IoSettingsOutline />

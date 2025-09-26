@@ -16,7 +16,7 @@ function updateDecorationTypes(categories: CategoryType[]): void {
   categories.forEach((category) => {
     const decorationType = vscode.window.createTextEditorDecorationType({
       backgroundColor: category.color,
-      color: "#ffffff",
+      color: new vscode.ThemeColor("button.foreground"),
       borderRadius: "3px",
       fontWeight: "bold",
       textDecoration: "none",
@@ -115,7 +115,6 @@ export function updateDecorations(context: vscode.ExtensionContext): void {
     applyDecorationsToEditor(editor, categories);
   });
 }
-
 
 export function initializeSyntaxHighlighting(
   context: vscode.ExtensionContext

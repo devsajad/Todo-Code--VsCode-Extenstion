@@ -149,7 +149,7 @@ const TaskDetailView = ({ task }: { task: TaskType }) => {
         <div className="flex items-center gap-2">
           <button
             onClick={handleEdit}
-            className="flex items-center justify-center size-8 rounded-md bg-button-background hover:bg-gray-600 transition-colors"
+            className="flex items-center justify-center size-8 rounded-md bg-button-secondry hover:bg-button-secondry/50  text-button-foreground transition-colors"
             title="Edit Task"
           >
             <IoMdCreate />

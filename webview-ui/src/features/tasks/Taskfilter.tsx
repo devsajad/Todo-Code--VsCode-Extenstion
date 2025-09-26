@@ -65,7 +65,7 @@ const TaskFilter = () => {
           </DropDown.Content>
         </DropDown>
 
-        <div className="flex items-center p-1 bg-button-background rounded-lg">
+        <div className="flex items-center p-1 bg-button-background hover:bg-button-background/50  text-button-foreground rounded-lg">
           <FilterButton
             isActive={viewMode === "column"}
             onClick={() => dispatch(setviewMode("column"))}
