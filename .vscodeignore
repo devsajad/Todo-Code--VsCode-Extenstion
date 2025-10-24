@@ -12,3 +12,12 @@ vsc-extension-quickstart.md
 **/*.map
 **/*.ts
 **/.vscode-test.*
+test-highlighting.js
+SYNTAX_HIGHLIGHTING.md
+REFACTORING_SUMMARY.md
+FIXING_AFTER_RENAME.md
+QUICK_FIX.md
+.git/**
+.github/**
+**/.DS_Store
+**/Thumbs.db

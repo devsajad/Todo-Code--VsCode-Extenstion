@@ -1,21 +1,52 @@
 {
-  "name": "todos-coders",
-  "displayName": "Todos-Coders",
-  "description": "A simple todo manager for your codebase with beautiful UI.",
-  "version": "0.0.1",
+  "name": "code-todos",
+  "displayName": "Code Todos - Task Manager",
+  "description": "🚀 Powerful todo manager with syntax highlighting. Track tasks in code comments, organize with categories, and boost your productivity!",
+  "version": "1.0.0",
+  "publisher": "sajjadzarepour",
+  "author": {
+    "name": "Sajjad Zarepour"
+  },
   "engines": {
-    "vscode": "^1.104.0"
+    "vscode": "^1.60.0"
   },
   "categories": [
-    "Other"
+    "Other",
+    "Visualization"
   ],
+  "keywords": [
+    "todo",
+    "task",
+    "productivity",
+    "task manager",
+    "comment",
+    "syntax highlighting",
+    "organizer",
+    "todos",
+    "checklist",
+    "notes"
+  ],
+  "icon": "icon.png",
+  "galleryBanner": {
+    "color": "#1e293b",
+    "theme": "dark"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/devsajad/Todo-Code--VsCode-Extenstion"
+  },
+  "bugs": {
+    "url": "https://github.com/devsajad/Todo-Code--VsCode-Extenstion/issues"
+  },
+  "homepage": "https://github.com/devsajad/Todo-Code--VsCode-Extenstion#readme",
+  "license": "MIT",
   "activationEvents": [],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "code-todos.start",
-        "title": "Start Todos Coders"
+        "command": "code-todos.showPanel",
+        "title": "Show Code Todos Panel"
       },
       {
         "command": "code-todos.debug",
