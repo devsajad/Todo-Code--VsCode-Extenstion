@@ -30,19 +30,17 @@ function getSidebarContentProd(
   let html = fs.readFileSync(indexPath, "utf8");
   const nonce = getNonce();
 
-  html = html
-    .replace(/(href|src)="(\/[^"]+)"/g, (_, type, assetPath) => {
-      const assetUri = vscode.Uri.file(path.join(buildPath, assetPath));
-      return `${type}="${webview.asWebviewUri(assetUri)}"`;
-    })
-    .replace(
-      "</head>",
-      `<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; script-src 'nonce-${nonce}';"></head>`
-    )
-    .replace(
-      /<script type="module"/g,
-      `<script type="module" nonce="${nonce}"`
-    );
+  html = html.replace(/(href|src)="(\/[^"]+)"/g, (_, type, assetPath) => {
+    const assetUri = vscode.Uri.file(path.join(buildPath, assetPath));
+    return `${type}="${webview.asWebviewUri(assetUri)}"`;
+  });
+
+  html = html.replace(/<script/g, `<script nonce="${nonce}"`);
+
+  html = html.replace(
+    "</head>",
+    `<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource} 'unsafe-inline'; script-src 'nonce-${nonce}' ${webview.cspSource}; img-src ${webview.cspSource} data:;"></head>`
+  );
 
   return html;
 }

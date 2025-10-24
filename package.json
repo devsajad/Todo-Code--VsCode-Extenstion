@@ -8,7 +8,7 @@
     "name": "Sajjad Zarepour"
   },
   "engines": {
-    "vscode": "^1.60.0"
+    "vscode": "^1.104.0"
   },
   "categories": [
     "Other",
@@ -26,7 +26,6 @@
     "checklist",
     "notes"
   ],
-  "icon": "icon.png",
   "galleryBanner": {
     "color": "#1e293b",
     "theme": "dark"
@@ -77,7 +76,8 @@
     "vscode:prepublish": "npm run package",
     "compile": "webpack",
     "watch": "webpack --watch",
-    "package": "webpack --mode production --devtool hidden-source-map",
+    "package": "npm run build:webview && webpack --mode production --devtool hidden-source-map",
+    "build:webview": "cd webview-ui && npm install && npm run build",
     "compile-tests": "tsc -p . --outDir out",
     "watch-tests": "tsc -p . -w --outDir out",
     "pretest": "npm run compile-tests && npm run compile && npm run lint",

@@ -21,3 +21,7 @@ QUICK_FIX.md
 .github/**
 **/.DS_Store
 **/Thumbs.db
+
+# Include webview UI files but exclude source
+webview-ui/**
+!webview-ui/dist/**
