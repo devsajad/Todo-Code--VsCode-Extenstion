@@ -44,7 +44,7 @@ function App() {
         dispatch(openModal(message.data));
       }
     };
-    // fix bugs:Fix the empty categories issue that appears on first load
+
     window.addEventListener("message", handleMessage);
     vscode.postMessage({ command: "get-data" });
     return () => window.removeEventListener("message", handleMessage);
