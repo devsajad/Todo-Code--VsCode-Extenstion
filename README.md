@@ -192,7 +192,7 @@ See [CHANGELOG.md](CHANGELOG.md) for a detailed history of changes and releases.
 **Sajjad Zarepour**
 
 - GitHub: [@devsajad](https://github.com/devsajad)
-- Email: [Your Email] <!-- Add your email if you want -->
+- Email: [sajjadzarepur@gmail.com](mailto:sajjadzarepur@gmail.com)
 
 Made with ❤️ for developers who love clean code and organized workflows.
 
