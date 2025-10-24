@@ -1,10 +1,5 @@
 # 📝 Code Todos - Smart Task Manager for VS Code
 
-[![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/sajjadzarepour.code-todos?style=flat-square&label=VS%20Marketplace&color=0098FF)](https://marketplace.visualstudio.com/items?itemName=sajjadzarepour.code-todos)
-[![Installs](https://img.shields.io/visual-studio-marketplace/i/sajjadzarepour.code-todos?style=flat-square&color=4BC51D)](https://marketplace.visualstudio.com/items?itemName=sajjadzarepour.code-todos)
-[![Rating](https://img.shields.io/visual-studio-marketplace/r/sajjadzarepour.code-todos?style=flat-square&color=FF6600)](https://marketplace.visualstudio.com/items?itemName=sajjadzarepour.code-todos)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
-
 **Transform your code comments into a powerful, organized, and beautiful task list. Never lose track of a `TODO` again!**
 
 Code Todos scans your workspace for comments like `// features: ...` or `# fix bugs: ...` and elegantly organizes them in a dedicated sidebar view. Manage tasks, create custom categories, and stay productive without ever leaving your editor.

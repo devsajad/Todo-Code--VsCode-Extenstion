@@ -1,7 +1,7 @@
 {
   "name": "code-todos",
   "displayName": "Code Todos - Task Manager",
-  "description": "🚀 Powerful todo manager with syntax highlighting. Track tasks in code comments, organize with categories, and boost your productivity!",
+  "description": "Powerful todo manager with syntax highlighting. Track tasks in code comments, organize with categories, and boost your productivity!",
   "version": "1.0.2",
   "publisher": "sajjadzarepour",
   "author": {
@@ -26,6 +26,7 @@
     "checklist",
     "notes"
   ],
+  "icon": "icon.png",
   "galleryBanner": {
     "color": "#1e293b",
     "theme": "dark"
