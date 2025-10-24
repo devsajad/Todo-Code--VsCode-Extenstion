@@ -4,13 +4,29 @@ This is the README for your extension "todos-coders". After writing up a brief d
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+### 🎨 **Syntax Highlighting**
 
-For example if there is an image subfolder under your extension project workspace:
+Automatically highlights todo comments with category colors! Write comments like:
 
-\!\[feature X\]\(images/feature-x.png\)
+- `// features: Add user authentication` (highlighted in green)
+- `// fix bugs: Memory leak in handlers` (highlighted in red)
+- `// refactors: Extract utility functions` (highlighted in yellow)
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+### 📋 **Todo Management**
+
+- Scan workspace for todo comments
+- Add manual tasks
+- Organize by categories
+- Track completion status
+
+### 🎯 **Smart Categories**
+
+- Default categories: Features, Fix Bugs, Refactors
+- Custom categories with colors and icons
+- Case-insensitive matching
+- Real-time updates
+
+> See [SYNTAX_HIGHLIGHTING.md](SYNTAX_HIGHLIGHTING.md) for detailed documentation on the highlighting feature.
 
 ## Requirements
 
@@ -24,8 +40,8 @@ For example:
 
 This extension contributes the following settings:
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+- `myExtension.enable`: Enable/disable this extension.
+- `myExtension.thing`: Set to `blah` to do something.
 
 ## Known Issues
 
@@ -53,19 +69,19 @@ Added features X, Y, and Z.
 
 Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
 
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
+- [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
 
 ## Working with Markdown
 
 You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
 
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
+- Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
+- Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
+- Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
 
 ## For more information
 
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+- [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
+- [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
 
 **Enjoy!**

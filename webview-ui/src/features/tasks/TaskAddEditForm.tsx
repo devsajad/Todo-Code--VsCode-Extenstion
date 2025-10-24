@@ -1,0 +1,142 @@
+import DateRangePicker from "@/components/DatePicker";
+import React, { useState } from "react";
+import type { DateRange } from "react-day-picker";
+import { useAppDispatch, useAppSelector } from "../../store/hook";
+import type { TaskType } from "../../types/types";
+import CategoryPicker from "../categories/CategoryPicker";
+import TaskPriorityPicker from "./TaskPriorityPicker";
+import { addManualTaskThunk, updateTaskThunk } from "./store/TasksSlice";
+import { closeModal } from "@/components/ui/Modal/store/modalSlice";
+
+const TaskAddEditForm = ({
+  task,
+  categoryId,
+}: {
+  task?: TaskType;
+  categoryId?: string;
+}) => {
+  const dispatch = useAppDispatch();
+  const handleCloseModal = () => dispatch(closeModal());
+  const categories = useAppSelector((state) => state.categories);
+
+  const [titleInput, setTitleInput] = useState<string>(() => task?.text || "");
+  const [descriptionInput, setDescriptionInput] = useState<string>(
+    () => task?.description || ""
+  );
+  const [selectedPriority, setSelectedPriority] = useState<number>(
+    () => task?.priority ?? 5
+  );
+  const [selectedCategoryId, setSelectedCategoryId] = useState(
+    () => task?.categoryId || categoryId || categories[0]?.id || ""
+  );
+  const [dateRange, setDateRange] = useState<DateRange | undefined>(() =>
+    task?.startDate && task?.endDate
+      ? { from: new Date(task.startDate), to: new Date(task.endDate) }
+      : undefined
+  );
+
+  function resetStates() {
+    setTitleInput("");
+    setDescriptionInput("");
+    setSelectedPriority(5);
+    setSelectedCategoryId(categories[0]?.id || "");
+    setDateRange(undefined);
+  }
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!titleInput || !selectedCategoryId) return;
+
+    const taskObject = {
+      text: titleInput,
+      categoryId: selectedCategoryId,
+      priority: selectedPriority,
+      startDate: dateRange?.from,
+      endDate: dateRange?.to,
+      description: descriptionInput,
+    };
+
+    if (task?.id) dispatch(updateTaskThunk(task, { ...task, ...taskObject }));
+    else dispatch(addManualTaskThunk(taskObject));
+
+    resetStates();
+    handleCloseModal();
+  };
+
+  if (categories.length === 0) {
+    return <p>Please add a category first.</p>;
+  }
+
+  return (
+    <form onSubmit={handleSubmit} onClick={(e) => e.stopPropagation()}>
+      <div className="flex flex-col mb-6 space-y-1">
+        <label htmlFor="title" className="font-medium text-base">
+          Title
+        </label>
+        <input
+          value={titleInput}
+          onChange={(e) => setTitleInput(e.target.value)}
+          className="border-1 border-white-text/30 px-2 py-2"
+          type="text"
+          name="title"
+          id="title"
+          placeholder="Enter your task title"
+        />
+      </div>
+
+      <div className="flex flex-col mb-6 space-y-1">
+        <label htmlFor="description" className="font-medium  text-base">
+          Description
+        </label>
+        <input
+          value={descriptionInput}
+          onChange={(e) => setDescriptionInput(e.target.value)}
+          className="border-1 border-white-text/30 px-2 py-2 rounded-md"
+          type="text"
+          name="description"
+          id="description"
+          placeholder="Enter your task description"
+        />
+      </div>
+
+      <div className="flex flex-col mb-6 space-y-1">
+        <label className="font-medium  text-base">Start/End Date</label>
+        <DateRangePicker
+          selectedRange={dateRange}
+          onRangeSelect={setDateRange}
+        />
+      </div>
+
+      <div className="mb-6">
+        <label className="font-medium  text-base inline-block mb-1">
+          Choose Category{" "}
+          <span className="font-light text-sm">({selectedCategoryId})</span>
+        </label>
+        <CategoryPicker
+          categories={categories}
+          selectedCategoryId={selectedCategoryId}
+          onCategorySelect={setSelectedCategoryId}
+        />
+      </div>
+
+      <div className="mb-8">
+        <label className="font-medium  text-base inline-block mb-1">
+          Priority
+        </label>
+        <TaskPriorityPicker
+          selectedPriority={selectedPriority}
+          onPrioritySelect={setSelectedPriority}
+        />
+      </div>
+
+      <button type="submit" className="btn-primary">
+        <span className="font-medium text-base">
+          {task ? "Edit Task" : "Add Task"}
+        </span>
+      </button>
+    </form>
+  );
+};
+
+export default TaskAddEditForm;

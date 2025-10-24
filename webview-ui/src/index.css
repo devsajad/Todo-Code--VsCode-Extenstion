@@ -1,2 +1,97 @@
-body {
+@import "tailwindcss";
+
+@theme {
+  --color-gray-bg: var(--vscode-editor-background);
+  --color-gray-secondry: var(--vscode-sideBar-background);
+  --color-white-text: var(--vscode-foreground);
+
+  --color-purple-primary: #007aff;
+  --color-primary-text: var(--vscode-foreground);
+
+  /* --color-primary-text: var(--vscode-activityBarBadge-foreground); */
+
+  --color-gray-subtext: var(--vscode-descriptionForeground, #afafaf);
+
+  --color-button-background: var(--vscode-sideBar-background);
+  --color-button-secondry: var(--vscode-editor-background);
+  --color-button-foreground: var(--vscode-foreground);
+  /* --color-button-background: var(--vscode-button-background); */
+  /* --color-button-foreground: var(--vscode-button-foreground); */
+
+  --color-green-accent: #1ec337;
+  --color-yellow-accent: #f5c200;
+  --color-blue-accent: #007aff;
+  --color-purple-accent: #cb30e0;
+  --color-red-accent: #f53126;
+
+  /* sidebar */
+  --color-sidebar-header: var(--vscode-sideBarSectionHeader-background);
+  --color-sidebar-border: var(--vscode-sideBarSectionHeader-border);
+  --color-sidebar-foreground: var(
+    --vscode-sideBarSectionHeader-foreground,
+    #fff
+  );
+  --color-list-hover: var(--vscode-list-hoverBackground);
+  --color-list-hover-foreground: var(--vscode-list-hoverForeground);
+}
+
+@layer base {
+  body {
+    @apply text-white-text bg-gray-bg relative;
+  }
+  button {
+    @apply cursor-pointer;
+  }
+  input {
+    @apply border-gray-600! placeholder:text-xs placeholder:md:text-sm placeholder:text-gray-400 rounded-md;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply rounded-md flex w-full text-center justify-center items-center gap-1 bg-purple-primary text-primary-text py-2 px-2 ml-auto;
+  }
+  .invisible-animation {
+    @apply invisible pointer-events-none scale-90 opacity-0 group-hover:visible group-hover:scale-100 group-hover:opacity-100 transition-all duration-200;
+  }
+  .invisible-state {
+    @apply invisible pointer-events-none scale-90 opacity-0;
+  }
+  .visible-state {
+    @apply visible scale-100 opacity-100;
+  }
+}
+
+#date-picker .rdp-root {
+  padding: 6px;
+  --rdp-accent-color: #007aff;
+  --rdp-accent-background-color: var(--vscode-sideBar-background);
+
+  --rdp-day-height: 33px;
+  --rdp-day-width: 33px;
+
+  --rdp-day_button-border: none;
+  --rdp-day_button-height: 35px;
+  --rdp-day_button-width: 35px;
+
+  --rdp-nav_button-height: 1.1rem;
+  --rdp-nav_button-width: 1.1rem;
+  --rdp-nav-height: 2rem;
+
+  --rdp-range_start-color: var(--vscode-statusBarItem-remoteForeground);
+  --rdp-range_end-color: var(--vscode-statusBarItem-remoteForeground);
+
+  --rdp-weekday-padding: 0.5rem 0rem;
+}
+#date-picker .rdp-month_caption,
+#date-picker .rdp-nav {
+  @apply font-medium text-sm;
+}
+
+#date-picker .rdp-selected {
+  @apply text-sm;
+}
+
+#date-picker {
+  @apply rounded-md;
 }
