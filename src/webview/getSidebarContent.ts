@@ -10,7 +10,7 @@ export function getSidebarContent(
   webview: vscode.Webview,
   extensionUri: vscode.Uri
 ): string {
-  if (isDevelopment) {
+  if (false) {
     return getSidebarContentDev();
   } else {
     return getSidebarContentProd(webview, extensionUri);

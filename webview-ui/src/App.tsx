@@ -19,7 +19,6 @@ function App() {
   const dispatch = useAppDispatch();
   const allCategories = useAppSelector((state) => state.categories);
   const { filterByCategories } = useAppSelector((state) => state.filters);
-
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
       const message = event.data;
@@ -45,7 +44,7 @@ function App() {
         dispatch(openModal(message.data));
       }
     };
-
+    // fix bugs:Fix the empty categories issue that appears on first load
     window.addEventListener("message", handleMessage);
     vscode.postMessage({ command: "get-data" });
     return () => window.removeEventListener("message", handleMessage);

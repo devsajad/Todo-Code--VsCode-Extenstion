@@ -1,6 +1,6 @@
 // This is a test file to demonstrate syntax highlighting for todo comments
 
-// features: Add user authentication system
+
 // fix bugs: Fix the empty categories issue that appears on first load
 // refactors: Refactor the webview creation logic for better performance
 

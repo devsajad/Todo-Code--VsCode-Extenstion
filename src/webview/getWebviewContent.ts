@@ -10,7 +10,7 @@ export function getWebviewContent(
   webview: vscode.Webview,
   extensionUri: vscode.Uri
 ): string {
-  if (isDevelopment) {
+  if (false) {
     return getWebviewContentDev();
   } else {
     return getWebviewContentProd(webview, extensionUri);
